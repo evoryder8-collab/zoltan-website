@@ -46,20 +46,24 @@ export function initFilm({ reduced }) {
   };
   whenNear(section, load, '1400px');
 
-  // ── iOS: the intro's sound tap unlocks this element for audible play ──
+  // ── iOS: the intro's sound tap unlocks this element for audible play later.
+  // Safari lifts the restriction at the moment play() is called inside a tap,
+  // so a muted play that is stopped at once is enough, and nothing is heard. ──
   addEventListener('soundgesture', (e) => {
     wantSound = e.detail.on;
     if (!e.detail.on) return;
     load();
-    video.muted = false;
-    const p = video.play();
-    p?.then(() => {
-      if (!inWindow) {
-        video.pause();
-        video.currentTime = 0;
-      }
-    }).catch(() => {});
+    video.muted = true;
+    video.play()?.catch(() => {});
+    video.pause();
   });
+  // nothing plays outside the full-screen window, whatever asked it to
+  // (reduced motion has no window: there the visitor plays it with controls)
+  if (!reduced) {
+    video.addEventListener('play', () => {
+      if (!inWindow) video.pause();
+    });
+  }
   addEventListener('soundchange', (e) => {
     wantSound = e.detail.on;
     if (playing) setMuted(!wantSound);

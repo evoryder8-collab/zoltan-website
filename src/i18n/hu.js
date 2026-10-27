@@ -12,6 +12,7 @@ export default {
     mezokeresztes: { name: 'Mezőkeresztes', in: 'Mezőkeresztesen', address: '3441 Mezőkeresztes, Bornemissza utca 3.' },
   },
   a11y: {
+    results: 'Címek és eredmények',
     skip: 'Ugrás a tartalomra',
     laurel: '3D babérkoszorú',
     medal: 'Pörgethető 3D érem',

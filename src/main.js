@@ -25,6 +25,7 @@ import { initSilk } from './lib/silk.js';
 import { sound } from './lib/audio.js';
 import { whenNear } from './lib/lazy.js';
 import { tilt, initTilt, buzz } from './lib/tilt.js';
+import { mountRibbon } from './lib/ribbon.js';
 import { LOCATIONS } from './config.js';
 
 import { runIntro } from './components/intro.js';
@@ -54,6 +55,7 @@ fillIcons();
 markPlaceholders();
 
 // ── shared systems ──
+const ribbon = mountRibbon(document.querySelector('.ticker'), document.querySelector('.ticker__track'), '.ticker__set');
 const silk = initSilk(document.getElementById('silk'), { reduced });
 const glass = initGlass();
 const reveals = initReveals({ reduced });
@@ -93,6 +95,7 @@ const RENDERED = '#stats [data-reveal], #treatment-steps [data-reveal], #treatme
 addEventListener('langchange', () => {
   renderName();
   renderTicker();
+  ribbon.refresh();
   renderSections();
   renderEvents();
   fillIcons();

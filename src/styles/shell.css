@@ -602,8 +602,31 @@ html.menu-open .dock {
 .ticker__set {
   display: flex;
 }
-.ticker:hover .ticker__track {
-  animation-play-state: paused;
+/* with JS the ribbon is physical (lib/ribbon.js): grab, flick, glide back */
+.ticker[data-ribbon-ready] {
+  touch-action: pan-y pinch-zoom;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.ticker[data-ribbon-ready]:active {
+  cursor: grabbing;
+}
+.ticker[data-ribbon-ready] .ticker__track {
+  animation: none;
+  will-change: transform;
+}
+.ticker:focus-visible {
+  outline-offset: -3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ticker {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .ticker__track {
+    animation: none;
+  }
 }
 .ticker__item {
   display: inline-flex;

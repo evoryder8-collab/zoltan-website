@@ -12,6 +12,7 @@ export default {
     mezokeresztes: { name: 'Mezőkeresztes', in: 'in Mezőkeresztes', address: 'Bornemissza utca 3, 3441 Mezőkeresztes' },
   },
   a11y: {
+    results: 'Titles and results',
     skip: 'Skip to content',
     laurel: '3D laurel wreath',
     medal: '3D medal you can spin',

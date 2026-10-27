@@ -53,6 +53,17 @@ export default {
     chipSlovakia: 'Slovakia 2026 · Grand Champion',
     scroll: 'Scroll',
   },
+  film: {
+    kicker: 'The film',
+    title: 'Two continents. Under two months.',
+    hint: 'Scroll to play',
+    label: 'Short film · 1:30',
+    soundOn: 'Sound on',
+    soundOff: 'Tap for sound',
+    full: 'Full screen',
+    replay: 'Watch again',
+    aria: 'Zoltan Kodor’s short film: two overall titles on two continents',
+  },
   ticker: [
     'Clinical Precision • Aesthetic Flow',
     'Slovakia Massage Championship · Grand Champion',

@@ -191,6 +191,16 @@ class Sound {
     this.air({ from: 900, to: 300, dur: 0.6, gain: 0.025, wet: 0.4, pan0: pan, pan1: pan });
   }
 
+  /** Lowers the ambient pad while the film plays with sound. */
+  duck(on) {
+    if (!this.pad || !this.ctx) return;
+    const g = this.pad.out.gain;
+    const t = this.ctx.currentTime;
+    g.cancelScheduledValues(t);
+    g.setValueAtTime(Math.max(g.value, 0.0001), t);
+    g.exponentialRampToValueAtTime(on ? 0.003 : 0.035, t + (on ? 0.8 : 2.4));
+  }
+
   /** A quiet, slowly breathing pad underneath everything. */
   ambient(on) {
     if (!this.ctx) return;

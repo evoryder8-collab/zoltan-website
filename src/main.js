@@ -6,6 +6,7 @@ import './styles/glass.css';
 import './styles/shell.css';
 import './styles/hero.css';
 import './styles/sections.css';
+import './styles/film.css';
 import './styles/gallery.css';
 import './styles/maps.css';
 
@@ -34,6 +35,7 @@ import { renderTicker, renderName, prepareHero, enterHero } from './components/h
 import { renderSections, initTopics, initStudioSwitch } from './components/sections.js';
 import { renderEvents, initChampionships } from './components/championships.js';
 import { initGallery } from './components/gallery.js';
+import { initFilm } from './components/film.js';
 import { initDirections } from './components/directions.js';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -73,6 +75,7 @@ const nav = initNav({ lenis });
 initTopics({ sound });
 initStudioSwitch();
 initGallery({ reduced });
+initFilm({ reduced });
 initChampionships({
   reduced,
   lenis,

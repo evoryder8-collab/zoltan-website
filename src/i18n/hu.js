@@ -53,6 +53,17 @@ export default {
     chipSlovakia: 'Szlovákia 2026 · Abszolút győztes',
     scroll: 'Görgess',
   },
+  film: {
+    kicker: 'A film',
+    title: 'Két kontinens. Két hónapon belül.',
+    hint: 'Görgess a lejátszáshoz',
+    label: 'Rövidfilm · 1:30',
+    soundOn: 'Hang bekapcsolva',
+    soundOff: 'Koppints a hangért',
+    full: 'Teljes képernyő',
+    replay: 'Újranézés',
+    aria: 'Kódor Zoltán rövidfilmje: két abszolút győzelem két kontinensen',
+  },
   ticker: [
     'Clinical Precision • Aesthetic Flow',
     'Szlovákiai Masszázsbajnokság · Abszolút győztes',

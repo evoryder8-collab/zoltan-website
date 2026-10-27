@@ -171,6 +171,32 @@
         <a class="hero__scroll" href="#about"><span data-i18n="hero.scroll"></span><i aria-hidden="true"></i></a>
       </section>
 
+      <!-- The film: a floating vertical frame that grows to full screen as you scroll -->
+      <section class="film" id="film" aria-labelledby="film-title">
+        <div class="film__pin">
+          <div class="film__theater" aria-hidden="true"></div>
+          <div class="film__copy">
+            <p class="kicker"><span class="leaf" aria-hidden="true"></span><span data-i18n="film.kicker"></span></p>
+            <h2 class="film__title" id="film-title" data-i18n="film.title"></h2>
+            <p class="film__hint"><span class="film__mouse" aria-hidden="true"><i></i></span><span data-i18n="film.hint"></span></p>
+          </div>
+          <div class="film__frame">
+            <div class="film__floor" aria-hidden="true"></div>
+            <div class="film__bezel">
+              <video class="film__video" playsinline preload="none" poster="./media/film-poster.jpg" data-i18n-attr="aria-label:film.aria"></video>
+              <div class="film__shine" aria-hidden="true"></div>
+              <span class="film__tag"><span data-icon="play"></span><span data-i18n="film.label"></span></span>
+              <div class="film__ui">
+                <button type="button" class="film__btn film__sound" aria-pressed="false"><span data-icon="sound"></span><span class="film__sound-label"></span></button>
+                <button type="button" class="film__btn film__full" data-i18n-attr="aria-label:film.full" data-icon="expand"></button>
+              </div>
+              <button type="button" class="film__replay" hidden><span data-icon="replay"></span><span data-i18n="film.replay"></span></button>
+              <span class="film__bar" aria-hidden="true"><i></i></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <div class="ticker" role="region" tabindex="0" data-i18n-attr="aria-label:a11y.results">
         <div class="ticker__track"></div>
       </div>

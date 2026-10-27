@@ -49,6 +49,8 @@ export function runIntro({ reduced }) {
       if (!b) return;
       const on = b.dataset.sound === 'on';
       sound.enable(on);
+      // still inside the tap: lets the film start with sound later (iOS)
+      dispatchEvent(new CustomEvent('soundgesture', { detail: { on } }));
       if (on) sound.chime();
       buzz(12);
       requestTilt(); // iOS: must be asked inside this tap

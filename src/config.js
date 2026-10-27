@@ -1,6 +1,6 @@
 // Everything about Zoltan that is a fact rather than wording: contact details,
-// locations, prices and events. Values in [brackets] are placeholders; see
-// docs/CONTENT-TODO.md. Wording for both languages lives in src/i18n/.
+// locations, prices and events. Wording for both languages lives in src/i18n/;
+// open questions are in docs/CONTENT-TODO.md.
 
 // From zwellness.hu (Z-Wellness, Kódor Zoltán e.v.)
 export const CONTACT = {
@@ -31,8 +31,8 @@ export const LOCATIONS = [
 export const HOME = { lngLat: [19.0402, 47.4979] };
 
 // Championships, in date order: wording in i18n under champs.events.<id>.
-// Slovakia's pin sits at the country centre until the city is known.
+// The Slovakia championship's city isn't published, so its pin marks the country.
 export const EVENTS = [
-  { id: 'slovakia', lngLat: [19.699, 48.669], featured: true }, // [placeholder] city unknown
+  { id: 'slovakia', lngLat: [19.699, 48.669], featured: true },
   { id: 'ausmc26', lngLat: [151.1717, -33.8477], featured: true },
 ];

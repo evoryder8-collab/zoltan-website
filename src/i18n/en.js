@@ -130,7 +130,7 @@ export default {
       slovakia: {
         short: 'Slovakia 2026',
         name: 'Slovakia Massage Championship 2026',
-        place: '[City], Slovakia',
+        place: 'Slovakia',
         date: '12 September 2026',
         titles: ['Grand Champion · Absolute Winner', 'Gold'],
       },
@@ -182,8 +182,12 @@ export default {
   training: {
     kicker: 'Training',
     title: 'Learn from a champion.',
-    body: 'Zoltan shares championship technique with other therapists: [workshops, one-to-one coaching or competition preparation].',
-    points: ['[Competition preparation]', '[Technique masterclasses]', '[One-to-one coaching]'],
+    body: 'What won two overall titles, taught to therapists: Clinical Precision • Aesthetic Flow. Treatment that starts from a careful assessment and goes after the cause, delivered in one unbroken flow, the craft behind his Best Flow & Transition Award.',
+    points: [
+      'Clinical precision: read the body before you treat it',
+      'Aesthetic flow: seamless transitions, rhythm and body mechanics',
+      'One treatment: combining methods such as FDM, cupping and IASTM',
+    ],
     cta: 'Ask about training',
     waText: 'Hi Zoltan! I’m a therapist and I’d like to know more about your training.',
   },
@@ -195,7 +199,7 @@ export default {
     whatsapp: 'WhatsApp',
     email: 'Email',
     hours: 'Hours',
-    hoursValue: '[Mon–Fri 9:00–19:00 · Sat by appointment]',
+    hoursValue: 'By appointment',
     topicLabel: 'What’s it about?',
     topics: {
       booking: { label: 'Booking', subject: 'Booking request', wa: 'Hi Zoltan! I’d like to book a massage.' },

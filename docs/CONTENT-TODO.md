@@ -1,15 +1,15 @@
-# Content still needed from Zoltan
+# Content checklist for Zoltan
 
-Anything below still shows on the site as `[placeholder]` text (dashed underline, italic). Fill it in and the placeholder disappears.
+Any text written in `[brackets]` in the language files shows on the page as a placeholder (dashed underline, italic). None are left right now.
 
 Wording lives in `src/i18n/hu.js` and `src/i18n/en.js` (change both). Facts live in `src/config.js`.
 
-## Still missing
+## Open questions (the site shows no placeholders)
 
-- [ ] Slovakia Massage Championship: the city (`champs.events.slovakia.place`), plus its coordinates in `EVENTS` (the globe pin sits at the centre of Slovakia for now)
-- [ ] Opening hours (`contact.hoursValue`)
-- [ ] Training for other therapists: what is offered (`training.body`, `training.points`)
-- [ ] Confirm WhatsApp is on the same number as the phone (+36 30 416 2043)
+- [ ] Slovakia Massage Championship: which city? The card says "Slovakia" and the globe pin marks the country. Add the city to `champs.events.slovakia.place` and its coordinates to `EVENTS`.
+- [ ] Opening hours: the site says "By appointment". Replace `contact.hoursValue` if Zoltan has fixed hours.
+- [ ] Training: the copy describes his approach (Clinical Precision • Aesthetic Flow). Add formats, dates or prices to `training` if he offers specific courses.
+- [ ] Confirm WhatsApp is on the same number as the phone (+36 30 416 2043).
 - [ ] Budapest: is "XVI. kerület – Sashalom" all that should be public, or is there a street address?
 
 ## Confirmed and on the site

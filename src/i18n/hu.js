@@ -130,7 +130,7 @@ export default {
       slovakia: {
         short: 'Szlovákia 2026',
         name: 'Szlovákiai Masszázsbajnokság 2026',
-        place: '[Város], Szlovákia',
+        place: 'Szlovákia',
         date: '2026. szeptember 12.',
         titles: ['Abszolút győztes · Grand Champion', 'Aranyérem'],
       },
@@ -182,8 +182,12 @@ export default {
   training: {
     kicker: 'Képzés',
     title: 'Tanulj egy bajnoktól.',
-    body: 'Zoltán a bajnoki technikát más terapeutáknak is átadja: [workshopok, egyéni coaching vagy versenyfelkészítés].',
-    points: ['[Versenyfelkészítés]', '[Technikai mesterkurzusok]', '[Egyéni coaching]'],
+    body: 'Amivel két abszolút győzelmet nyert, azt terapeutáknak is átadja: Clinical Precision • Aesthetic Flow. Alapos állapotfelmérésből induló, az okokra fókuszáló kezelés, megszakítás nélküli, áramló kivitelezéssel. Ez a tudás áll a Best Flow & Transition Award mögött.',
+    points: [
+      'Klinikai precizitás: előbb megérteni a testet, aztán kezelni',
+      'Esztétikus áramlás: zökkenőmentes átmenetek, ritmus és testmechanika',
+      'Egy kezelés: módszerek, például FDM, köpölyözés és IASTM egybeépítése',
+    ],
     cta: 'Érdeklődj a képzésről',
     waText: 'Szia Zoltán! Terapeuta vagyok, és érdekelnének a képzéseid.',
   },
@@ -195,7 +199,7 @@ export default {
     whatsapp: 'WhatsApp',
     email: 'E-mail',
     hours: 'Nyitvatartás',
-    hoursValue: '[H–P 9:00–19:00 · Szo előzetes egyeztetéssel]',
+    hoursValue: 'Előzetes egyeztetés alapján',
     topicLabel: 'Miről lenne szó?',
     topics: {
       booking: { label: 'Foglalás', subject: 'Időpontfoglalás', wa: 'Szia Zoltán! Szeretnék időpontot foglalni egy masszázsra.' },

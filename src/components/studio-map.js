@@ -80,6 +80,7 @@ export async function mountStudioMap(container, { locations, reduced = false }) 
   );
   map.on('load', () => {
     frame.classList.add('is-ready');
+    container.querySelector('.maplibregl-ctrl-attrib')?.classList.remove('maplibregl-compact-show');
     io.observe(container);
   });
   return map;

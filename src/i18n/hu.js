@@ -23,10 +23,16 @@ export default {
   intro: {
     kicker: 'Clinical Precision • Aesthetic Flow',
     line: 'Abszolút győztes · Szlovákia & Ausztrália 2026',
+    soundTitle: 'Bekapcsolod a hangot?',
+    soundHint: 'Hanggal a legszebb az élmény.',
+    yes: 'Igen',
+    recommended: 'Ajánlott',
+    no: 'Nem, folytatás hang nélkül',
     choose: 'Válassz nyelvet',
-    sound: 'Hanggal',
-    entering: 'Belépés {n} mp múlva',
-    paused: 'Megállítva. Válassz nyelvet a belépéshez.',
+    countdown: 'Hamarosan magyarul folytatjuk',
+    paused: 'Automatikus választás szüneteltetve',
+    pause: 'Szünet',
+    resume: 'Folytatás',
   },
   nav: {
     about: 'Bemutatkozás',
@@ -48,7 +54,7 @@ export default {
   },
   ticker: [
     'Clinical Precision • Aesthetic Flow',
-    'Szlovákia · 2026. szeptember 12. · Abszolút győztes',
+    'Szlovákiai Masszázsbajnokság · Abszolút győztes',
     'Sydney · AusMC 2026 · Abszolút győztes',
     'Freestyle Massage Award',
     'Best Flow & Transition Award',
@@ -59,7 +65,7 @@ export default {
     kicker: 'Bemutatkozás',
     title: 'Kíváncsiságból indult.',
     p1: 'Kódor Zoltán versenytörténete 2026 májusában kezdődött, kíváncsiságból. Minden próbálkozásról, ami nem sikerült, gondos jegyzeteket készített, és minden nap dolgozott rajtuk.',
-    p2: '2026. szeptember 12-én Szlovákiában aranyérmet és abszolút győzelmet szerzett. Csak néhány héttel később megismételte az Ausztrál Masszázsbajnokságon Sydney-ben, a világ minden tájáról érkezett terapeuták ellen, és mellé elnyerte a Freestyle Massage Award, a Best Flow & Transition Award és a Best International Therapist díjat is.',
+    p2: '2026. szeptember 12-én a Szlovákiai Masszázsbajnokságon aranyérmet szerzett, és abszolút győztes (Grand Champion) lett. Csak néhány héttel később megismételte az Ausztrál Masszázsbajnokságon Sydney-ben, a világ minden tájáról érkezett terapeuták ellen, és mellé elnyerte a Freestyle Massage Award, a Best Flow & Transition Award és a Best International Therapist díjat is.',
     p3: 'Minden kezelés konzultációval és állapotfelméréssel kezdődik. Ezután Zoltán széles szakmai hátteréből választja ki és kombinálja a módszereket, a terápiás és svédmasszázstól az FDM-en és a köpölyözésen át az IASTM-ig, mindig ahhoz igazítva, amire a vendégnek szüksége van.',
     quote: 'És ez… még csak a kezdet.',
     quoteBy: 'Kódor Zoltán · rövidfilm',
@@ -111,10 +117,10 @@ export default {
     events: {
       slovakia: {
         short: 'Szlovákia 2026',
-        name: '[Bajnokság neve]',
+        name: 'Szlovákiai Masszázsbajnokság 2026',
         place: '[Város], Szlovákia',
         date: '2026. szeptember 12.',
-        titles: ['Abszolút győztes', 'Aranyérem'],
+        titles: ['Abszolút győztes · Grand Champion', 'Aranyérem'],
       },
       ausmc26: {
         short: 'AusMC 2026 · Sydney',

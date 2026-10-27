@@ -50,9 +50,7 @@
   letter-spacing: -0.02em;
 }
 .intro__line {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6em;
+  display: block;
   margin: 0 0 1.6rem;
   color: var(--pearl);
   font-size: 0.9rem;
@@ -60,17 +58,122 @@
 }
 .intro__line::before {
   content: '';
+  display: inline-block;
+  vertical-align: middle;
+  margin: -2px 0.55em 0 0;
   width: 7px;
   height: 7px;
   border-radius: 50%;
   background: var(--ember);
   box-shadow: 0 0 12px var(--ember);
 }
-.intro__choose {
-  margin: 0 0 0.8rem;
-  color: var(--pearl-dim);
-  font-size: 0.82rem;
+.intro__step {
+  animation: step-in 0.7s var(--spring);
 }
+.intro__step[hidden] {
+  display: none;
+}
+.intro__step.is-leaving {
+  animation: step-out 0.38s var(--ease) forwards;
+}
+@keyframes step-in {
+  from { opacity: 0; transform: translateY(14px); filter: blur(6px); }
+}
+@keyframes step-out {
+  to { opacity: 0; transform: translateY(-10px); filter: blur(6px); }
+}
+.intro__ask {
+  margin: 0 0 0.35rem;
+  font: 400 clamp(1.5rem, 6vw, 1.9rem) / 1.15 var(--serif);
+  color: var(--pearl);
+}
+.intro__hint {
+  margin: 0 0 1.3rem;
+  color: var(--pearl-dim);
+  font-size: 0.86rem;
+}
+[data-step='lang'] .intro__ask {
+  margin-bottom: 1rem;
+}
+
+/* sound: a big, glowing yes and a quiet no */
+.btn-yes {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  min-height: 84px;
+  padding: 0.9rem 1.2rem;
+  border: 0;
+  border-radius: 28px;
+  color: var(--pearl);
+  background: linear-gradient(160deg, #e6283f 0%, #b70f2b 55%, #8a0a21 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 95, 115, 0.45),
+    0 18px 44px -12px rgba(255, 59, 78, 0.85);
+  cursor: pointer;
+  transition: transform 0.45s var(--spring);
+}
+.btn-yes:active {
+  transform: scale(0.97);
+}
+.btn-yes__aura {
+  position: absolute;
+  inset: -8px;
+  border-radius: 34px;
+  border: 1px solid rgba(255, 59, 78, 0.55);
+  animation: aura 2.4s var(--ease) infinite;
+  pointer-events: none;
+}
+@keyframes aura {
+  from { transform: scale(0.96); opacity: 1; }
+  to { transform: scale(1.1); opacity: 0; }
+}
+.btn-yes__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font: 700 1.35rem/1 var(--sans);
+  letter-spacing: 0.01em;
+}
+.btn-yes__label .i {
+  width: 24px;
+  height: 24px;
+}
+.btn-yes .spk__slash {
+  display: none;
+}
+.btn-yes__tag {
+  font-size: 0.68rem;
+  font-weight: 750;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(255, 236, 238, 0.82);
+}
+.btn-no {
+  margin-top: 0.9rem;
+  padding: 0.7rem 1rem;
+  min-height: 44px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--pearl-dim);
+  font-size: 0.86rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: rgba(246, 241, 236, 0.3);
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+.btn-no:hover {
+  color: var(--pearl);
+}
+
 .intro__langs {
   display: flex;
   gap: 10px;
@@ -111,57 +214,73 @@
   font: 600 1.05rem/1 var(--sans);
   letter-spacing: 0.02em;
 }
-.switch {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.7rem;
-  margin-top: 1.2rem;
-  cursor: pointer;
-  color: var(--pearl-dim);
-  font-size: 0.86rem;
-  font-weight: 600;
-}
-.switch input {
+/* language: the suggested choice breathes while the countdown runs */
+.lang-btn.is-suggested::after {
+  content: '';
   position: absolute;
-  opacity: 0;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 22px rgba(255, 59, 78, 0.55);
+  opacity: 0.3;
   pointer-events: none;
+  animation: breathe 2.6s ease-in-out infinite;
 }
-.switch__track {
+.intro.countdown-paused .lang-btn.is-suggested::after {
+  animation-play-state: paused;
+}
+@keyframes breathe {
+  50% { opacity: 1; }
+}
+.countdown {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-top: 1.1rem;
+  color: var(--pearl-dim);
+  font-size: 0.8rem;
+  text-align: left;
+}
+.countdown[hidden] {
+  display: none;
+}
+.countdown__clock {
   position: relative;
-  width: 44px;
-  height: 26px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.12);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
-  transition: background 0.35s;
+  flex: 0 0 34px;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  color: var(--pearl);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
-.switch__thumb {
+.countdown__clock svg {
   position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: var(--pearl);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-  transition: transform 0.45s var(--spring);
+  inset: 0;
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.14);
+  stroke-width: 1.6;
+  transform: rotate(-90deg);
 }
-.switch input:checked + .switch__track {
-  background: var(--crimson);
+.countdown__clock circle + circle {
+  stroke: var(--ember);
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 4px rgba(255, 59, 78, 0.8));
 }
-.switch input:checked + .switch__track .switch__thumb {
-  transform: translateX(18px);
-}
-.switch input:focus-visible + .switch__track {
-  outline: 2px solid var(--ember);
-  outline-offset: 3px;
-}
-.intro__count {
-  min-height: 1.3em;
-  margin: 1rem 0 0;
-  color: var(--pearl-faint);
-  font-size: 0.74rem;
-  letter-spacing: 0.04em;
+.countdown__toggle {
+  margin-left: auto;
+  min-height: 44px;
+  padding: 0.5rem 0.4rem;
+  border: 0;
+  background: none;
+  color: var(--pearl);
+  font-size: 0.8rem;
+  font-weight: 650;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
 }
 .intro.is-leaving {
   pointer-events: none;

@@ -11,8 +11,9 @@ describe('detectLang', () => {
   it('picks Hungarian for a Hungarian browser', () => {
     expect(detectLang({ search: '', stored: null, languages: ['hu-HU'] })).toBe('hu');
   });
-  it('finds Hungarian further down the browser list', () => {
-    expect(detectLang({ search: '', stored: null, languages: ['de-DE', 'hu'] })).toBe('hu');
+  it('goes by the primary language only', () => {
+    expect(detectLang({ search: '', stored: null, languages: ['de-DE', 'hu'] })).toBe('en');
+    expect(detectLang({ search: '', stored: null, languages: ['hu', 'en-GB'] })).toBe('hu');
   });
   it('falls back to English', () => {
     expect(detectLang({ search: '', stored: null, languages: ['fr'] })).toBe('en');

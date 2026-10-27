@@ -109,6 +109,10 @@
   white-space: nowrap;
   pointer-events: none;
 }
+.gmark--below .gmark__label {
+  bottom: auto;
+  top: calc(100% + 8px);
+}
 .gmark.is-active .gmark__core {
   transform: scale(1.35);
 }

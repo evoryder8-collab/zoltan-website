@@ -49,6 +49,8 @@ export async function mountGlobe(container, { events, home, reduced = false }) {
     map.addLayer({ id: 'comets-glow', type: 'circle', source: 'comets', paint: { 'circle-radius': 9, 'circle-color': '#ff3b4e', 'circle-blur': 1, 'circle-opacity': 0.8 } });
     map.addLayer({ id: 'comets-core', type: 'circle', source: 'comets', paint: { 'circle-radius': 2.6, 'circle-color': '#fff' } });
     container.closest('.globe')?.classList.add('is-ready');
+    // keep the attribution folded into its (i) button, as on AusMC
+    container.querySelector('.maplibregl-ctrl-attrib')?.classList.remove('maplibregl-compact-show');
   });
 
   function comets(time) {
@@ -71,7 +73,7 @@ export async function mountGlobe(container, { events, home, reduced = false }) {
     markers[id] = { el, marker: new Marker({ element: el, anchor: 'center' }).setLngLat(lngLat).addTo(map) };
     return el;
   };
-  addMarker('home', home.lngLat, 'gmark--home');
+  addMarker('home', home.lngLat, 'gmark--home gmark--below');
   placed.forEach((e) => addMarker(e.id, e.lngLat).addEventListener('click', () => api.flyTo(e.id)));
   const label = () => {
     markers.home.el.querySelector('.gmark__label').innerHTML = esc(t('globe.home'));

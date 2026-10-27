@@ -6,7 +6,7 @@ Wording lives in `src/i18n/hu.js` and `src/i18n/en.js` (change both). Facts live
 
 ## Still missing
 
-- [ ] Slovakia championship: its name and city (`champs.events.slovakia`), plus the city's coordinates in `EVENTS` (the globe pin sits at the centre of Slovakia for now)
+- [ ] Slovakia Massage Championship: the city (`champs.events.slovakia.place`), plus its coordinates in `EVENTS` (the globe pin sits at the centre of Slovakia for now)
 - [ ] Opening hours (`contact.hoursValue`)
 - [ ] Training for other therapists: what is offered (`training.body`, `training.points`)
 - [ ] Confirm WhatsApp is on the same number as the phone (+36 30 416 2043)
@@ -20,7 +20,7 @@ Wording lives in `src/i18n/hu.js` and `src/i18n/en.js` (change both). Facts live
 - Studios: 3441 Mezőkeresztes, Bornemissza utca 3. and Budapest XVI. kerület – Sashalom
 - One personalised treatment, about 70 minutes, fixed price, never extra if it runs longer: 20,000 HUF in Budapest, 14,000 HUF in Mezőkeresztes
 - Methods: therapeutic and Swedish massage, FDM, trigger point techniques, cupping, IASTM, kinesiology taping, scar tissue treatment, vagus therapy, mobilization techniques
-- Slovakia, 12 September 2026: gold and Overall Winner
+- Slovakia Massage Championship, 12 September 2026: gold, Grand Champion (absolute winner)
 - AusMC 2026 (Cockatoo Island, Sydney, 9–11 October 2026): Overall Winner, Freestyle Massage Award, Best Flow & Transition Award, Best International Therapist
 - Story (from the short film): started competing in May 2026, out of curiosity; two overall titles on two continents less than two months apart
 - Not shown, by request: EMC 2026 and the World Championship in Massage (IMA)

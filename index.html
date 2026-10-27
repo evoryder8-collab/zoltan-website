@@ -36,7 +36,7 @@
         "jobTitle": "Massage therapist",
         "nationality": "Hungary",
         "award": [
-          "Overall Winner, Slovakia, 12 September 2026",
+          "Grand Champion (Absolute Winner), Slovakia Massage Championship, 12 September 2026",
           "Overall Winner, Australian Massage Championship 2026",
           "Freestyle Massage Award, Australian Massage Championship 2026",
           "Best Flow & Transition Award, Australian Massage Championship 2026",
@@ -55,24 +55,37 @@
     <canvas id="silk" class="silk" aria-hidden="true"></canvas>
     <div class="grain" aria-hidden="true"></div>
 
-    <!-- Intro: language + sound -->
+    <!-- Intro: 1 · sound on?  2 · language (auto-picks the device language) -->
     <div id="intro" class="intro" role="dialog" aria-modal="true" aria-labelledby="intro-title">
       <svg class="intro__laurel laurel-svg" viewBox="-120 -120 240 240" aria-hidden="true"></svg>
       <div class="intro__card glass" data-lens>
         <p class="intro__kicker" data-i18n="intro.kicker"></p>
         <h1 id="intro-title" class="intro__title" data-i18n="name.first">Zoltan</h1>
         <p class="intro__line" data-i18n="intro.line"></p>
-        <p class="intro__choose" data-i18n="intro.choose"></p>
-        <div class="intro__langs">
-          <button type="button" class="lang-btn" data-lang="hu" lang="hu"><span class="lang-btn__fill" aria-hidden="true"></span><span class="lang-btn__name">Magyar</span></button>
-          <button type="button" class="lang-btn" data-lang="en" lang="en"><span class="lang-btn__fill" aria-hidden="true"></span><span class="lang-btn__name">English</span></button>
+
+        <div class="intro__step" data-step="sound">
+          <p class="intro__ask" data-i18n="intro.soundTitle"></p>
+          <p class="intro__hint" data-i18n="intro.soundHint"></p>
+          <button type="button" class="btn-yes" data-sound="on">
+            <span class="btn-yes__aura" aria-hidden="true"></span>
+            <span class="btn-yes__label"><span data-icon="sound"></span><span data-i18n="intro.yes"></span></span>
+            <small class="btn-yes__tag" data-i18n="intro.recommended"></small>
+          </button>
+          <button type="button" class="btn-no" data-sound="off" data-i18n="intro.no"></button>
         </div>
-        <label class="switch">
-          <input type="checkbox" id="intro-sound" />
-          <span class="switch__track" aria-hidden="true"><span class="switch__thumb"></span></span>
-          <span class="switch__label" data-i18n="intro.sound"></span>
-        </label>
-        <p class="intro__count" aria-live="polite"></p>
+
+        <div class="intro__step" data-step="lang" hidden>
+          <p class="intro__ask" data-i18n="intro.choose"></p>
+          <div class="intro__langs">
+            <button type="button" class="lang-btn" data-lang="hu" lang="hu"><span class="lang-btn__fill" aria-hidden="true"></span><span class="lang-btn__name">Magyar</span></button>
+            <button type="button" class="lang-btn" data-lang="en" lang="en"><span class="lang-btn__fill" aria-hidden="true"></span><span class="lang-btn__name">English</span></button>
+          </div>
+          <div class="countdown" hidden>
+            <span class="countdown__clock" aria-hidden="true"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="16" /><circle cx="18" cy="18" r="16" pathLength="1" /></svg><span class="countdown__n">5</span></span>
+            <span class="countdown__label" role="status"></span>
+            <button type="button" class="countdown__toggle" aria-pressed="false"></button>
+          </div>
+        </div>
       </div>
     </div>
 

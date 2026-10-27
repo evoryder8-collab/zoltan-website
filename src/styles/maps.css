@@ -1,0 +1,266 @@
+/* shared by the championship globe and the studio map */
+.globe {
+  position: relative;
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+  height: clamp(420px, 64vh, 660px);
+  overflow: hidden;
+  border-radius: 36px;
+}
+.globe__map,
+.studio__map {
+  position: absolute;
+  inset: 0;
+  /* maplibre sets position: relative on its container; size it explicitly too */
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 1.4s var(--ease);
+}
+.globe.is-ready .globe__map,
+.studio.is-ready .studio__map {
+  opacity: 1;
+}
+.globe__loading,
+.studio__loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  transition: opacity 0.6s;
+}
+.globe__loading span,
+.studio__loading span {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  border-top-color: var(--ember);
+  animation: spin 1s linear infinite;
+}
+.is-ready > .globe__loading,
+.is-ready > .studio__loading {
+  opacity: 0;
+}
+@keyframes spin {
+  to { transform: rotate(1turn); }
+}
+.globe__hint {
+  position: absolute;
+  left: 18px;
+  bottom: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0.55rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(11, 6, 7, 0.55);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  color: var(--pearl-dim);
+  font-size: 0.76rem;
+  font-weight: 650;
+  pointer-events: none;
+}
+.globe.is-fallback .globe__map,
+.studio.is-fallback .studio__map {
+  opacity: 1;
+}
+
+/* markers */
+.gmark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+}
+.gmark__core {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--pearl);
+  box-shadow: 0 0 0 3px rgba(255, 59, 78, 0.7), 0 0 18px var(--ember);
+}
+.gmark__pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid var(--ember);
+  animation: ring 2.4s var(--ease) infinite;
+}
+.gmark--home .gmark__core {
+  background: var(--ember);
+  box-shadow: 0 0 0 3px rgba(246, 241, 236, 0.85), 0 0 18px var(--ember);
+}
+.gmark__label {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  translate: -50% 0;
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+  color: var(--pearl);
+  font: 650 0.74rem/1.2 var(--sans);
+  white-space: nowrap;
+  pointer-events: none;
+}
+.gmark.is-active .gmark__core {
+  transform: scale(1.35);
+}
+
+/* studio */
+.studio {
+  position: relative;
+  min-height: 520px;
+  overflow: hidden;
+  border-radius: var(--r-lg);
+}
+.studio__bar {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  padding: 0.6rem 0.6rem 0.6rem 1rem;
+  border-radius: 999px;
+  background: rgba(11, 6, 7, 0.62);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  backdrop-filter: blur(14px) saturate(150%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+.studio__note {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0;
+  color: var(--pearl-dim);
+  font-size: 0.82rem;
+  font-weight: 650;
+}
+.studio__note .i,
+.studio__go .i {
+  width: 16px;
+  height: 16px;
+}
+.smark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+}
+.smark__laurel {
+  position: absolute;
+  inset: 0;
+  color: var(--pearl);
+  filter: drop-shadow(0 0 10px rgba(255, 59, 78, 0.8));
+}
+.smark__core {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--ember);
+  box-shadow: 0 0 0 4px rgba(246, 241, 236, 0.9), 0 0 24px var(--ember);
+}
+
+.maplibregl-ctrl-attrib {
+  background: rgba(11, 6, 7, 0.6) !important;
+  color: var(--pearl-faint) !important;
+  font-size: 10px !important;
+}
+.maplibregl-ctrl-attrib a {
+  color: var(--pearl-dim) !important;
+}
+.maplibregl-ctrl-attrib-button {
+  filter: invert(1);
+}
+.maplibregl-cooperative-gesture-screen {
+  font-family: var(--sans);
+  background: rgba(11, 6, 7, 0.6) !important;
+}
+
+.studio__switch {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  display: flex;
+  gap: 3px;
+  padding: 4px;
+  border-radius: 999px;
+}
+.studio__switch button {
+  padding: 0.55rem 0.95rem;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--pearl-dim);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 0.3s, background 0.35s;
+}
+.studio__switch button[aria-selected='true'] {
+  color: var(--pearl);
+  background: linear-gradient(160deg, rgba(227, 37, 63, 0.75), rgba(158, 12, 37, 0.6));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+/* maplibre owns the marker's own transform, so scale its children */
+.smark {
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity 0.5s;
+}
+.smark > * {
+  transform: scale(0.8);
+  transition: transform 0.6s var(--spring);
+}
+.smark.is-active {
+  opacity: 1;
+}
+.smark.is-active > * {
+  transform: none;
+}
+
+/* directions chooser (phones) */
+.maps-sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: grid;
+  align-items: end;
+  justify-items: center;
+}
+.maps-sheet[hidden] {
+  display: none;
+}
+.maps-sheet__scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 3, 5, 0.6);
+}
+.maps-sheet__card {
+  position: relative;
+  display: grid;
+  gap: 10px;
+  width: min(420px, 100% - 20px);
+  margin-bottom: max(10px, env(safe-area-inset-bottom));
+  padding: 1.4rem;
+  border-radius: 28px;
+}
+.maps-sheet__title {
+  margin: 0 0 0.4rem;
+  font: 400 1.5rem/1.1 var(--serif);
+  text-align: center;
+}
+.maps-sheet__card .btn {
+  width: 100%;
+}

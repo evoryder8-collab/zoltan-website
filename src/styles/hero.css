@@ -1,0 +1,182 @@
+.hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.02fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(1rem, 3vw, 3rem);
+  min-height: 100svh;
+  max-width: 1340px;
+  margin: 0 auto;
+  padding: 110px var(--gutter) 70px;
+}
+.hero__copy {
+  position: relative;
+  z-index: 2;
+}
+.hero__copy::before {
+  content: '';
+  position: absolute;
+  inset: -18% -30% -18% -40%;
+  z-index: -1;
+  background: radial-gradient(closest-side, rgba(11, 6, 7, 0.72), rgba(11, 6, 7, 0.35) 60%, transparent);
+  pointer-events: none;
+}
+.hero__name {
+  margin: 0.05em 0 0.22em;
+  font: 400 clamp(5.4rem, 14.5vw, 14rem) / 0.84 var(--serif);
+  letter-spacing: -0.04em;
+}
+.hero__name-inner {
+  display: inline-block;
+  padding-bottom: 0.08em;
+  background: linear-gradient(180deg, #fff 30%, #e9ddd5 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.hero__name em {
+  font-style: italic;
+  background: linear-gradient(170deg, var(--ember) 10%, var(--crimson) 70%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  padding-right: 0.04em;
+}
+.hero__brand {
+  margin: -0.2rem 0 1.4rem;
+  font: italic 400 clamp(1.1rem, 1.7vw, 1.45rem) / 1.3 var(--serif);
+  letter-spacing: 0.01em;
+  color: var(--pearl);
+}
+.hero__lead {
+  max-width: 36ch;
+  margin: 0;
+  color: var(--pearl-dim);
+  font-size: clamp(1.04rem, 1.35vw, 1.2rem);
+  line-height: 1.7;
+}
+.hero__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 2rem 0 1.5rem;
+}
+.hero__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.hero__stage {
+  position: relative;
+  height: min(80svh, 780px);
+  display: grid;
+  place-items: end center;
+}
+.hero__halo {
+  position: absolute;
+  left: 50%;
+  top: 44%;
+  width: 125%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  background: radial-gradient(circle, rgba(227, 37, 63, 0.34), rgba(195, 18, 47, 0.12) 42%, transparent 66%);
+  pointer-events: none;
+}
+.hero__laurel {
+  position: absolute;
+  left: 50%;
+  top: 38%;
+  width: min(128%, 760px);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+}
+.hero__laurel canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+.hero__laurel-fallback {
+  position: absolute;
+  inset: 4%;
+  color: rgba(246, 241, 236, 0.85);
+  display: none;
+}
+.hero__laurel.is-fallback .hero__laurel-fallback {
+  display: block;
+}
+.hero__portrait {
+  position: relative;
+  z-index: 1;
+  width: auto;
+  height: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: bottom center;
+  filter: drop-shadow(0 30px 50px rgba(0, 0, 0, 0.55));
+  -webkit-mask: linear-gradient(to bottom, #000 80%, transparent 100%);
+  mask: linear-gradient(to bottom, #000 80%, transparent 100%);
+}
+.hero__floor {
+  position: absolute;
+  z-index: 0;
+  bottom: 2%;
+  left: 12%;
+  right: 12%;
+  height: 70px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.65), transparent 70%);
+}
+.hero__scroll {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  translate: -50% 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: var(--pearl-faint);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.hero__scroll i {
+  width: 1px;
+  height: 38px;
+  background: linear-gradient(var(--pearl), transparent);
+  transform-origin: top;
+  animation: drip 2.2s var(--ease) infinite;
+}
+@keyframes drip {
+  0% { transform: scaleY(0); opacity: 1; }
+  60% { transform: scaleY(1); opacity: 1; }
+  100% { transform: scaleY(1); opacity: 0; }
+}
+
+/* entrance: set by hero.js once the intro has gone */
+.hero [data-hero] {
+  opacity: 0;
+}
+
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+    padding-top: 88px;
+    padding-bottom: 80px;
+    gap: 0;
+  }
+  .hero__stage {
+    order: -1;
+    height: min(58svh, 560px);
+  }
+  .hero__name {
+    font-size: clamp(4.6rem, 23vw, 8rem);
+  }
+  .hero__scroll {
+    display: none;
+  }
+}

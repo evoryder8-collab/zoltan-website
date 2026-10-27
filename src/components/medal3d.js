@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { laurelLeaves } from '../lib/laurel.js';
 import { sound } from '../lib/audio.js';
+import { tilt, buzz } from '../lib/tilt.js';
 
 const TAU = Math.PI * 2;
 const SERIF = '"Bodoni Moda Variable", Didot, Georgia, serif';
@@ -57,19 +58,20 @@ function face(kind, relief) {
     g.font = `italic 400 380px ${SERIF}`;
     g.fillText('Z', 0, 18);
     g.font = `700 46px ${SANS}`;
-    arcText(g, 'AUSMC · 2026', 400, -Math.PI / 2, 0.075);
+    arcText(g, 'OVERALL WINNER · 2026', 400, -Math.PI / 2, 0.068);
   } else {
     g.fillStyle = ink;
     g.textAlign = 'center';
     g.textBaseline = 'middle';
-    g.font = `700 50px ${SANS}`;
-    g.fillText('OVERALL', 0, -150);
-    g.fillText('WINNER', 0, -88);
-    g.font = `400 132px ${SERIF}`;
-    g.fillText('Zoltan', 0, 40);
-    g.font = `700 40px ${SANS}`;
-    g.fillText('HUNGARY', 0, 170);
-    arcText(g, 'AUSTRALIAN MASSAGE CHAMPIONSHIP', 400, -Math.PI / 2, 0.052);
+    g.font = `italic 400 150px ${SERIF}`;
+    g.fillText('2×', 0, -150);
+    g.font = `400 120px ${SERIF}`;
+    g.fillText('Zoltan', 0, 10);
+    g.font = `700 46px ${SANS}`;
+    g.fillText('KODOR', 0, 110);
+    g.font = `700 36px ${SANS}`;
+    g.fillText('HUNGARY', 0, 200);
+    arcText(g, 'SLOVAKIA · AUSTRALIA', 400, -Math.PI / 2, 0.062);
   }
   const tex = new THREE.CanvasTexture(c);
   tex.colorSpace = relief ? THREE.NoColorSpace : THREE.SRGBColorSpace;
@@ -211,6 +213,7 @@ export async function mountMedal(container, { reduced = false } = {}) {
       S.spinV += TAU * 1.6;
       S.thetaV += 0.9;
       sound.clink(0.8);
+      buzz(18);
     } else if (Math.abs(S.spinV) > 9) sound.clink(Math.min(1, Math.abs(S.spinV) / 30));
   };
   el.addEventListener('pointerup', release);
@@ -237,6 +240,17 @@ export async function mountMedal(container, { reduced = false } = {}) {
   });
   io.observe(container);
 
+  let lastScroll = scrollY;
+  const onScroll = () => {
+    const d = scrollY - lastScroll;
+    lastScroll = scrollY;
+    if (!onScreen || dragging || reduced) return;
+    // scrolling past spins the medal, so it flips as you read
+    S.spinV += Math.max(-1.2, Math.min(1.2, d * 0.03));
+    start();
+  };
+  addEventListener('scroll', onScroll, { passive: true });
+
   const t0 = performance.now();
   let prev = t0;
   let raf = 0;
@@ -258,6 +272,10 @@ export async function mountMedal(container, { reduced = false } = {}) {
     }
     S.thetaV += (-16 * S.theta - 1.4 * S.thetaV) * dt;
     S.theta += S.thetaV * dt;
+    if (tilt.active && !dragging) {
+      S.leanT = tilt.x * 0.5;
+      S.thetaV += tilt.x * 0.6 * dt;
+    }
     S.lean += (S.leanT - S.lean) * 0.06;
     // a quiet tick each time a face swings past at speed
     const f = Math.round(S.spin / Math.PI);
@@ -267,6 +285,7 @@ export async function mountMedal(container, { reduced = false } = {}) {
       if (Math.abs(S.spinV) > 4 && now - lastClink > 110) {
         lastClink = now;
         sound.clink(Math.min(0.5, Math.abs(S.spinV) / 40));
+        buzz(5);
       }
     }
     swing.rotation.z = S.theta + Math.sin(t * 0.9) * 0.015;
@@ -289,6 +308,7 @@ export async function mountMedal(container, { reduced = false } = {}) {
       cancelAnimationFrame(raf);
       ro.disconnect();
       io.disconnect();
+      removeEventListener('scroll', onScroll);
       renderer.dispose();
       el.remove();
     },

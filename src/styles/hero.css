@@ -34,6 +34,14 @@
   background-clip: text;
   color: transparent;
 }
+.hero__surname {
+  display: block;
+  margin: 0.2em 0 0 0.05em;
+  font: 650 clamp(0.95rem, 1.5vw, 1.3rem) / 1 var(--sans);
+  letter-spacing: 0.62em;
+  text-transform: uppercase;
+  color: var(--pearl-dim);
+}
 .hero__name em {
   font-style: italic;
   background: linear-gradient(170deg, var(--ember) 10%, var(--crimson) 70%);

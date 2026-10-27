@@ -173,5 +173,15 @@ export function initGlass() {
     }
   }, { passive: true });
 
-  return { track, refresh: paint, lens: (el) => supportsLens && applyLens(el) };
+  // phones: tilt stands in for the pointer (x, y in -1..1)
+  const light = (x, y) => {
+    px = innerWidth * (0.5 + x * 0.7);
+    py = innerHeight * (0.25 + y * 0.7);
+    if (!queued) {
+      queued = true;
+      requestAnimationFrame(paint);
+    }
+  };
+
+  return { track, refresh: paint, light, lens: (el) => supportsLens && applyLens(el) };
 }

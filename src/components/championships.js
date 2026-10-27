@@ -22,7 +22,7 @@ export function renderEvents() {
       : `<button type="button" class="event__go" disabled>${icon('pin')}<span>${esc(t('champs.noLocation'))}</span></button>`;
     return `
       <li class="event glass${e.featured ? ' is-featured' : ''}${active === e.id ? ' is-active' : ''}" data-reveal>
-        <p class="event__meta"><span>${icon('clock')}${esc(t(`${k}.date`))}</span><span>${icon('pin')}${esc(t(`${k}.place`))}</span></p>
+        <p class="event__meta"><span>${icon('clock')}<span>${esc(t(`${k}.date`))}</span></span><span>${icon('pin')}<span>${esc(t(`${k}.place`))}</span></span></p>
         <h3 class="event__name">${esc(t(`${k}.name`))}</h3>
         <ul class="event__titles">${titles}</ul>
         ${go}

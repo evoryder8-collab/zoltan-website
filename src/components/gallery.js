@@ -24,7 +24,7 @@ export function initGallery({ reduced }) {
       <button type="button" data-open="${i}">
         <img src="${src(g.id, 800)}" srcset="${src(g.id, 800)} 800w, ${src(g.id, 1600)} 1600w" sizes="(max-width: 720px) 70vw, 480px" width="${g.w}" height="${g.h}" alt="" loading="${i < 4 ? 'eager' : 'lazy'}" decoding="async" draggable="false" />
       </button>
-      <p class="shot__cap glass"></p>
+      <p class="shot__cap"></p>
     </li>`,
   ).join('');
   const shots = [...track.children];

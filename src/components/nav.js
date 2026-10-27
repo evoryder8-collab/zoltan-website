@@ -2,6 +2,7 @@
 import { setLang, getLang, t } from '../i18n/index.js';
 import { sound } from '../lib/audio.js';
 import { drawLaurelSvg } from '../lib/laurel.js';
+import { buzz } from '../lib/tilt.js';
 
 export function initNav({ lenis }) {
   const nav = document.getElementById('nav');
@@ -36,6 +37,34 @@ export function initNav({ lenis }) {
   addEventListener('langchange', syncSound);
   syncSound();
 
+  // phones: full-screen menu
+  const menu = document.getElementById('menu');
+  const menuBtn = nav.querySelector('.menu-btn');
+  const menuLaurel = menu.querySelector('.menu__laurel');
+  menu.querySelectorAll('.menu__links a').forEach((a, i) => a.style.setProperty('--i', i));
+  const setMenu = (open) => {
+    menuBtn.setAttribute('aria-expanded', open);
+    document.documentElement.classList.toggle('menu-open', open);
+    if (open) {
+      menu.hidden = false;
+      lenis?.stop();
+      menuLaurel.classList.remove('is-drawn');
+      requestAnimationFrame(() => {
+        menu.classList.add('is-open');
+        menuLaurel.classList.add('is-drawn');
+      });
+      sound.whoosh(0.9);
+    } else {
+      menu.classList.remove('is-open');
+      lenis?.start();
+      setTimeout(() => !menu.classList.contains('is-open') && (menu.hidden = true), 800);
+    }
+    buzz(10);
+  };
+  menuBtn.addEventListener('click', () => setMenu(menuBtn.getAttribute('aria-expanded') !== 'true'));
+  menu.addEventListener('click', (e) => e.target.closest('a') && setMenu(false));
+  addEventListener('keydown', (e) => e.key === 'Escape' && menu.classList.contains('is-open') && setMenu(false));
+
   // anchors: smooth via Lenis when it's running
   document.addEventListener('click', (e) => {
     const a = e.target.closest('a[href^="#"]');
@@ -44,6 +73,7 @@ export function initNav({ lenis }) {
     const target = id ? document.getElementById(id) : null;
     if (!target) return;
     e.preventDefault();
+    if (lenis) lenis.start();
     if (lenis) lenis.scrollTo(id === 'top' ? 0 : target, { offset: -84, duration: 1.4 });
     else target.scrollIntoView({ behavior: 'smooth' });
     history.replaceState(history.state, '', `${location.search}#${id}`);

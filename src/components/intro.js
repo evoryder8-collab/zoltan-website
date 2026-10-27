@@ -3,6 +3,7 @@
 // countdown; any movement over the card pauses it. Shown once per session.
 import { setLang, getLang, t } from '../i18n/index.js';
 import { sound } from '../lib/audio.js';
+import { requestTilt, buzz } from '../lib/tilt.js';
 
 const SEEN = 'zoltan.entered';
 const WAIT = 7; // seconds before the suggested language enters by itself
@@ -79,9 +80,11 @@ export function runIntro({ reduced }) {
       cancelAnimationFrame(raf);
       setLang(lang);
       if (byHand) {
-        // a click is a gesture, so sound can start now
+        // a tap is a gesture: sound can start, and iOS can ask for motion access
         sound.enable(toggle.checked);
         sound.tap();
+        buzz(12);
+        requestTilt();
       }
       try {
         sessionStorage.setItem(SEEN, '1');

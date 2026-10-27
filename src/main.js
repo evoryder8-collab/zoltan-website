@@ -24,11 +24,12 @@ import { initGlass } from './lib/glass.js';
 import { initSilk } from './lib/silk.js';
 import { sound } from './lib/audio.js';
 import { whenNear } from './lib/lazy.js';
+import { tilt, initTilt, buzz } from './lib/tilt.js';
 import { LOCATIONS } from './config.js';
 
 import { runIntro } from './components/intro.js';
 import { initNav } from './components/nav.js';
-import { renderTicker, prepareHero, enterHero } from './components/hero.js';
+import { renderTicker, renderName, prepareHero, enterHero } from './components/hero.js';
 import { renderSections, initTopics, initStudioSwitch } from './components/sections.js';
 import { renderEvents, initChampionships } from './components/championships.js';
 import { initGallery } from './components/gallery.js';
@@ -45,6 +46,7 @@ setLang(detectLang({ search: location.search, stored: storedLang(), languages: n
 // ── static markup ──
 document.querySelectorAll('svg.laurel-svg').forEach((svg) => drawLaurelSvg(svg));
 document.querySelector('.training__laurel').classList.add('is-static');
+renderName();
 renderTicker();
 renderSections();
 renderEvents();
@@ -89,6 +91,7 @@ whenNear(document.getElementById('studio-map'), () => {
 // ── the language can change at any time ──
 const RENDERED = '#stats [data-reveal], #treatment-steps [data-reveal], #treatment-prices [data-reveal], #event-cards [data-reveal]';
 addEventListener('langchange', () => {
+  renderName();
   renderTicker();
   renderSections();
   renderEvents();
@@ -108,7 +111,26 @@ addEventListener('pointerdown', (e) => {
 }, { passive: true });
 document.addEventListener('click', (e) => {
   if (e.target.closest('a, .topic, .filter, .langswitch button, .event__go')) sound.tap();
+  if (e.target.closest('a, button')) buzz(6);
 });
+
+// ── phones: tilt is the pointer (laurel, medal and silk read it directly) ──
+initTilt();
+if (!reduced) {
+  const follow = () => {
+    requestAnimationFrame(follow);
+    if (tilt.active) glass.light(tilt.x, tilt.y);
+  };
+  requestAnimationFrame(follow);
+}
+
+// ── scroll-driven hero: the portrait and laurel drift apart as you leave ──
+if (!reduced) {
+  const st = { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 0.6 };
+  gsap.to('.hero__stage', { yPercent: -10, scale: 1.06, ease: 'none', scrollTrigger: st });
+  gsap.to('.hero__laurel', { rotate: 28, scale: 1.18, opacity: 0.35, ease: 'none', scrollTrigger: st });
+  gsap.to('.hero__copy', { yPercent: -18, opacity: 0.2, ease: 'none', scrollTrigger: st });
+}
 document.addEventListener('pointerover', (e) => {
   if (e.pointerType === 'mouse' && e.target.closest('a, button') && !e.relatedTarget?.closest?.('a, button')) sound.hover();
 });

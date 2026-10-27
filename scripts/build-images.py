@@ -22,8 +22,6 @@ CUTOUTS = {
 
 # slug: (source, category). Proof sources are matched by their numeric id.
 GALLERY = {
-    'ima-standing': ('Zoltan IMA/ara/0E7A0547-2-retouched.jpg', 'portrait'),
-    'ima-kneeling': ('Zoltan IMA/ara/0E7A0570-2-retouched lips fixed.jpg', 'portrait'),
     'at-the-table': ('clients copenhagen/Zoltan.webp', 'treatment'),
     'overall-lifted': ('proof:91612', 'awards'),
     'trophy': ('proof:91691', 'awards'),

@@ -93,6 +93,8 @@ void main(){
   gl_FragColor = vec4(col, 1.0);
 }`;
 
+import { tilt } from './tilt.js';
+
 export function initSilk(canvas, { reduced = false } = {}) {
   const gl = canvas.getContext('webgl', { antialias: false, alpha: false, powerPreference: 'low-power', preserveDrawingBuffer: false });
   const api = { ripple() {}, setLevel() {}, ok: false };
@@ -154,6 +156,10 @@ export function initSilk(canvas, { reduced = false } = {}) {
   }, { passive: true });
 
   const draw = () => {
+    if (tilt.active) {
+      mouse.tx = 0.5 + tilt.x * 0.45;
+      mouse.ty = 0.6 - tilt.y * 0.35;
+    }
     mouse.x += (mouse.tx - mouse.x) * 0.06;
     mouse.y += (mouse.ty - mouse.y) * 0.06;
     level += (levelTarget - level) * 0.04;

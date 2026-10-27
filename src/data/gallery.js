@@ -1,8 +1,6 @@
 // Generated from scripts/build-images.py output. Captions live in the i18n files
 // under gallery.captions.<id>; categories match gallery.filters.
 export const GALLERY = [
-  { id: 'ima-standing', cat: 'portrait', w: 1280, h: 1600 },
-  { id: 'ima-kneeling', cat: 'portrait', w: 1280, h: 1600 },
   { id: 'at-the-table', cat: 'treatment', w: 1002, h: 1600 },
   { id: 'overall-lifted', cat: 'awards', w: 1067, h: 1600 },
   { id: 'trophy', cat: 'awards', w: 1067, h: 1600 },

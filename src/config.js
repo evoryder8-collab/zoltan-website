@@ -2,15 +2,16 @@
 // locations, prices and events. Values in [brackets] are placeholders; see
 // docs/CONTENT-TODO.md. Wording for both languages lives in src/i18n/.
 
+// From zwellness.hu (Z-Wellness, Kódor Zoltán e.v.)
 export const CONTACT = {
-  phone: '+36 00 000 0000', // [placeholder] shown and dialled as-is
-  whatsapp: '+36 00 000 0000', // [placeholder] international format
-  email: 'hello@example.com', // [placeholder]
+  phone: '+36 30 416 2043',
+  whatsapp: '+36 30 416 2043', // assumed to be the same number as the phone
+  email: 'zwellness18@gmail.com',
   socials: {
-    instagram: '', // full URLs; empty ones are hidden
-    facebook: '',
-    tiktok: '',
-    youtube: '',
+    instagram: 'https://www.instagram.com/zwellness18/', // empty ones are hidden
+    facebook: 'https://www.facebook.com/zwellness18',
+    tiktok: 'https://www.tiktok.com/@zwellness18',
+    youtube: 'https://www.youtube.com/@zwellness18',
   },
 };
 
@@ -19,21 +20,19 @@ export const CONTACT = {
 export const TREATMENT = { minutes: 70 };
 
 // Where Zoltan works, with the price at each. Names and addresses live in
-// i18n under locations.<id>. Coordinates are town centres until the exact
-// studio addresses are known (placeholder: true).
+// i18n under locations.<id>; `query` is what Google/Apple Maps search for.
+// Budapest is only published as a district (Sashalom), so its pin marks the area.
 export const LOCATIONS = [
-  { id: 'budapest', price: 20000, lngLat: [19.0402, 47.4979], query: 'Budapest, Hungary', placeholder: true },
-  { id: 'mezokeresztes', price: 14000, lngLat: [20.6905, 47.8278], query: 'Mezőkeresztes, Hungary', placeholder: true },
+  { id: 'budapest', price: 20000, lngLat: [19.17397, 47.51038], query: 'Sashalom, Budapest XVI. kerület' },
+  { id: 'mezokeresztes', price: 14000, lngLat: [20.68864, 47.82599], query: 'Mezőkeresztes, Bornemissza u. 3, 3441' },
 ];
 
 // Where the arcs on the championship globe start
 export const HOME = { lngLat: [19.0402, 47.4979] };
 
-// Championships: wording in i18n under champs.events.<id>. Events without
-// coordinates still get a card but no arc on the globe.
+// Championships, in date order: wording in i18n under champs.events.<id>.
+// Slovakia's pin sits at the country centre until the city is known.
 export const EVENTS = [
+  { id: 'slovakia', lngLat: [19.699, 48.669], featured: true }, // [placeholder] city unknown
   { id: 'ausmc26', lngLat: [151.1717, -33.8477], featured: true },
-  { id: 'emc26', lngLat: [2.3522, 48.8566] },
-  { id: 'ima26', lngLat: null }, // [placeholder] city unknown
-  { id: 'slovakia', lngLat: null }, // [placeholder] event and city unknown
 ];

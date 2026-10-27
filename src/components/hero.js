@@ -12,10 +12,15 @@ export function renderTicker() {
   track.innerHTML = half + half.replace('class="ticker__set"', 'class="ticker__set" aria-hidden="true"');
 }
 
+export function renderName() {
+  const first = t('name.first');
+  document.querySelector('.hero__name-inner').innerHTML = `${esc(first.slice(0, 4))}<em>${esc(first.slice(4, 5))}</em>${esc(first.slice(5))}`;
+}
+
 export function prepareHero({ reduced }) {
   if (reduced) return;
   const q = (s) => document.querySelectorAll(`.hero ${s}`);
-  gsap.set([...q('.hero__copy .kicker'), ...q('.hero__lead'), ...q('.hero__ctas > *'), ...q('.hero__chips > *')], { opacity: 0, y: 24 });
+  gsap.set([...q('.hero__copy .kicker'), ...q('.hero__surname'), ...q('.hero__brand'), ...q('.hero__lead'), ...q('.hero__ctas > *'), ...q('.hero__chips > *')], { opacity: 0, y: 24 });
   gsap.set(q('.hero__name-inner'), { opacity: 0, yPercent: 40, filter: 'blur(12px)' });
   gsap.set(q('.hero__portrait'), { opacity: 0, y: 60, filter: 'blur(14px) drop-shadow(0 30px 50px rgba(0,0,0,.55))' });
   gsap.set(q('.hero__halo'), { opacity: 0, scale: 0.7 });
@@ -29,6 +34,8 @@ export function enterHero({ reduced }) {
     .to(q('.hero__portrait'), { opacity: 1, y: 0, filter: 'blur(0px) drop-shadow(0 30px 50px rgba(0,0,0,.55))', duration: 1.8 }, 0.15)
     .to(q('.hero__copy .kicker'), { opacity: 1, y: 0, duration: 1.1 }, 0.3)
     .to(q('.hero__name-inner'), { opacity: 1, yPercent: 0, filter: 'blur(0px)', duration: 1.6 }, 0.38)
+    .to(q('.hero__surname'), { opacity: 1, y: 0, duration: 1.2 }, 0.5)
+    .to(q('.hero__brand'), { opacity: 1, y: 0, duration: 1.2 }, 0.6)
     .to(q('.hero__lead'), { opacity: 1, y: 0, duration: 1.2 }, 0.62)
     .to(q('.hero__ctas > *'), { opacity: 1, y: 0, duration: 1.1, stagger: 0.08 }, 0.78)
     .to(q('.hero__chips > *'), { opacity: 1, y: 0, duration: 1.1, stagger: 0.08 }, 0.92);

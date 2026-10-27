@@ -5,6 +5,7 @@
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { laurelLeaves } from '../lib/laurel.js';
+import { tilt } from '../lib/tilt.js';
 
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const backOut = (x) => {
@@ -183,11 +184,15 @@ export function mountLaurel(container, { reduced = false } = {}) {
         onDone?.();
       }
     }
+    if (tilt.active) {
+      lean.tx = tilt.x * 0.6;
+      lean.ty = tilt.y * 0.45;
+    }
     lean.x += (lean.tx - lean.x) * 0.05;
     lean.y += (lean.ty - lean.y) * 0.05;
     wreath.rotation.y = lean.x + Math.sin(t * 0.45) * 0.07;
     wreath.rotation.x = lean.y * 0.8 + Math.cos(t * 0.38) * 0.04;
-    wreath.rotation.z = Math.sin(t * 0.25) * 0.02 - scrollY * 0.00025;
+    wreath.rotation.z = Math.sin(t * 0.25) * 0.02 - scrollY * 0.0006;
     renderer.render(scene, camera);
     raf = requestAnimationFrame(frame);
   };

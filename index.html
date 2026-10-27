@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Zoltan · Díjnyertes masszőr Magyarországon</title>
-    <meta name="description" content="Zoltan, az Ausztrál Masszázsbajnokság 2026 abszolút győztese. Sport-, mélyszöveti és nyújtó masszázs. Foglalj időpontot telefonon vagy WhatsAppon." />
+    <title>Kódor Zoltán · Kétszeres abszolút masszázsbajnok · Budapest</title>
+    <meta name="description" content="Kódor Zoltán, Szlovákia és az Ausztrál Masszázsbajnokság 2026 abszolút győztese. Személyre szabott masszázskezelés Budapesten és Mezőkeresztesen." />
     <!-- test build for client feedback: keep out of search engines until launch -->
     <meta name="robots" content="noindex" />
     <meta name="theme-color" content="#0b0607" />
@@ -14,10 +14,10 @@
 
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://evoryder8-collab.github.io/zoltan-website/" />
-    <meta property="og:site_name" content="Zoltan" />
+    <meta property="og:site_name" content="Zoltan Kodor" />
     <meta property="og:locale" content="hu_HU" />
     <meta property="og:locale:alternate" content="en_GB" />
-    <meta property="og:title" content="Zoltan · AusMC 2026 Overall Winner" />
+    <meta property="og:title" content="Zoltan Kodor · Two-time overall massage champion" />
     <meta property="og:description" content="Clinical Precision • Aesthetic Flow. Massage therapy in Budapest and Mezőkeresztes. Book by phone or WhatsApp." />
     <meta property="og:image" content="https://evoryder8-collab.github.io/zoltan-website/og.jpg" />
     <meta property="og:image:width" content="1200" />
@@ -28,10 +28,20 @@
       {
         "@context": "https://schema.org",
         "@type": "Person",
-        "name": "Zoltan",
+        "name": "Zoltan Kodor",
+        "alternateName": "Kódor Zoltán",
+        "brand": "Z-Wellness",
+        "telephone": "+36304162043",
+        "email": "zwellness18@gmail.com",
         "jobTitle": "Massage therapist",
         "nationality": "Hungary",
-        "award": ["Overall Winner, Australian Massage Championship 2026", "Freestyle Massage Award, Australian Massage Championship 2026"]
+        "award": [
+          "Overall Winner, Slovakia, 12 September 2026",
+          "Overall Winner, Australian Massage Championship 2026",
+          "Freestyle Massage Award, Australian Massage Championship 2026",
+          "Best Flow & Transition Award, Australian Massage Championship 2026",
+          "Best International Therapist, Australian Massage Championship 2026"
+        ]
       }
     </script>
     <script>
@@ -50,7 +60,7 @@
       <svg class="intro__laurel laurel-svg" viewBox="-120 -120 240 240" aria-hidden="true"></svg>
       <div class="intro__card glass" data-lens>
         <p class="intro__kicker" data-i18n="intro.kicker"></p>
-        <h1 id="intro-title" class="intro__title">Zoltan</h1>
+        <h1 id="intro-title" class="intro__title" data-i18n="name.first">Zoltan</h1>
         <p class="intro__line" data-i18n="intro.line"></p>
         <p class="intro__choose" data-i18n="intro.choose"></p>
         <div class="intro__langs">
@@ -69,9 +79,9 @@
     <!-- Navigation -->
     <header class="nav" id="nav">
       <div class="nav__pill glass" data-lens>
-        <a class="nav__brand" href="#top" aria-label="Zoltan">
+        <a class="nav__brand" href="#top" aria-label="Zoltan Kodor">
           <svg class="nav__mark" viewBox="-60 -60 120 120" aria-hidden="true"></svg>
-          <span>Zoltan</span>
+          <span data-i18n="name.first">Zoltan</span>
         </a>
         <nav class="nav__links" aria-label="Sections">
           <a href="#about" data-i18n="nav.about"></a>
@@ -88,16 +98,35 @@
           </div>
           <button type="button" class="sound-toggle" aria-pressed="false" data-i18n-attr="aria-label:a11y.soundOn" data-icon="sound"></button>
           <a class="btn btn--crimson btn--sm nav__book" href="#contact" data-i18n="nav.book"></a>
+          <button type="button" class="menu-btn" aria-expanded="false" aria-controls="menu" data-i18n-attr="aria-label:a11y.menu"><span></span><span></span></button>
         </div>
       </div>
     </header>
+
+    <!-- Phones: a full-screen menu -->
+    <div class="menu" id="menu" hidden>
+      <svg class="menu__laurel laurel-svg" viewBox="-120 -120 240 240" aria-hidden="true"></svg>
+      <nav class="menu__links" aria-label="Menu">
+        <a href="#about"><i>01</i><span data-i18n="nav.about"></span></a>
+        <a href="#treatments"><i>02</i><span data-i18n="nav.treatments"></span></a>
+        <a href="#championships"><i>03</i><span data-i18n="nav.champs"></span></a>
+        <a href="#gallery"><i>04</i><span data-i18n="nav.gallery"></span></a>
+        <a href="#training"><i>05</i><span data-i18n="nav.training"></span></a>
+        <a href="#contact"><i>06</i><span data-i18n="nav.contact"></span></a>
+      </nav>
+      <p class="menu__brand" data-i18n="brand"></p>
+      <div class="menu__foot">
+        <a class="btn btn--crimson" data-wa target="_blank" rel="noopener"><span data-icon="whatsapp"></span><span data-i18n="hero.whatsapp"></span></a>
+        <a class="btn btn--glass glass" data-tel><span data-icon="phone"></span><span data-i18n="hero.call"></span></a>
+      </div>
+    </div>
 
     <main id="main">
       <!-- Hero -->
       <section class="hero" id="top" aria-labelledby="hero-name">
         <div class="hero__copy">
           <p class="kicker" data-reveal><span class="leaf" aria-hidden="true"></span><span data-i18n="hero.kicker"></span></p>
-          <h2 class="hero__name" id="hero-name"><span class="hero__name-inner">Zolt<em>a</em>n</span></h2>
+          <h2 class="hero__name" id="hero-name"><span class="hero__name-inner">Zolt<em>a</em>n</span><span class="hero__surname" data-i18n="name.last">Kodor</span></h2>
           <p class="hero__brand" data-i18n="brand"></p>
           <p class="hero__lead" data-i18n="hero.lead"></p>
           <div class="hero__ctas">
@@ -105,8 +134,8 @@
             <a class="btn btn--glass glass" data-tel><span data-icon="phone"></span><span data-i18n="hero.call"></span></a>
           </div>
           <ul class="hero__chips">
+            <li class="glass-chip"><span class="dot" aria-hidden="true"></span><span data-i18n="hero.chipSlovakia"></span></li>
             <li class="glass-chip"><span class="dot" aria-hidden="true"></span><span data-i18n="hero.chipOverall"></span></li>
-            <li class="glass-chip"><span class="dot" aria-hidden="true"></span><span data-i18n="hero.chipFreestyle"></span></li>
           </ul>
         </div>
         <div class="hero__stage">
@@ -121,7 +150,7 @@
             sizes="(max-width: 900px) 80vw, 560px"
             width="1223"
             height="1600"
-            alt="Zoltan"
+            alt="Zoltan Kodor"
             fetchpriority="high"
           />
           <div class="hero__floor" aria-hidden="true"></div>
@@ -148,7 +177,7 @@
             <p class="placeholder-aware" data-i18n="about.p3" data-reveal></p>
             <blockquote class="about__quote" data-reveal>
               <p data-i18n="about.quote"></p>
-              <cite>Zoltan</cite>
+              <cite data-i18n="about.quoteBy"></cite>
             </blockquote>
           </div>
         </div>
@@ -271,7 +300,7 @@
               <div class="studio__switch glass" role="tablist" id="studio-switch" data-i18n-attr="aria-label:contact.map.switch"></div>
               <div class="studio__loading" aria-hidden="true"><span></span></div>
               <div class="studio__bar">
-                <p class="studio__note"><span data-icon="pin"></span><span data-i18n="contact.map.placeholder"></span></p>
+                <p class="studio__note"><span data-icon="pin"></span><span></span></p>
                 <a class="btn btn--crimson btn--sm studio__go" id="studio-go" target="_blank" rel="noopener"><span data-icon="nav"></span><span data-i18n="contact.map.bring"></span></a>
               </div>
             </div>
@@ -281,10 +310,11 @@
     </main>
 
     <footer class="footer">
-      <div class="footer__mark" aria-hidden="true">Zoltan</div>
+      <div class="footer__mark" aria-hidden="true" data-i18n="name.first">Zoltan</div>
       <p class="footer__brand" data-i18n="brand"></p>
       <p class="footer__tagline" data-i18n="footer.tagline"></p>
       <p class="footer__small" data-i18n="footer.rights"></p>
+      <p class="footer__legal" data-i18n="footer.disclaimer"></p>
       <a href="#top" class="footer__top glass"><span data-i18n="footer.top"></span><span data-icon="up"></span></a>
     </footer>
 

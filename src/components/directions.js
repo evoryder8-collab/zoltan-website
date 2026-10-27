@@ -7,19 +7,21 @@ import { sound } from '../lib/audio.js';
 const isApple = /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints > 1;
 const PHONE = matchMedia('(max-width: 900px), (pointer: coarse)');
 
-export const directions = (loc, provider) => {
-  const [lng, lat] = loc.lngLat;
-  const dest = loc.placeholder ? loc.query : `${lat},${lng}`;
-  return provider === 'apple'
-    ? `https://maps.apple.com/?daddr=${encodeURIComponent(dest)}`
-    : `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(dest)}`;
-};
+export const directions = (loc, provider) =>
+  provider === 'apple'
+    ? `https://maps.apple.com/?daddr=${encodeURIComponent(loc.query)}`
+    : `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(loc.query)}`;
 
 export function initDirections(locations) {
   const go = document.getElementById('studio-go');
   let current = locations[0];
-  const set = () => (go.href = directions(current, isApple ? 'apple' : 'google'));
+  const note = document.querySelector('.studio__note span:last-child');
+  const set = () => {
+    go.href = directions(current, isApple ? 'apple' : 'google');
+    note.textContent = t(`locations.${current.id}.address`);
+  };
   set();
+  addEventListener('langchange', set);
   addEventListener('studiochange', (e) => {
     current = locations.find((l) => l.id === e.detail.id) || current;
     set();

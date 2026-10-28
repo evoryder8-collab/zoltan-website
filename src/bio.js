@@ -54,7 +54,7 @@ const CARDS = {
   'links-follow': [
     { id: 'instagram', href: () => CONTACT.socials.instagram, away: true, art: 'g-overall-lifted-800.webp', fx: 62 },
     { id: 'tiktok', href: () => CONTACT.socials.tiktok, away: true, art: 'g-freestyle-award-800.webp', fx: 50 },
-    { id: 'youtube', href: () => CONTACT.socials.youtube, away: true, art: '../media/film-cover.jpg', fx: 50 },
+    { id: 'youtube', href: () => CONTACT.socials.youtube, away: true, art: '../media/film-cover-continents.jpg', fx: 50 },
     { id: 'facebook', href: () => CONTACT.socials.facebook, away: true, art: 'g-medal-flag-800.webp', fx: 57 },
   ],
   'links-site': [
@@ -385,9 +385,6 @@ sheet.addEventListener('cancel', (e) => {
     if (!v.src) v.src = SRC;
     v.preload = 'metadata';
   }, '700px');
-  // the cover stays underneath until the first frame is ready, so the screen
-  // never flashes black as it starts
-  v.style.backgroundImage = `url("${v.poster}")`;
   const sync = () => {
     toggleBtn.innerHTML = icon(v.paused ? 'play' : 'pause');
     toggleBtn.setAttribute('aria-label', t(v.paused ? 'bio.film.play' : 'bio.film.pause'));
@@ -406,6 +403,8 @@ sheet.addEventListener('cancel', (e) => {
       v.play().catch(() => {});
     });
   };
+
+  const rolling = (on) => reel.classList.toggle('is-rolling', on);
 
   // where the screen sits: its place on the page, and filling the screen
   let full = false;
@@ -455,6 +454,7 @@ sheet.addEventListener('cancel', (e) => {
     if (!full) return;
     full = false;
     v.pause();
+    rolling(false);
     lock(false);
     reel.classList.add('is-closing');
     const done = () => {
@@ -496,6 +496,8 @@ sheet.addEventListener('cancel', (e) => {
     (screen.requestFullscreen?.() || screen.webkitRequestFullscreen?.())?.catch?.(() => {});
   });
   ['play', 'pause', 'volumechange'].forEach((ev) => v.addEventListener(ev, sync));
+  // the cover lifts once it's really rolling full screen
+  v.addEventListener('playing', () => full && rolling(true));
   v.addEventListener('ended', () => {
     v.currentTime = 0;
     sync();

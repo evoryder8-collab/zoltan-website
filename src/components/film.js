@@ -134,7 +134,12 @@ export function initFilm({ reduced, lenis }) {
     playing = false;
     sound.duck(false);
     replay.hidden = false;
+    rolling(false);
   });
+  // its cover lies over it until it's really rolling in its window (an iOS
+  // unlock or a stray play elsewhere doesn't count), and returns when it leaves
+  const rolling = (on) => section.classList.toggle('is-rolling', on);
+  video.addEventListener('playing', () => inWindow && rolling(true));
   video.addEventListener('timeupdate', () => {
     if (video.duration) bar.style.transform = `scaleX(${(video.currentTime / video.duration).toFixed(4)})`;
   });
@@ -230,7 +235,10 @@ export function initFilm({ reduced, lenis }) {
     if (nowIn !== inWindow) {
       inWindow = nowIn;
       if (nowIn) play();
-      else pause();
+      else {
+        pause();
+        rolling(false);
+      }
     }
   };
 

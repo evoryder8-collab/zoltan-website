@@ -707,7 +707,7 @@ html.is-arriving .bar {
   height: 100%;
   object-fit: cover;
   border-radius: 22px;
-  background: #000 center / cover no-repeat;
+  background: #000;
   cursor: pointer;
   transition: border-radius 0.9s var(--ease);
 }
@@ -815,6 +815,35 @@ html.is-arriving .bar {
 .reel__sound.is-muted .spk__w,
 .reel__sound:not(.is-muted) .spk__slash {
   opacity: 0;
+}
+/* the film's own cover over it whenever it isn't rolling full screen, so a
+   stray frame never shows; it follows the screen's inset out and back */
+.reel__cover {
+  position: absolute;
+  inset: 8px;
+  width: calc(100% - 16px);
+  height: calc(100% - 16px);
+  object-fit: cover;
+  border-radius: 22px;
+  pointer-events: none;
+  transition:
+    opacity 0.5s var(--ease),
+    inset 0.9s var(--ease),
+    width 0.9s var(--ease),
+    height 0.9s var(--ease),
+    border-radius 0.9s var(--ease);
+}
+.reel.is-full:not(.is-closing) .reel__cover {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+}
+.reel.is-rolling .reel__cover {
+  opacity: 0;
+}
+.reel__screen:fullscreen .reel__cover {
+  display: none;
 }
 /* played: the screen leaves its tilt and fills the screen (bio.js animates
    the way there and back); the page waits, dark, behind it */

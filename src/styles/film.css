@@ -118,6 +118,25 @@
   background: #000;
   cursor: pointer;
 }
+/* the film's own cover over it whenever it isn't rolling: before it starts,
+   once it's scrolled past and at the end, so a stray frame never shows */
+.film__cover {
+  position: absolute;
+  inset: var(--pad, 10px);
+  width: calc(100% - 2 * var(--pad, 10px));
+  height: calc(100% - 2 * var(--pad, 10px));
+  object-fit: cover;
+  border-radius: calc(var(--r, 30px) - var(--pad, 10px));
+  pointer-events: none;
+  transition: opacity 0.5s var(--ease);
+}
+.film.is-rolling .film__cover {
+  opacity: 0;
+}
+.film.is-static .film__cover,
+.film__bezel:fullscreen .film__cover {
+  display: none;
+}
 .film__shine {
   position: absolute;
   inset: var(--pad, 10px);

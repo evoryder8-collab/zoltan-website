@@ -24,7 +24,7 @@ export async function darkStyle() {
   return structuredClone(await base);
 }
 
-const C = {
+const BASE_COLORS = {
   bg: '#1a0b0f',
   water: '#0a0406',
   park: '#1f0d12',
@@ -37,7 +37,8 @@ const C = {
   boundary: '#6e2030',
 };
 
-export function restyle(style, { buildings = false, labels = true } = {}) {
+export function restyle(style, { buildings = false, labels = true, colors = {} } = {}) {
+  const C = { ...BASE_COLORS, ...colors };
   style.layers = style.layers.filter((l) => l.id !== 'building' && (labels || l.type !== 'symbol'));
   for (const l of style.layers) {
     const p = (l.paint = l.paint || {});

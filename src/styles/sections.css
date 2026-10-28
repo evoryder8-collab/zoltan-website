@@ -12,7 +12,7 @@
   place-items: end center;
   min-height: 560px;
 }
-/* a warm gold light behind him, breathing slowly */
+/* a warm gold light behind him, breathing */
 .about__glow {
   position: absolute;
   left: 50%;
@@ -21,20 +21,18 @@
   aspect-ratio: 1;
   translate: -50% -50%;
   background:
-    radial-gradient(closest-side, rgba(255, 214, 140, 0.34), rgba(224, 181, 109, 0.13) 45%, transparent 76%),
+    radial-gradient(closest-side, rgba(255, 214, 140, 0.36), rgba(224, 181, 109, 0.14) 45%, transparent 76%),
     radial-gradient(closest-side at 50% 72%, rgba(195, 18, 47, 0.24), transparent 82%);
-  animation: about-glow 7s ease-in-out infinite;
+  animation: about-breathe 5.2s ease-in-out infinite;
   pointer-events: none;
 }
-@keyframes about-glow {
-  0%, 100% { opacity: 0.75; scale: 0.94; }
-  50% { opacity: 1; scale: 1.04; }
+@keyframes about-breathe {
+  0%, 100% { opacity: 0.45; scale: 0.9; }
+  50% { opacity: 1; scale: 1.06; }
 }
-/* a gold rim of light (on the wrapper, so the fade below doesn't clip it) */
 .about__portrait {
   position: relative;
   display: block;
-  filter: drop-shadow(0 0 24px rgba(240, 196, 120, 0.4));
 }
 .about__figure img {
   height: 600px;
@@ -43,6 +41,24 @@
   /* the legs dissolve into the page */
   -webkit-mask-image: linear-gradient(to bottom, #000 56%, transparent 96%);
   mask-image: linear-gradient(to bottom, #000 56%, transparent 96%);
+}
+.about__figure .about__halo {
+  /* his silhouette as soft gold light (pre-rendered, padded 60/391 × 60/900),
+     breathing with the glow behind */
+  position: absolute;
+  left: -15.35%;
+  top: -6.67%;
+  width: 130.7%;
+  height: 113.3%;
+  max-width: none;
+  -webkit-mask-image: none;
+  mask-image: none;
+  opacity: 0.5;
+  animation: about-halo 5.2s ease-in-out infinite;
+}
+@keyframes about-halo {
+  0%, 100% { opacity: 0.3; scale: 0.985; }
+  50% { opacity: 0.95; scale: 1.03; }
 }
 .about__text p {
   margin: 0 0 1.1rem;
@@ -675,7 +691,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .about__glow {
+  .about__glow,
+  .about__figure .about__halo {
     animation: none;
   }
 }

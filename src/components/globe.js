@@ -1,25 +1,33 @@
 // The championship globe: MapLibre's globe projection in wine and crimson,
-// with glowing great-circle arcs from Hungary to each event and comets
-// travelling along them. It turns slowly until the visitor takes over.
+// lit from the viewer's side (the sun sits behind the visitor, so the face is
+// day, not an eclipse), floating in its own universe (lib/space.js), with
+// glowing great-circle arcs from Hungary to each event and comets travelling
+// along them. It turns slowly until the visitor takes over.
 import { loadMapLibre, darkStyle, restyle } from '../lib/maps.js';
 import { greatCircle } from '../lib/geo.js';
+import { mountSpace } from '../lib/space.js';
 import { t } from '../i18n/index.js';
 import { esc } from '../lib/dom.js';
 import { sound } from '../lib/audio.js';
 
 export async function mountGlobe(container, { events, home, reduced = false }) {
   const [{ Map, Marker, AttributionControl }, style] = await Promise.all([loadMapLibre(), darkStyle()]);
-  restyle(style, { labels: false });
+  // a lit face: rose land, deep plum seas, borders as fine light lines
+  restyle(style, { labels: false, colors: { bg: '#6a2131', park: '#702333', water: '#2d101e', boundary: '#f08a9c' } });
+  for (const l of style.layers) if (l.id.startsWith('boundary')) l.paint['line-opacity'] = 0.32;
   style.projection = { type: 'globe' };
+  // the sun behind the visitor's shoulder, up and to the left
+  style.light = { anchor: 'viewport', position: [1.5, 300, 6] };
   style.sky = {
     'sky-color': '#2a0710',
-    'horizon-color': '#ff3b4e',
+    'horizon-color': '#ff6b7a',
     'fog-color': '#0b0607',
     'sky-horizon-blend': 0.6,
     'horizon-fog-blend': 0.6,
     'fog-ground-blend': 0.8,
-    'atmosphere-blend': ['interpolate', ['linear'], ['zoom'], 0, 1, 4, 0.6, 7, 0],
+    'atmosphere-blend': ['interpolate', ['linear'], ['zoom'], 0, 0.85, 4, 0.5, 7, 0],
   };
+  const space = mountSpace(container.parentElement.querySelector('.globe__space'), { reduced });
 
   const placed = events.filter((e) => e.lngLat);
   const small = innerWidth < 720;
@@ -54,9 +62,43 @@ export async function mountGlobe(container, { events, home, reduced = false }) {
     map.addLayer({ id: 'comets-glow', type: 'circle', source: 'comets', paint: { 'circle-radius': 9, 'circle-color': '#ff3b4e', 'circle-blur': 1, 'circle-opacity': 0.8 } });
     map.addLayer({ id: 'comets-core', type: 'circle', source: 'comets', paint: { 'circle-radius': 2.6, 'circle-color': '#fff' } });
     container.closest('.globe')?.classList.add('is-ready');
+    shade();
     // keep the attribution folded into its (i) button, as on AusMC
     container.querySelector('.maplibregl-ctrl-attrib')?.classList.remove('maplibregl-compact-show');
   });
+
+  // sunlight on the face and shadow toward the rim, sized to the globe as it
+  // zooms; above the map, below the markers
+  const limb = document.createElement('div');
+  limb.className = 'globe__limb';
+  const sheen = document.createElement('div');
+  sheen.className = 'globe__sheen';
+  map.getCanvas().after(limb, sheen);
+  // the globe's outline on screen: a sphere of radius r seen from the camera,
+  // which sits D pixels above the map centre (MapLibre's own camera model)
+  const outline = () => {
+    const lat = Math.min(Math.abs(map.getCenter().lat), 85) * (Math.PI / 180);
+    const r = (512 * 2 ** map.getZoom()) / (2 * Math.PI) / Math.cos(lat);
+    const fov = (map.getVerticalFieldOfView?.() ?? 36.87) * (Math.PI / 180);
+    const D = container.clientHeight / 2 / Math.tan(fov / 2);
+    return (D * r) / Math.sqrt(D * D + 2 * D * r);
+  };
+  let lastLng = null;
+  function shade() {
+    const c = map.getCenter();
+    const cx = container.clientWidth / 2;
+    const cy = container.clientHeight / 2;
+    const r = outline();
+    for (const el of [limb, sheen]) {
+      el.style.setProperty('--gx', `${cx.toFixed(1)}px`);
+      el.style.setProperty('--gy', `${cy.toFixed(1)}px`);
+      el.style.setProperty('--gr', `${r.toFixed(1)}px`);
+    }
+    if (lastLng !== null) space?.turn(c.lng - lastLng);
+    lastLng = c.lng;
+  }
+  map.on('move', shade);
+  map.on('resize', shade);
 
   function comets(time) {
     return {

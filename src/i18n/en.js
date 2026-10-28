@@ -83,7 +83,7 @@ export default {
     quoteBy: 'Zoltan Kodor · short film',
     stats: [
       ['2× Overall Winner', 'Australia & Slovakia'],
-      ['Multi-gold medalist', 'Slovakia & AusMC 2026'],
+      ['Multi-Gold International Medalist', 'Slovakia & AusMC 2026'],
       ['Best Flow & Transition', 'AusMC 2026 award'],
       ['Best International Therapist', 'AusMC 2026 award'],
     ],

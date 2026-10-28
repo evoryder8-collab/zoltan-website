@@ -83,7 +83,7 @@ export default {
     quoteBy: 'Kódor Zoltán · rövidfilm',
     stats: [
       ['2× abszolút győztes', 'Ausztrália & Szlovákia'],
-      ['Többszörös aranyérmes', 'Szlovákia & AusMC 2026'],
+      ['Többszörös nemzetközi aranyérmes', 'Szlovákia & AusMC 2026'],
       ['Best Flow & Transition', 'AusMC 2026 különdíj'],
       ['Best International Therapist', 'AusMC 2026 különdíj'],
     ],

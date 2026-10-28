@@ -209,7 +209,7 @@
         <div class="wrap about__grid">
           <figure class="about__figure" data-reveal>
             <div class="about__glow" aria-hidden="true"></div>
-            <span class="about__portrait"><img src="./img/cutout-stand-900.webp" srcset="./img/cutout-stand-900.webp 391w, ./img/cutout-stand-1600.webp 695w" sizes="(max-width: 900px) 60vw, 360px" width="695" height="1600" alt="" loading="lazy" /></span>
+            <span class="about__portrait"><img class="about__halo" src="./img/about-halo.webp" width="511" height="1020" alt="" aria-hidden="true" loading="lazy" /><img src="./img/cutout-stand-900.webp" srcset="./img/cutout-stand-900.webp 391w, ./img/cutout-stand-1600.webp 695w" sizes="(max-width: 900px) 60vw, 360px" width="695" height="1600" alt="" loading="lazy" /></span>
           </figure>
           <div class="about__text">
             <p class="kicker" data-reveal><span class="leaf" aria-hidden="true"></span><span data-i18n="about.kicker"></span></p>
@@ -270,6 +270,7 @@
             <ol class="champs__cards" id="event-cards"></ol>
           </div>
           <div class="globe glass" data-reveal>
+            <canvas class="globe__space" aria-hidden="true"></canvas>
             <div class="globe__map" id="globe" role="region" data-i18n-attr="aria-label:globe.label"></div>
             <div class="globe__loading" aria-hidden="true"><span></span></div>
             <p class="globe__hint"><span data-icon="drag"></span><span data-i18n="globe.hint"></span></p>

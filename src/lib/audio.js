@@ -1,16 +1,34 @@
-// Sound: Zoltan's soundtrack underneath, and UI sounds synthesised with the
-// Web Audio API on top, so each one stays in step with the motion that
-// triggers it. Nothing plays until the visitor turns sound on; the choice is
-// remembered, and so is where the soundtrack was, from page to page.
+// Sound: Zoltan's soundtrack underneath, and recorded UI sounds on top
+// (CC0, from Freesound via Openverse: see media/sfx/CREDITS.md), each played
+// in step with the motion that triggers it, a little varied in pitch and
+// place so repeats never sound mechanical. Nothing plays until the visitor
+// turns sound on; the choice is remembered, and so is where the soundtrack
+// was, from page to page.
 import trackUrl from '../media/soundtrack.m4a?url';
+import tapUrl from '../media/sfx/tap.mp3?url';
+import tickUrl from '../media/sfx/tick.mp3?url';
+import bellUrl from '../media/sfx/bell.mp3?url';
+import chimesUrl from '../media/sfx/chimes.mp3?url';
+import clinkUrl from '../media/sfx/clink.mp3?url';
+import swooshUrl from '../media/sfx/swoosh.mp3?url';
+import whooshUrl from '../media/sfx/whoosh.mp3?url';
+import silkUrl from '../media/sfx/silk.mp3?url';
+import swellUrl from '../media/sfx/swell.mp3?url';
+import popUrl from '../media/sfx/pop.mp3?url';
+import sparkleUrl from '../media/sfx/sparkle.mp3?url';
 
 const STORE = 'zoltan.sound';
 const AT = 'zoltan.track';
 const LEVEL = 0.36; // the soundtrack under everything
 const DUCKED = 0.022; // while a film speaks
-const mtof = (m) => 440 * Math.pow(2, (m - 69) / 12);
-// D major pentatonic, the same family the laurel chime and hovers draw from
+const SFX = { tap: tapUrl, tick: tickUrl, bell: bellUrl, chimes: chimesUrl, clink: clinkUrl, swoosh: swooshUrl, whoosh: whooshUrl, silk: silkUrl, swell: swellUrl, pop: popUrl, sparkle: sparkleUrl };
+// the glockenspiel bar in bell.mp3 rings at C7 (a touch sharp); every bell is
+// pitched from it, in D major pentatonic, the soundtrack's family
+const BELL = 96.16;
 const PENTA = [62, 64, 66, 69, 71, 74, 76, 78, 81, 83, 86, 88, 90];
+const pitch = (m) => 2 ** ((m - BELL) / 12);
+const vary = (amount) => 1 + (Math.random() - 0.5) * amount;
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
 class Sound {
   constructor() {
@@ -19,6 +37,9 @@ class Sound {
     this.lastHover = 0;
     this.track = null;
     this.speaking = new Set(); // the films playing with sound
+    this.bytes = null; // the sound files, fetched ahead
+    this.buffers = {}; // and decoded, once there's a context
+    this.decoding = {};
     this.supported = typeof window !== 'undefined' && !!(window.AudioContext || window.webkitAudioContext);
   }
 
@@ -28,6 +49,20 @@ class Sound {
     } catch {
       return false;
     }
+  }
+
+  /** Fetch the sound files ahead of time (when sound is about to be asked for
+   *  or restored), so they're ready the moment it's switched on. */
+  prefetch() {
+    if (this.bytes || !this.supported) return;
+    this.bytes = Object.fromEntries(
+      Object.entries(SFX).map(([name, url]) => [
+        name,
+        fetch(url)
+          .then((r) => r.arrayBuffer())
+          .catch(() => null),
+      ]),
+    );
   }
 
   /** Must run inside a user gesture the first time (browser autoplay rules). */
@@ -55,13 +90,20 @@ class Sound {
     this.master = ctx.createGain();
     this.master.gain.value = 0.8;
     this.master.connect(comp).connect(ctx.destination);
-    // a soft hall made from decaying noise, for chimes and whooshes
+    // a soft hall made from decaying noise, to give the bells some air
     this.verb = ctx.createConvolver();
     this.verb.buffer = this.impulse(2.6, 3.2);
     this.wet = ctx.createGain();
     this.wet.gain.value = 0.32;
     this.verb.connect(this.wet).connect(this.master);
-    this.noiseBuf = this.noise(1.5);
+    // the recordings: decoded as they arrive
+    this.prefetch();
+    for (const [name, bytes] of Object.entries(this.bytes || {})) {
+      this.decoding[name] = bytes
+        .then((data) => data && new Promise((ok, no) => ctx.decodeAudioData(data, ok, no)))
+        .then((buf) => buf && (this.buffers[name] = buf))
+        .catch(() => null);
+    }
   }
 
   impulse(seconds, decay) {
@@ -75,82 +117,45 @@ class Sound {
     return buf;
   }
 
-  noise(seconds) {
-    const ctx = this.ctx;
-    const buf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * seconds), ctx.sampleRate);
-    const d = buf.getChannelData(0);
-    for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
-    return buf;
-  }
-
   ready() {
     return this.enabled && this.ctx && this.ctx.state !== 'closed';
   }
 
-  /** One enveloped oscillator, optionally into the reverb. */
-  tone({ freq, type = 'sine', gain = 0.1, attack = 0.004, decay = 0.4, when = 0, glide, wet = 0, pan = 0, detune = 0 }) {
+  /** One recording: `rate` pitches it (and stretches it), `pan` places it,
+   *  `wet` sends some to the hall. Not decoded yet: it plays when it is, if
+   *  that's soon enough to still belong to the moment. */
+  play(name, { gain = 0.2, rate = 1, pan = 0, when = 0, wet = 0 } = {}) {
+    const buf = this.buffers[name];
+    if (!buf) {
+      const asked = performance.now();
+      this.decoding[name]?.then(() => performance.now() - asked < 500 && this.buffers[name] && this.play(name, { gain, rate, pan, when, wet }));
+      return;
+    }
     const ctx = this.ctx;
-    const t = ctx.currentTime + when;
-    const o = ctx.createOscillator();
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    src.playbackRate.value = rate;
     const g = ctx.createGain();
-    const p = ctx.createStereoPanner ? ctx.createStereoPanner() : null;
-    o.type = type;
-    o.frequency.setValueAtTime(freq, t);
-    o.detune.value = detune;
-    if (glide) o.frequency.exponentialRampToValueAtTime(glide, t + decay);
-    g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(gain, t + attack);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + attack + decay);
-    let node = o.connect(g);
-    if (p) {
-      p.pan.value = pan;
+    g.gain.value = gain;
+    let node = src.connect(g);
+    if (pan && ctx.createStereoPanner) {
+      const p = ctx.createStereoPanner();
+      p.pan.value = clamp(pan, -1, 1);
       node = node.connect(p);
     }
     node.connect(this.master);
     if (wet) {
-      const s = ctx.createGain();
-      s.gain.value = wet;
-      node.connect(s).connect(this.verb);
+      const send = ctx.createGain();
+      send.gain.value = wet;
+      node.connect(send).connect(this.verb);
     }
-    o.start(t);
-    o.stop(t + attack + decay + 0.05);
+    src.start(ctx.currentTime + when);
   }
 
-  /** Filtered noise burst. */
-  air({ from = 400, to = 2400, q = 1.2, gain = 0.08, dur = 0.8, when = 0, wet = 0.3, pan0 = -0.3, pan1 = 0.3 }) {
-    const ctx = this.ctx;
-    const t = ctx.currentTime + when;
-    const src = ctx.createBufferSource();
-    src.buffer = this.noiseBuf;
-    const f = ctx.createBiquadFilter();
-    f.type = 'bandpass';
-    f.Q.value = q;
-    f.frequency.setValueAtTime(from, t);
-    f.frequency.exponentialRampToValueAtTime(to, t + dur);
-    const g = ctx.createGain();
-    g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(gain, t + dur * 0.35);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    let node = src.connect(f).connect(g);
-    if (ctx.createStereoPanner) {
-      const p = ctx.createStereoPanner();
-      p.pan.setValueAtTime(pan0, t);
-      p.pan.linearRampToValueAtTime(pan1, t + dur);
-      node = node.connect(p);
-    }
-    node.connect(this.master);
-    const s = ctx.createGain();
-    s.gain.value = wet;
-    node.connect(s).connect(this.verb);
-    src.start(t);
-    src.stop(t + dur + 0.05);
-  }
-
-  /** Glassy tap for buttons and chips. */
+  /** A glass tapped, for buttons and chips. */
   tap() {
     if (!this.ready()) return;
-    this.tone({ freq: 2093, type: 'sine', gain: 0.06, decay: 0.09, glide: 1760 });
-    this.tone({ freq: 3136, type: 'sine', gain: 0.025, decay: 0.07, wet: 0.2 });
+    this.play('tap', { gain: 0.2, rate: vary(0.1), wet: 0.06 });
   }
 
   /** Barely-there tick for hovers; throttled. */
@@ -159,86 +164,73 @@ class Sound {
     const now = performance.now();
     if (now - this.lastHover < 70) return;
     this.lastHover = now;
-    const m = PENTA[7 + Math.floor(Math.random() * 5)];
-    this.tone({ freq: mtof(m), gain: 0.012, decay: 0.12, wet: 0.25 });
+    this.play('tick', { gain: 0.07, rate: 0.85 + Math.random() * 0.4 });
   }
 
-  /** The laurel completes: a rising pentatonic shimmer. */
+  /** The laurel completes: a rising run of bells under a wind-chime shimmer. */
   chime() {
     if (!this.ready()) return;
-    [62, 69, 74, 78, 81, 86].forEach((m, i) => {
-      this.tone({ freq: mtof(m), type: 'sine', gain: 0.05 - i * 0.005, attack: 0.01, decay: 2.2, when: i * 0.075, wet: 0.7, pan: (i % 2 ? 1 : -1) * 0.25 });
-      this.tone({ freq: mtof(m + 12), type: 'triangle', gain: 0.008, decay: 1.2, when: i * 0.075 + 0.01, wet: 0.6 });
+    [81, 86, 90, 93, 98, 102].forEach((m, i) => {
+      this.play('bell', { gain: 0.2 - i * 0.015, rate: pitch(m), when: i * 0.075, pan: (i % 2 ? 1 : -1) * 0.25, wet: 0.3 });
     });
+    this.play('chimes', { gain: 0.1, when: 0.18, wet: 0.2 });
   }
 
-  /** Medal clink: inharmonic metal partials, louder for harder spins. */
+  /** Medal clink, louder for harder spins. */
   clink(strength = 0.6) {
     if (!this.ready()) return;
-    const s = Math.max(0.2, Math.min(1, strength));
-    const base = 1480 + Math.random() * 120;
-    [1, 2.76, 5.4, 8.93].forEach((r, i) => {
-      this.tone({ freq: base * r, gain: (0.05 * s) / (i + 1), attack: 0.001, decay: 0.9 / (1 + i * 0.4), wet: 0.35, pan: (Math.random() - 0.5) * 0.4 });
-    });
+    const s = clamp(strength, 0.2, 1);
+    this.play('clink', { gain: 0.32 * s, rate: vary(0.12), pan: (Math.random() - 0.5) * 0.3, wet: 0.1 });
   }
 
-  /** Globe flights and big moves. */
+  /** Air moving: a short swoosh for the menu and sheet, a deep whoosh for
+   *  globe and map flights, stretched towards the move's length. */
   whoosh(dur = 1.4) {
     if (!this.ready()) return;
-    this.air({ from: 220, to: 2600, dur, gain: 0.07, wet: 0.5 });
-    this.tone({ freq: mtof(50), gain: 0.03, attack: 0.3, decay: dur, wet: 0.4 });
+    if (dur <= 1.2) this.play('swoosh', { gain: 0.22, rate: clamp(0.62 / dur, 0.75, 1.1), wet: 0.12 });
+    else this.play('whoosh', { gain: 0.26, rate: clamp(2.9 / dur, 0.85, 1.25), wet: 0.15 });
   }
 
-  /** A touch on the silk: a soft low pulse with a breath on top. */
+  /** A touch on the silk: the soft flap of fabric, where the finger was. */
   ripple(x = 0) {
     if (!this.ready()) return;
-    const pan = Math.max(-0.6, Math.min(0.6, x * 1.2));
-    this.tone({ freq: 150, glide: 82, gain: 0.07, attack: 0.008, decay: 0.55, pan, wet: 0.3 });
-    this.air({ from: 900, to: 300, dur: 0.6, gain: 0.025, wet: 0.4, pan0: pan, pan1: pan });
+    this.play('silk', { gain: 0.12, rate: vary(0.2), pan: clamp(x * 1.2, -0.6, 0.6) });
   }
 
-  /** One honour appearing in the opening: a soft, rising bell. */
+  /** One honour appearing in the opening: a soft bell, a step higher each time. */
   accolade(i = 0) {
     if (!this.ready()) return;
-    const m = PENTA[6 + (i % 6)];
-    this.tone({ freq: mtof(m), type: 'sine', gain: 0.022, attack: 0.04, decay: 1.6, wet: 0.75, pan: (i % 2 ? 1 : -1) * 0.4 });
-    this.tone({ freq: mtof(m + 12), type: 'sine', gain: 0.006, attack: 0.02, decay: 0.9, wet: 0.6 });
+    this.play('bell', { gain: 0.13, rate: pitch(PENTA[6 + (i % 6)] + 12), pan: (i % 2 ? 1 : -1) * 0.4, wet: 0.4 });
   }
 
-  /** The contact jewels arrive: small glassy bells, from the middle out. */
+  /** The contact jewels arrive: small bells, from the middle out. */
   summon() {
     if (!this.ready()) return;
     [[86, 0, 0.12], [83, -0.3, 0.23], [88, 0.3, 0.23], [81, -0.55, 0.34], [93, 0.55, 0.34]].forEach(([m, pan, when]) => {
-      this.tone({ freq: mtof(m), type: 'sine', gain: 0.016, attack: 0.008, decay: 1.1, when, wet: 0.7, pan });
-      this.tone({ freq: mtof(m + 12), type: 'sine', gain: 0.004, attack: 0.004, decay: 0.5, when, wet: 0.5, pan });
+      this.play('bell', { gain: 0.09, rate: pitch(m + 12), when, pan, wet: 0.35 });
     });
   }
 
-  /** The ticket's confetti: two soft pops, then high bells twinkling down. */
+  /** The ticket's confetti: two soft pops, then a sparkle. */
   sparkle() {
     if (!this.ready()) return;
-    this.air({ from: 2400, to: 700, q: 0.8, dur: 0.22, gain: 0.03, wet: 0.2, pan0: -0.5, pan1: -0.5 });
-    this.air({ from: 2400, to: 700, q: 0.8, dur: 0.22, gain: 0.03, when: 0.04, wet: 0.2, pan0: 0.5, pan1: 0.5 });
-    [93, 90, 88, 86, 83, 81, 86, 90].forEach((m, i) => {
-      this.tone({ freq: mtof(m), type: 'sine', gain: 0.012, attack: 0.004, decay: 0.7, when: 0.08 + i * 0.06 + Math.random() * 0.03, wet: 0.7, pan: (Math.random() - 0.5) * 0.8 });
-    });
+    this.play('pop', { gain: 0.2, pan: -0.4 });
+    this.play('pop', { gain: 0.16, rate: 1.08, pan: 0.4, when: 0.05 });
+    this.play('sparkle', { gain: 0.14, when: 0.08, wet: 0.25 });
   }
 
-  /** The opening: a low swell, rising air and a high shimmer as the curtain parts. */
+  /** The opening: a cinematic swell as the portal opens, with a shimmer above. */
   reveal() {
     if (!this.ready()) return;
-    this.tone({ freq: 55, type: 'sine', gain: 0.13, attack: 0.06, decay: 3, wet: 0.5 });
-    this.tone({ freq: 82.4, type: 'triangle', gain: 0.035, attack: 0.1, decay: 2.6, wet: 0.6 });
-    this.air({ from: 180, to: 4200, dur: 1.5, gain: 0.06, wet: 0.65, pan0: -0.5, pan1: 0.5 });
-    [74, 81, 86, 90, 93].forEach((m, i) => {
-      this.tone({ freq: mtof(m), type: 'sine', gain: 0.018, attack: 0.25, decay: 2.8, when: 0.3 + i * 0.07, wet: 0.85, pan: (i % 2 ? 1 : -1) * 0.35 });
-    });
+    this.play('swell', { gain: 0.42 });
+    this.play('chimes', { gain: 0.08, when: 0.6, wet: 0.3 });
   }
 
   /** Sound was on last time: it comes back with the first tap or key, since
    *  browsers need one (on phones a swipe doesn't count, a tap does). */
   restore() {
     if (!this.saved || !this.supported) return;
+    this.prefetch();
     const events = ['pointerdown', 'pointerup', 'touchend', 'keydown'];
     const off = () => events.forEach((e) => removeEventListener(e, on, true));
     const on = () => {

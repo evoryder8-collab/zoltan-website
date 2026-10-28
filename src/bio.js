@@ -565,6 +565,7 @@ function portal(el, done) {
 // any sound (and iOS before motion), and it opens the page
 function ask(el, then) {
   const step = el.querySelector('.arrival__ask');
+  sound.prefetch(); // the sound effects, ready for a "Yes"
   el.removeAttribute('aria-hidden');
   Object.entries({ role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'arrival-q' }).forEach(([k, v]) => el.setAttribute(k, v));
   el.classList.add('is-asking');

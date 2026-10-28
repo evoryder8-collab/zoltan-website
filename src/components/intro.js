@@ -52,6 +52,7 @@ export function runIntro({ reduced }) {
     const suggestedBtn = buttons.find((b) => b.dataset.lang === suggested);
 
     laurel.classList.add(reduced ? 'is-static' : 'is-drawn');
+    sound.prefetch(); // the sound effects, ready for a "Yes"
     setTimeout(() => el.querySelector('.btn-yes').focus({ preventScroll: true }), 60);
 
     // ── step 1: sound ──

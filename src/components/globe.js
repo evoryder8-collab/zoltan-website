@@ -33,6 +33,11 @@ export async function mountGlobe(container, { events, home, reduced = false }) {
   const small = innerWidth < 720;
   // size the globe to the frame: radius ≈ 42% of its height
   const fit = () => Math.log2(((Math.min(container.clientHeight, container.clientWidth * 0.9) * 0.42) * 2 * Math.PI) / 512);
+  // the whole globe at rest, tipped to show both Hungary and Sydney; a fly-in
+  // leaves it for one event, and the globe comes back to it afterwards
+  const REST_LAT = 12;
+  const resting = () => ({ zoom: fit(), lat: REST_LAT });
+  const away = () => map.getZoom() - fit() > 0.05 || Math.abs(map.getCenter().lat - REST_LAT) > 0.5;
   // Phones: the map takes no gestures of its own, so a vertical swipe always
   // scrolls the page; a sideways swipe turns the globe (swipeToTurn below).
   // Desktop: drag with the mouse; the wheel always scrolls the page.
@@ -40,7 +45,7 @@ export async function mountGlobe(container, { events, home, reduced = false }) {
   const map = new Map({
     container,
     style,
-    center: [76, 12],
+    center: [76, REST_LAT],
     zoom: fit(),
     attributionControl: false,
     interactive: !touch,
@@ -118,7 +123,8 @@ export async function mountGlobe(container, { events, home, reduced = false }) {
     const el = document.createElement('div');
     el.className = `gmark ${cls}`;
     el.innerHTML = '<span class="gmark__pulse"></span><span class="gmark__core"></span><span class="gmark__label glass"></span>';
-    markers[id] = { el, marker: new Marker({ element: el, anchor: 'center' }).setLngLat(lngLat).addTo(map) };
+    // a marker on the far side is hidden, not ghosted over whatever faces the camera
+    markers[id] = { el, marker: new Marker({ element: el, anchor: 'center', opacityWhenCovered: '0' }).setLngLat(lngLat).addTo(map) };
     return el;
   };
   addMarker('home', home.lngLat, 'gmark--home gmark--below');
@@ -137,7 +143,7 @@ export async function mountGlobe(container, { events, home, reduced = false }) {
   io.observe(container);
   const takeOver = () => (idleUntil = performance.now() + 9000);
   ['mousedown', 'touchstart', 'wheel', 'dragstart'].forEach((ev) => map.on(ev, takeOver));
-  if (touch) swipeToTurn(container, map, takeOver);
+  const halt = touch ? swipeToTurn(container, map, { takeOver, resting, away }) : () => {};
   let last = 0;
   const loop = (now) => {
     requestAnimationFrame(loop);
@@ -146,7 +152,9 @@ export async function mountGlobe(container, { events, home, reduced = false }) {
     map.getSource('comets')?.setData(comets(now / 1000));
     if (now > idleUntil && !map.isMoving()) {
       const c = map.getCenter();
-      map.jumpTo({ center: [c.lng + 0.045, c.lat] });
+      // after a fly-in, back out to the whole globe first, then the slow turn resumes
+      if (away()) map.easeTo({ center: [c.lng, REST_LAT], zoom: fit(), duration: 2600 });
+      else map.jumpTo({ center: [c.lng + 0.045, c.lat] });
     }
   };
   requestAnimationFrame(loop);
@@ -157,6 +165,7 @@ export async function mountGlobe(container, { events, home, reduced = false }) {
       if (!e) return;
       idleUntil = performance.now() + 14000;
       Object.entries(markers).forEach(([k, m]) => m.el.classList.toggle('is-active', k === id));
+      halt();
       map.flyTo({ center: e.lngLat, zoom: small ? 2.6 : 3.4, duration: reduced ? 0 : 3200, curve: 1.5, essential: true });
       sound.whoosh(2.2);
     },
@@ -164,8 +173,13 @@ export async function mountGlobe(container, { events, home, reduced = false }) {
   return api;
 }
 
-/** Sideways swipes turn the globe, with momentum; vertical swipes scroll the page. */
-function swipeToTurn(container, map, takeOver) {
+/**
+ * Sideways swipes turn the globe, with momentum; vertical swipes scroll the page.
+ * A swipe only turns the longitude, so one that starts close over an event
+ * after a fly-in also eases the camera back out to the whole globe: otherwise
+ * it would slide along that one latitude, Sydney's being mostly ocean.
+ */
+function swipeToTurn(container, map, { takeOver, resting, away }) {
   container.style.touchAction = 'pan-y';
   let start = null;
   let turning = false;
@@ -173,6 +187,23 @@ function swipeToTurn(container, map, takeOver) {
   let lastT = 0;
   let vel = 0; // degrees per ms
   let glide = 0;
+  let settle = 0;
+  const settleOut = () => {
+    cancelAnimationFrame(settle);
+    let prev = performance.now();
+    const step = (now) => {
+      const k = 1 - Math.exp(-(now - prev) / 260);
+      prev = now;
+      const { zoom, lat } = resting();
+      const c = map.getCenter();
+      const z = map.getZoom();
+      const there = Math.abs(zoom - z) < 0.004 && Math.abs(lat - c.lat) < 0.03;
+      // only zoom and latitude: the finger keeps the longitude
+      map.jumpTo({ center: [c.lng, there ? lat : c.lat + (lat - c.lat) * k], zoom: there ? zoom : z + (zoom - z) * k });
+      if (!there) settle = requestAnimationFrame(step);
+    };
+    settle = requestAnimationFrame(step);
+  };
   const degPerPx = () => 360 / (512 * 2 ** map.getZoom());
   const turn = (deg) => {
     const c = map.getCenter();
@@ -198,6 +229,7 @@ function swipeToTurn(container, map, takeOver) {
         try {
           container.setPointerCapture(e.pointerId);
         } catch {}
+        if (away()) settleOut();
       } else if (Math.abs(dy) > 10) {
         start = null; // the page is scrolling
         return;
@@ -227,4 +259,9 @@ function swipeToTurn(container, map, takeOver) {
   };
   container.addEventListener('pointerup', release);
   container.addEventListener('pointercancel', () => (start = null));
+  // a fly-in takes the camera: stop any glide or settle that would cut it short
+  return () => {
+    cancelAnimationFrame(glide);
+    cancelAnimationFrame(settle);
+  };
 }

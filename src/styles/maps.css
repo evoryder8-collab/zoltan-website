@@ -150,6 +150,10 @@
 .gmark.is-active .gmark__core {
   transform: scale(1.35);
 }
+/* on the far side of the globe: hidden (globe.js), and not tappable either */
+.gmark.maplibregl-marker-covered {
+  pointer-events: none;
+}
 
 /* studio */
 .studio {

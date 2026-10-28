@@ -154,7 +154,7 @@ export default {
     judgeRole: 'Nemzetközi masszázsbíró · Zürich, Svájc',
     videoAria: 'Matthew Hua bíró gratulál Zoltánnak a fordulója után',
     soundOff: 'Koppints a hangért',
-    soundOn: 'Hang bekapcsolva',
+    soundOn: 'Némítás',
     inviteKicker: 'Tiszteletbeli meghívás',
     inviteTitle: 'Hely a Bolgár Masszázsbajnokságon.',
     inviteBody: 'A Szlovákiai Masszázsbajnokság megnyeréséért a Bolgár Masszázsbajnokság szervezője különdíjjal jutalmazta Zoltánt: ingyenes részvétellel az OBMC 2027-en.',

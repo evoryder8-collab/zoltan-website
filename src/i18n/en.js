@@ -154,7 +154,7 @@ export default {
     judgeRole: 'International massage judge · Zurich, Switzerland',
     videoAria: 'Judge Matthew Hua congratulating Zoltan after his round',
     soundOff: 'Tap for sound',
-    soundOn: 'Sound on',
+    soundOn: 'Tap to mute',
     inviteKicker: 'An honorary invitation',
     inviteTitle: 'A place at the Bulgarian Massage Championship.',
     inviteBody: 'For winning the Slovakia Massage Championship, the organiser of the Bulgarian Massage Championship presented Zoltan with a special award: a free place at OBMC 2027.',

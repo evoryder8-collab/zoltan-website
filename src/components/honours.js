@@ -1,6 +1,9 @@
-// Recognition: the judge's verdict plays silently on a loop while it's on
-// screen (its words are subtitled in the video); a tap turns the sound on and
-// starts it from the top, and the soundtrack steps back while it speaks.
+// Recognition: the judge's verdict plays while it's on screen. With the
+// page's sound on it speaks by itself, from the top, once through, and then
+// loops on quietly (its words are subtitled in the video); the button turns
+// it off, or on when the page is quiet, and the soundtrack steps back while
+// it speaks. Browsers only let a video speak unprompted after a tap has
+// played it, so the visitor's taps on the page unlock it on the way down.
 import { t } from '../i18n/index.js';
 import { whenNear } from '../lib/lazy.js';
 import { sound } from '../lib/audio.js';
@@ -9,8 +12,9 @@ import { buzz } from '../lib/tilt.js';
 const BASE = import.meta.env.BASE_URL;
 
 export function initHonours({ reduced }) {
-  const video = document.querySelector('.verdict__video');
-  const btn = document.querySelector('.verdict__sound');
+  const film = document.querySelector('.verdict__film');
+  const video = film.querySelector('.verdict__video');
+  const btn = film.querySelector('.verdict__sound');
   const label = btn.querySelector('.verdict__sound-label');
 
   const sync = () => {
@@ -32,26 +36,103 @@ export function initHonours({ reduced }) {
     return;
   }
 
+  let inView = false;
+  let chosen = null; // the visitor's own call on this button; until then the page's sound decides
+  let unlocked = false; // it has spoken once, so the browser lets it again
+  // saved too: after a refresh the page's sound only comes back at the first tap
+  const wants = () => chosen ?? (sound.enabled || sound.saved);
+
+  const quiet = () => {
+    video.muted = true;
+    video.loop = true;
+    if (inView) video.play().catch(() => {});
+    sync();
+  };
+  // from the top, out loud, once; without permission yet it stays quiet
+  const speak = () => {
+    if (!video.muted) {
+      if (inView) video.play().catch(() => {});
+      return;
+    }
+    const at = video.currentTime;
+    video.currentTime = 0;
+    video.muted = false;
+    video.loop = false;
+    video.play().then(
+      () => {
+        unlocked = true;
+        sync();
+      },
+      () => {
+        video.currentTime = at; // refused: the quiet loop carries on where it was
+        quiet();
+      },
+    );
+    sync();
+  };
+  video.addEventListener('ended', () => {
+    video.currentTime = 0;
+    quiet();
+  });
+
   new IntersectionObserver(
     ([e]) => {
-      if (e.isIntersecting) video.play().catch(() => {});
-      else video.pause();
+      inView = e.isIntersecting;
+      if (!inView) video.pause();
+      else if (wants()) speak();
+      else quiet();
     },
     { threshold: 0.45 },
   ).observe(video);
   video.addEventListener('play', sync);
   video.addEventListener('pause', sync);
 
+  // the page's sound switched: the verdict follows it, the switch's tap
+  // letting it speak at once if it's on screen
+  addEventListener('soundchange', (e) => {
+    chosen = null;
+    if (!inView) return;
+    if (e.detail.on) speak();
+    else quiet();
+  });
+
+  // any tap or key on the way down unlocks it: a muted play and pause inside
+  // the gesture, which nobody sees or hears (iOS lifts the restriction there).
+  // On screen and kept quiet for want of one, a tap brings the voice in; a
+  // swipe isn't a tap, and would only restart it silently. Once it has
+  // spoken, none of this is needed.
+  let x0 = 0;
+  let y0 = 0;
+  const unlock = (e) => {
+    if (unlocked) return off();
+    if (e.type === 'touchstart') {
+      x0 = e.touches[0].clientX;
+      y0 = e.touches[0].clientY;
+      return;
+    }
+    if (film.contains(e.target)) return; // the button has its own say
+    if (inView) {
+      const p = e.changedTouches?.[0];
+      const tap = !p || Math.hypot(p.clientX - x0, p.clientY - y0) < 12;
+      if (tap && wants() && video.muted) speak();
+      return;
+    }
+    video.muted = true;
+    video.play()?.catch(() => {});
+    video.pause();
+  };
+  const gestures = ['touchstart', 'touchend', 'click', 'keydown'];
+  const off = () => gestures.forEach((g) => removeEventListener(g, unlock, true));
+  gestures.forEach((g) => addEventListener(g, unlock, { capture: true, passive: true }));
+
   const toggle = () => {
-    if (video.muted) {
-      video.muted = false;
-      video.currentTime = 0;
-      video.play().catch(() => {});
-    } else video.muted = true;
-    sync();
+    chosen = video.muted;
+    if (chosen) speak();
+    else quiet();
     buzz(8);
   };
   btn.addEventListener('click', toggle);
   video.addEventListener('click', toggle);
   sync();
 }
+

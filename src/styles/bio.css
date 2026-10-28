@@ -112,6 +112,28 @@
   opacity: 1;
   transform: none;
 }
+/* asking "Sound on?": the laurel and its line move up to make room, and
+   glide back to the middle once it's answered */
+.arrival__ask {
+  position: absolute;
+  top: calc(50% + 28px);
+  left: 50%;
+  width: min(340px, calc(100% - 48px));
+  translate: -50% 0;
+  text-align: center;
+}
+.arrival__ask:not(.is-leaving) {
+  animation-delay: 0.5s;
+  animation-fill-mode: both;
+}
+.arrival.is-asking .arrival__mark {
+  transform: translateY(-130px);
+}
+.arrival.is-asking .arrival__line {
+  opacity: 1;
+  transform: translateY(-130px);
+  transition-delay: 0.45s;
+}
 .arrival.is-open {
   pointer-events: none;
 }

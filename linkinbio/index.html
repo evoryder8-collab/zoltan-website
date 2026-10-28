@@ -27,17 +27,28 @@
     <canvas id="silk" class="silk" aria-hidden="true"></canvas>
     <div class="grain" aria-hidden="true"></div>
 
-    <!-- Arrival: the ZK laurel draws, a line of crimson light opens into a
-         soft portal onto the page (as on the homepage) -->
+    <!-- Arrival: the ZK laurel draws; on a first visit it asks "Sound on?" as
+         the homepage does; then a line of crimson light opens into a soft
+         portal onto the page (as on the homepage) -->
     <div class="arrival" aria-hidden="true">
-      <div class="arrival__veil"></div>
-      <div class="arrival__rim"></div>
-      <span class="arrival__seam"></span>
-      <div class="arrival__mark">
+      <div class="arrival__veil" aria-hidden="true"></div>
+      <div class="arrival__rim" aria-hidden="true"></div>
+      <span class="arrival__seam" aria-hidden="true"></span>
+      <div class="arrival__mark" aria-hidden="true">
         <svg class="arrival__laurel laurel-svg" viewBox="-120 -120 240 240"></svg>
         <span class="arrival__zk">ZK</span>
       </div>
-      <p class="arrival__line" data-i18n="bio.arrival"></p>
+      <p class="arrival__line" data-i18n="bio.arrival" aria-hidden="true"></p>
+      <div class="arrival__ask intro__step" hidden>
+        <p class="intro__ask" id="arrival-q" data-i18n="intro.soundTitle"></p>
+        <p class="intro__hint" data-i18n="intro.soundHint"></p>
+        <button type="button" class="btn-yes" data-sound="on">
+          <span class="btn-yes__aura" aria-hidden="true"></span>
+          <span class="btn-yes__label"><span data-icon="sound"></span><span data-i18n="intro.yes"></span></span>
+          <small class="btn-yes__tag" data-i18n="intro.recommended"></small>
+        </button>
+        <button type="button" class="btn-no" data-sound="off" data-i18n="intro.no"></button>
+      </div>
     </div>
 
     <header class="bar">

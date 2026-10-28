@@ -26,13 +26,21 @@ import { initSilk } from './lib/silk.js';
 import { mountAura } from './lib/aura.js';
 import { sound } from './lib/audio.js';
 import { whenNear } from './lib/lazy.js';
-import { tilt, initTilt, buzz } from './lib/tilt.js';
+import { tilt, initTilt, requestTilt, buzz } from './lib/tilt.js';
 import { mountRibbon } from './lib/ribbon.js';
 import { waLink, telLink, mailLink } from './lib/links.js';
 import { initStudioSwitch } from './components/sections.js';
 import { initDirections } from './components/directions.js';
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+// a first visit asks "Sound on?", unless the homepage already asked this visit
+const askSound = (() => {
+  try {
+    return sound.supported && sessionStorage.getItem('zoltan.bio') !== '1' && sessionStorage.getItem('zoltan.entered') !== '1';
+  } catch {
+    return false;
+  }
+})();
 const root = document.documentElement;
 const $ = (s) => document.querySelector(s);
 const IMG = '../img/';
@@ -205,8 +213,9 @@ st.addEventListener('click', () => {
 addEventListener('soundchange', syncSound);
 addEventListener('langchange', syncSound);
 syncSound();
-// sound was on last time: it comes back with the first tap (browsers need one)
-sound.restore();
+// sound was on last time: it comes back with the first tap (browsers need one),
+// unless the arrival is about to ask
+if (!askSound) sound.restore();
 
 // ── touch: the silk ripples, taps click, hovers tick ──
 addEventListener('pointerdown', (e) => {
@@ -552,6 +561,32 @@ function portal(el, done) {
   requestAnimationFrame(step);
 }
 
+// "Sound on?", as on the homepage: the answer is the tap browsers need before
+// any sound (and iOS before motion), and it opens the page
+function ask(el, then) {
+  const step = el.querySelector('.arrival__ask');
+  el.removeAttribute('aria-hidden');
+  Object.entries({ role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'arrival-q' }).forEach(([k, v]) => el.setAttribute(k, v));
+  el.classList.add('is-asking');
+  step.hidden = false;
+  setTimeout(() => step.querySelector('.btn-yes').focus({ preventScroll: true }), 600);
+  step.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-sound]');
+    if (!b || step.classList.contains('is-leaving')) return;
+    const on = b.dataset.sound === 'on';
+    sound.enable(on);
+    if (on) sound.chime();
+    buzz(12);
+    requestTilt(); // iOS: must be asked inside this tap
+    step.classList.add('is-leaving');
+    el.classList.remove('is-asking');
+    ['role', 'aria-modal', 'aria-labelledby'].forEach((k) => el.removeAttribute(k));
+    el.setAttribute('aria-hidden', 'true');
+    setTimeout(() => (step.hidden = true), 380);
+    setTimeout(then, 250);
+  });
+}
+
 function arrive() {
   const el = $('.arrival');
   let seen = false;
@@ -570,6 +605,20 @@ function arrive() {
       if (reduced || seen) gone();
       else portal(el, gone);
     };
+    if (askSound) {
+      el.querySelector('.arrival__laurel').classList.add(reduced ? 'is-static' : 'is-drawn');
+      return ask(el, () => {
+        if (reduced) return finish();
+        // the answer drew the line of light; it opens into the portal
+        el.classList.add('is-line');
+        setTimeout(() => {
+          silk.ripple(innerWidth / 2, innerHeight / 2);
+          silk.flare?.();
+          sound.reveal();
+          finish();
+        }, 1000);
+      });
+    }
     if (reduced || seen) return finish();
     el.querySelector('.arrival__laurel').classList.add('is-drawn');
     const timers = [

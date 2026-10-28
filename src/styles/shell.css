@@ -4,6 +4,10 @@
   inset: 0;
   z-index: 100;
   overflow: hidden;
+  /* clipped, not hidden: a hidden box can still be scrolled (focusing a
+     button can do it), and the laurel is wider than a phone, so everything
+     on it would slide sideways */
+  overflow: clip;
   display: grid;
   place-items: center;
   padding: 16px;
@@ -391,6 +395,15 @@
   font-weight: 750;
   letter-spacing: 0.3em;
   text-transform: uppercase;
+}
+@media (max-width: 720px) {
+  /* two side by side above the name's flight */
+  .accolade {
+    max-width: 41vw;
+  }
+  .accolade__title {
+    font-size: 0.95rem;
+  }
 }
 .accolade.is-breathing .accolade__title {
   animation: honour 2.4s ease-in-out infinite;

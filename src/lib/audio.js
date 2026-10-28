@@ -199,6 +199,15 @@ class Sound {
     this.tone({ freq: mtof(m + 12), type: 'sine', gain: 0.006, attack: 0.02, decay: 0.9, wet: 0.6 });
   }
 
+  /** The contact jewels arrive: small glassy bells, from the middle out. */
+  summon() {
+    if (!this.ready()) return;
+    [[86, 0, 0.12], [83, -0.3, 0.23], [88, 0.3, 0.23], [81, -0.55, 0.34], [93, 0.55, 0.34]].forEach(([m, pan, when]) => {
+      this.tone({ freq: mtof(m), type: 'sine', gain: 0.016, attack: 0.008, decay: 1.1, when, wet: 0.7, pan });
+      this.tone({ freq: mtof(m + 12), type: 'sine', gain: 0.004, attack: 0.004, decay: 0.5, when, wet: 0.5, pan });
+    });
+  }
+
   /** The opening: a low swell, rising air and a high shimmer as the curtain parts. */
   reveal() {
     if (!this.ready()) return;

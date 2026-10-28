@@ -12,24 +12,37 @@
   place-items: end center;
   min-height: 560px;
 }
-.about__arch {
+/* a warm gold light behind him, breathing slowly */
+.about__glow {
   position: absolute;
-  inset: 12% 8% 0;
-  border-radius: 999px 999px 26px 26px;
+  left: 50%;
+  top: 38%;
+  width: 135%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
   background:
-    radial-gradient(80% 60% at 50% 15%, rgba(255, 59, 78, 0.45), transparent 70%),
-    linear-gradient(180deg, rgba(195, 18, 47, 0.55), rgba(42, 10, 18, 0.6));
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.25),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
-    0 40px 80px -30px rgba(0, 0, 0, 0.8);
+    radial-gradient(closest-side, rgba(255, 214, 140, 0.34), rgba(224, 181, 109, 0.13) 45%, transparent 76%),
+    radial-gradient(closest-side at 50% 72%, rgba(195, 18, 47, 0.24), transparent 82%);
+  animation: about-glow 7s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes about-glow {
+  0%, 100% { opacity: 0.75; scale: 0.94; }
+  50% { opacity: 1; scale: 1.04; }
+}
+/* a gold rim of light (on the wrapper, so the fade below doesn't clip it) */
+.about__portrait {
+  position: relative;
+  display: block;
+  filter: drop-shadow(0 0 24px rgba(240, 196, 120, 0.4));
 }
 .about__figure img {
-  position: relative;
   height: 600px;
   width: auto;
   object-fit: contain;
-  filter: drop-shadow(0 24px 40px rgba(0, 0, 0, 0.5));
+  /* the legs dissolve into the page */
+  -webkit-mask-image: linear-gradient(to bottom, #000 56%, transparent 96%);
+  mask-image: linear-gradient(to bottom, #000 56%, transparent 96%);
 }
 .about__text p {
   margin: 0 0 1.1rem;
@@ -71,8 +84,9 @@
 }
 .stat__value {
   display: block;
-  font: 400 clamp(1.5rem, 2.4vw, 2.1rem) / 1.1 var(--serif);
+  font: 400 clamp(1.25rem, 2vw, 1.85rem) / 1.12 var(--serif);
   color: var(--pearl);
+  text-wrap: balance;
 }
 .stat__label {
   display: block;
@@ -657,5 +671,11 @@
   .contact__list > div {
     grid-template-columns: 1fr;
     gap: 0.2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about__glow {
+    animation: none;
   }
 }

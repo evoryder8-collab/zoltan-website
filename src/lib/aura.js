@@ -1,7 +1,7 @@
 // A pool of live crimson silk behind the hero portrait: the background's
-// domain-warped noise, brighter and quicker, fading out in a soft circle so it
-// reads as liquid moving behind a glass medallion. Low resolution, ~30fps,
-// only while on screen; tilt or pointer leans the flow.
+// domain-warped noise, kept quiet (low highlights, slow, faint at the edges)
+// so it reads as liquid moving softly behind him rather than a shape. Low
+// resolution, ~30fps, only while on screen; tilt or pointer leans the flow.
 import { tilt } from './tilt.js';
 
 const VERT = 'attribute vec2 p; void main(){ gl_Position = vec4(p, 0.0, 1.0); }';
@@ -41,7 +41,7 @@ void main(){
   vec2 uv = gl_FragCoord.xy / uRes;
   vec2 p = (uv - 0.5) * 2.0;
   float r = length(p);
-  float t = uTime * 0.11;
+  float t = uTime * 0.075;
   vec2 q = p * 1.15 + uLean * 0.3;
   vec2 w1 = vec2(snoise(q * 0.85 + vec2(t, -t * 0.7)), snoise(q * 0.85 + vec2(-t * 0.6, t) + 3.1));
   vec2 w2 = vec2(snoise(q * 1.5 + w1 * 1.3 + vec2(1.7, 9.2) + t * 0.8), snoise(q * 1.5 + w1 * 1.3 + vec2(8.3, 2.8) - t * 0.8));
@@ -53,11 +53,12 @@ void main(){
   vec3 ember = vec3(1.0, 0.27, 0.33);
   float body = smoothstep(-0.6, 1.0, n);
   vec3 col = mix(wine, crimson, body * 0.8);
-  col = mix(col, ember, pow(folds, 8.0) * 0.65);
-  col += vec3(1.0, 0.86, 0.86) * pow(folds, 42.0) * 0.32;
+  col = mix(col, ember, pow(folds, 8.0) * 0.38);
+  col += vec3(1.0, 0.86, 0.86) * pow(folds, 42.0) * 0.1;
 
   // soft circular falloff, breathing with the cloth
-  float mask = smoothstep(1.0, 0.18, r) * (0.55 + 0.45 * body);
+  float edge = smoothstep(1.0, 0.0, r);
+  float mask = edge * edge * (0.4 + 0.35 * body) * 0.6;
   gl_FragColor = vec4(col * mask, mask);
 }`;
 

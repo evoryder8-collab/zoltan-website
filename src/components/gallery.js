@@ -11,6 +11,18 @@ const src = (id, w) => `${BASE}img/g-${id}-${w}.webp`;
 const CATS = ['all', 'treatment', 'stretch', 'awards', 'portrait'];
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 
+// The photo is 16% wider than its card (room for the parallax), so an
+// off-centre subject is shifted toward the middle and zoomed just enough that
+// no edge shows, up to 1.25×; the zoom is anchored at his face height.
+const PARALLAX = 0.05; // of the card's width
+function frame({ fx = 0.5, fy = 0.32 }) {
+  const off = Math.abs(fx - 0.5);
+  const z = clamp((0.5 + PARALLAX) / (0.58 - 1.16 * off), 1.02, 1.25);
+  const room = Math.max(0, (0.58 * z - 0.5 - PARALLAX) / (1.16 * z));
+  const shift = Math.sign(0.5 - fx) * Math.min(off, room);
+  return `--z:${z.toFixed(3)};--sx:${(shift * z * 100).toFixed(2)}%;--fy:${Math.round(fy * 100)}%`;
+}
+
 export function initGallery({ reduced }) {
   const viewport = document.getElementById('gallery-viewport');
   const track = document.getElementById('gallery-track');
@@ -20,7 +32,7 @@ export function initGallery({ reduced }) {
 
   track.innerHTML = GALLERY.map(
     (g, i) => `
-    <li class="shot" data-i="${i}" data-cat="${g.cat}" style="--ar:${g.w}/${g.h}">
+    <li class="shot" data-i="${i}" data-cat="${g.cat}" style="--ar:${g.w}/${g.h};${frame(g)}">
       <button type="button" data-open="${i}">
         <img src="${src(g.id, 800)}" srcset="${src(g.id, 800)} 800w, ${src(g.id, 1600)} 1600w" sizes="(max-width: 720px) 70vw, 480px" width="${g.w}" height="${g.h}" alt="" loading="${i < 4 ? 'eager' : 'lazy'}" decoding="async" draggable="false" />
       </button>
@@ -105,6 +117,41 @@ export function initGallery({ reduced }) {
     onScreen = e.isIntersecting;
     if (onScreen) kick();
   }).observe(viewport);
+
+  // arriving at the strip, it leans left and springs back, once and again a
+  // little later, to show it can be swiped; any touch of it ends the hints
+  let touched = false;
+  let nudges = 0;
+  let nudgeTimer = 0;
+  const nudge = () => {
+    if (touched || reduced || S.target !== 0 || nudges >= 2) return;
+    nudges++;
+    S.target = -Math.min(150, viewport.clientWidth * 0.24);
+    kick();
+    setTimeout(() => {
+      if (touched) return;
+      S.target = 0;
+      kick();
+    }, 620);
+  };
+  const stopHints = () => {
+    touched = true;
+    clearTimeout(nudgeTimer);
+  };
+  new IntersectionObserver(
+    ([e]) => {
+      clearTimeout(nudgeTimer);
+      if (!e.isIntersecting) return;
+      nudgeTimer = setTimeout(() => {
+        nudge();
+        nudgeTimer = setTimeout(nudge, 5200);
+      }, 450);
+    },
+    { threshold: 0.6 },
+  ).observe(viewport);
+  viewport.addEventListener('pointerdown', stopHints);
+  viewport.addEventListener('wheel', stopHints, { passive: true });
+  document.querySelectorAll('.gallery__arrows [data-dir]').forEach((b) => b.addEventListener('click', stopHints));
 
   viewport.addEventListener('pointerdown', (e) => {
     if (e.button !== 0) return;

@@ -260,17 +260,9 @@
   height: 20px;
 }
 
-/* full screen: the nav and booking bar step aside */
+/* full screen: the nav steps aside (the contact jewels hide in shell.css) */
 html.film-full .nav {
   transform: translateY(-160%);
-}
-html.film-full .dock {
-  transform: translateY(160%) !important;
-}
-@media (min-width: 721px) {
-  html.film-full .dock {
-    transform: translateX(160%) !important;
-  }
 }
 
 /* real fullscreen from the button */

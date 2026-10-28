@@ -4,6 +4,7 @@ import 'lenis/dist/lenis.css';
 import './styles/base.css';
 import './styles/glass.css';
 import './styles/shell.css';
+import './styles/orbs.css';
 import './styles/hero.css';
 import './styles/sections.css';
 import './styles/film.css';
@@ -41,6 +42,7 @@ import { initGallery } from './components/gallery.js';
 import { initFilm } from './components/film.js';
 import { initHonours } from './components/honours.js';
 import { initDirections } from './components/directions.js';
+import { initOrbs } from './components/orbs.js';
 
 gsap.registerPlugin(ScrollTrigger);
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -76,10 +78,11 @@ if (!reduced) {
 }
 
 const nav = initNav({ lenis });
+initOrbs({ reduced });
 initTopics({ sound });
 initStudioSwitch();
 initGallery({ reduced });
-initFilm({ reduced });
+initFilm({ reduced, lenis });
 initHonours({ reduced });
 initChampionships({
   reduced,

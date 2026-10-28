@@ -647,9 +647,6 @@ html[lang='en'] .langswitch__thumb {
 .menu__foot .btn {
   flex: 1;
 }
-html.menu-open .dock {
-  transform: translateY(160%) !important;
-}
 
 @media (max-width: 960px) {
   .nav__links {
@@ -732,100 +729,6 @@ html.menu-open .dock {
 }
 @keyframes marquee {
   to { transform: translateX(-50%); }
-}
-
-/* ───────── dock ───────── */
-.dock {
-  position: fixed;
-  right: max(18px, env(safe-area-inset-right));
-  bottom: max(18px, env(safe-area-inset-bottom));
-  z-index: 45;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  transform: translateX(160%);
-  transition: transform 0.9s var(--spring);
-}
-.dock.is-in {
-  transform: none;
-}
-.dock__btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5em;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  color: var(--pearl);
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 0.9rem;
-  transition: transform 0.45s var(--spring);
-}
-.dock__btn span:not([data-icon]) {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-}
-.dock__btn .i {
-  width: 24px;
-  height: 24px;
-}
-.dock__btn:hover {
-  transform: scale(1.08);
-}
-.dock__btn--wa {
-  background: linear-gradient(160deg, #e6283f, #9e0c25);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.35),
-    0 0 0 1px rgba(255, 95, 115, 0.35),
-    0 16px 36px -12px rgba(227, 37, 63, 0.85);
-}
-.dock__btn--wa::after {
-  content: '';
-  position: absolute;
-  inset: -6px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 59, 78, 0.5);
-  animation: ring 2.6s var(--ease) infinite;
-  pointer-events: none;
-}
-.dock__btn {
-  position: relative;
-}
-@keyframes ring {
-  from { transform: scale(0.85); opacity: 1; }
-  to { transform: scale(1.35); opacity: 0; }
-}
-@media (max-width: 720px) {
-  .dock {
-    left: 10px;
-    right: 10px;
-    bottom: max(10px, env(safe-area-inset-bottom));
-    flex-direction: row;
-    transform: translateY(160%);
-  }
-  .dock__btn {
-    flex: 1;
-    width: auto;
-    height: 52px;
-    border-radius: 999px;
-  }
-  .dock__btn span:not([data-icon]) {
-    position: static;
-    width: auto;
-    height: auto;
-    clip: auto;
-  }
-  .dock__btn--wa::after {
-    display: none;
-  }
-  .footer {
-    padding-bottom: 96px !important;
-  }
 }
 
 /* ───────── footer ───────── */

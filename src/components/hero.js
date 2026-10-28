@@ -29,7 +29,6 @@ export function prepareHero({ reduced }) {
   gsap.set(q('.hero__flash'), { opacity: 0 });
   gsap.set(q('.hero__halo'), { opacity: 0, scale: 0.7 });
   gsap.set(q('.hero__aura'), { opacity: 0, scale: 0.6 });
-  gsap.set(q('.hero__disc'), { opacity: 0, scale: 0.85 });
 }
 
 /** skipName: the opening flies the name in from the intro card instead. */
@@ -39,7 +38,6 @@ export function enterHero({ reduced, skipName = false }) {
   const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
   tl.to(q('.hero__halo'), { opacity: 1, scale: 1, duration: 2.2 }, 0)
     .to(q('.hero__aura'), { opacity: 1, scale: 1, duration: 2.6 }, 0)
-    .to(q('.hero__disc'), { opacity: 1, scale: 1, duration: 2.2 }, 0.2)
     .fromTo(q('.hero__flash'), { opacity: 0 }, { opacity: 0.85, duration: 0.35, ease: 'power2.out' }, 0)
     .to(q('.hero__flash'), { opacity: 0, duration: 1.8, ease: 'power2.inOut' }, 0.35)
     .to(q('.hero__portrait'), { opacity: 1, y: 0, scale: 1, duration: 2.2 }, 0.1)

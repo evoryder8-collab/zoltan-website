@@ -17,8 +17,9 @@ const ease = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
 // scroll progress through the pinned section
 const GROW = [0.16, 0.42]; // floating frame → full screen
 const PLAY = [0.34, 0.97]; // the film plays inside this window
+const WATCH = 0.46; // where a tap on the frame takes the visitor: full screen, playing
 
-export function initFilm({ reduced }) {
+export function initFilm({ reduced, lenis }) {
   const section = document.getElementById('film');
   const frame = section.querySelector('.film__frame');
   const video = section.querySelector('.film__video');
@@ -137,11 +138,33 @@ export function initFilm({ reduced }) {
   video.addEventListener('timeupdate', () => {
     if (video.duration) bar.style.transform = `scaleX(${(video.currentTime / video.duration).toFixed(4)})`;
   });
-  // tapping the playing film toggles pause
-  video.addEventListener('click', () => {
-    if (!inWindow) return;
-    if (video.paused) play();
-    else pause();
+  // a tap on the playing film pauses or resumes it; anywhere else (still
+  // floating, or scrolled past) it takes the visitor to the film and starts
+  // it with sound, the tap itself unlocking audio for iOS
+  frame.addEventListener('click', (e) => {
+    if (e.target.closest('button')) return;
+    if (inWindow) {
+      if (video.paused) play();
+      else pause();
+      return;
+    }
+    if (reduced) return;
+    wantSound = true;
+    load();
+    video.muted = true;
+    video.play()?.catch(() => {});
+    video.pause();
+    if (ended) {
+      ended = false;
+      replay.hidden = true;
+      video.currentTime = 0;
+    }
+    const r = section.getBoundingClientRect();
+    const y = scrollY + r.top + (r.height - innerHeight) * WATCH;
+    if (lenis) lenis.scrollTo(y, { duration: 1.5 });
+    else scrollTo({ top: y, behavior: 'smooth' });
+    sound.tap();
+    buzz(8);
   });
 
   // ── reduced motion: a still frame that plays on tap, no scroll takeover ──

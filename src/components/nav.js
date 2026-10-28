@@ -1,4 +1,4 @@
-// Nav pill (sections, HU/EN, sound, book), the booking dock and anchor scrolling.
+// Nav pill (sections, HU/EN, sound, book) and anchor scrolling.
 import { setLang, getLang, t } from '../i18n/index.js';
 import { sound } from '../lib/audio.js';
 import { drawLaurelSvg } from '../lib/laurel.js';
@@ -95,7 +95,6 @@ export function initNav({ lenis }) {
   return {
     show() {
       nav.classList.add('is-in');
-      document.getElementById('dock').classList.add('is-in');
     },
   };
 }

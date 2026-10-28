@@ -155,7 +155,6 @@
         <div class="hero__stage">
           <div class="hero__halo" aria-hidden="true"></div>
           <div class="hero__aura" aria-hidden="true"><canvas></canvas></div>
-          <div class="hero__disc glass" data-lens aria-hidden="true"></div>
           <div class="hero__laurel" role="img" data-i18n-attr="aria-label:a11y.laurel">
             <svg class="laurel-svg hero__laurel-fallback" viewBox="-120 -120 240 240" aria-hidden="true"></svg>
           </div>
@@ -209,8 +208,8 @@
       <section class="section about" id="about" aria-labelledby="about-title">
         <div class="wrap about__grid">
           <figure class="about__figure" data-reveal>
-            <div class="about__arch"></div>
-            <img src="./img/cutout-stand-900.webp" srcset="./img/cutout-stand-900.webp 391w, ./img/cutout-stand-1600.webp 695w" sizes="(max-width: 900px) 60vw, 360px" width="695" height="1600" alt="" loading="lazy" />
+            <div class="about__glow" aria-hidden="true"></div>
+            <span class="about__portrait"><img src="./img/cutout-stand-900.webp" srcset="./img/cutout-stand-900.webp 391w, ./img/cutout-stand-1600.webp 695w" sizes="(max-width: 900px) 60vw, 360px" width="695" height="1600" alt="" loading="lazy" /></span>
           </figure>
           <div class="about__text">
             <p class="kicker" data-reveal><span class="leaf" aria-hidden="true"></span><span data-i18n="about.kicker"></span></p>
@@ -416,11 +415,8 @@
       <a href="#top" class="footer__top glass"><span data-i18n="footer.top"></span><span data-icon="up"></span></a>
     </footer>
 
-    <!-- Always-there booking -->
-    <div class="dock" id="dock">
-      <a class="dock__btn dock__btn--wa" data-wa target="_blank" rel="noopener"><span data-icon="whatsapp"></span><span data-i18n="dock.whatsapp"></span></a>
-      <a class="dock__btn glass" data-tel><span data-icon="phone"></span><span data-i18n="dock.call"></span></a>
-    </div>
+    <!-- Floating contact jewels, summoned by the first scroll (components/orbs.js) -->
+    <nav class="orbs orb-set" id="orbs"></nav>
 
     <dialog class="viewer" id="viewer" data-i18n-attr="aria-label:gallery.viewer.label">
       <div class="viewer__stage">

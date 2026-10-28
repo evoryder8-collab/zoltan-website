@@ -191,6 +191,25 @@ class Sound {
     this.air({ from: 900, to: 300, dur: 0.6, gain: 0.025, wet: 0.4, pan0: pan, pan1: pan });
   }
 
+  /** One honour appearing in the opening: a soft, rising bell. */
+  accolade(i = 0) {
+    if (!this.ready()) return;
+    const m = PENTA[6 + (i % 6)];
+    this.tone({ freq: mtof(m), type: 'sine', gain: 0.022, attack: 0.04, decay: 1.6, wet: 0.75, pan: (i % 2 ? 1 : -1) * 0.4 });
+    this.tone({ freq: mtof(m + 12), type: 'sine', gain: 0.006, attack: 0.02, decay: 0.9, wet: 0.6 });
+  }
+
+  /** The opening: a low swell, rising air and a high shimmer as the curtain parts. */
+  reveal() {
+    if (!this.ready()) return;
+    this.tone({ freq: 55, type: 'sine', gain: 0.13, attack: 0.06, decay: 3, wet: 0.5 });
+    this.tone({ freq: 82.4, type: 'triangle', gain: 0.035, attack: 0.1, decay: 2.6, wet: 0.6 });
+    this.air({ from: 180, to: 4200, dur: 1.5, gain: 0.06, wet: 0.65, pan0: -0.5, pan1: 0.5 });
+    [74, 81, 86, 90, 93].forEach((m, i) => {
+      this.tone({ freq: mtof(m), type: 'sine', gain: 0.018, attack: 0.25, decay: 2.8, when: 0.3 + i * 0.07, wet: 0.85, pan: (i % 2 ? 1 : -1) * 0.35 });
+    });
+  }
+
   /** Lowers the ambient pad while the film plays with sound. */
   duck(on) {
     if (!this.pad || !this.ctx) return;

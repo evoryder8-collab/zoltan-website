@@ -9,7 +9,7 @@ export function initNav({ lenis }) {
   const mark = nav.querySelector('.nav__mark');
   drawLaurelSvg(mark, { radius: 34, pairs: 6, stroke: 2.2 });
   mark.classList.add('laurel-svg', 'is-static');
-  mark.insertAdjacentHTML('beforeend', '<text x="0" y="13" text-anchor="middle" fill="var(--pearl)" font-family="Bodoni Moda Variable, Georgia, serif" font-size="40" font-style="italic">Z</text>');
+  mark.insertAdjacentHTML('beforeend', '<text x="-1" y="11" text-anchor="middle" fill="var(--pearl)" font-family="Bodoni Moda Variable, Georgia, serif" font-size="31" font-style="italic" letter-spacing="-1">ZK</text>');
 
   // language
   const langBtns = nav.querySelectorAll('.langswitch button');

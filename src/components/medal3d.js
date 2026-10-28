@@ -55,8 +55,8 @@ function face(kind, relief) {
     }
     g.textAlign = 'center';
     g.textBaseline = 'middle';
-    g.font = `italic 400 380px ${SERIF}`;
-    g.fillText('Z', 0, 18);
+    g.font = `italic 400 250px ${SERIF}`;
+    g.fillText('ZK', -6, 14);
     g.font = `700 46px ${SANS}`;
     arcText(g, 'OVERALL WINNER · 2026', 400, -Math.PI / 2, 0.068);
   } else {

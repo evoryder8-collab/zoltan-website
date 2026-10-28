@@ -97,7 +97,7 @@ import { tilt } from './tilt.js';
 
 export function initSilk(canvas, { reduced = false } = {}) {
   const gl = canvas.getContext('webgl', { antialias: false, alpha: false, powerPreference: 'low-power', preserveDrawingBuffer: false });
-  const api = { ripple() {}, setLevel() {}, ok: false };
+  const api = { ripple() {}, setLevel() {}, flare() {}, ok: false };
   if (!gl) {
     document.documentElement.classList.add('no-webgl');
     return api;
@@ -199,6 +199,12 @@ export function initSilk(canvas, { reduced = false } = {}) {
     rips[ripIdx * 3 + 1] = 1 - y / innerHeight;
     rips[ripIdx * 3 + 2] = now();
     ripIdx = (ripIdx + 1) % 6;
+  };
+  api.flare = (peak = 1.9, hold = 650) => {
+    if (reduced) return;
+    const back = levelTarget;
+    levelTarget = peak;
+    setTimeout(() => (levelTarget = back), hold);
   };
   api.setLevel = (v) => {
     levelTarget = v;

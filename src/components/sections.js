@@ -34,7 +34,9 @@ export function renderSections() {
         <a class="btn btn--crimson btn--sm" href="${esc(href)}" target="_blank" rel="noopener">${icon('whatsapp')}${esc(t('treatments.book', { where }))}</a>
       </article>`;
   }).join('');
-  document.getElementById('toolkit').innerHTML = t('treatments.methods').map((m) => `<li class="tool"><span class="leaf" aria-hidden="true"></span>${esc(m)}</li>`).join('');
+  document.getElementById('toolkit').innerHTML = t('treatments.methods')
+    .map(([name, detail], i) => `<li class="tool"><span class="tool__n">${String(i + 1).padStart(2, '0')}</span><span class="tool__name">${esc(name)}</span>${detail ? `<span class="tool__detail">${esc(detail)}</span>` : ''}</li>`)
+    .join('');
 
   // training
   document.getElementById('training-points').innerHTML = t('training.points').map((p) => `<li>${icon('check')}<span>${esc(p)}</span></li>`).join('');

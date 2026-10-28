@@ -129,9 +129,9 @@ export function runIntro({ reduced }) {
       try {
         sessionStorage.setItem(SEEN, '1');
       } catch {}
-      el.classList.add('is-leaving');
-      setTimeout(() => resolve({ skipped: false }), reduced ? 0 : 520);
-      setTimeout(() => (el.hidden = true), reduced ? 0 : 1050);
+      // the opening (opening.js) takes it from here
+      if (reduced) el.hidden = true;
+      resolve({ skipped: false });
     }
   });
 }

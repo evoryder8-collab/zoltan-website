@@ -27,9 +27,11 @@ import { sound } from './lib/audio.js';
 import { whenNear } from './lib/lazy.js';
 import { tilt, initTilt, buzz } from './lib/tilt.js';
 import { mountRibbon } from './lib/ribbon.js';
+import { mountAura } from './lib/aura.js';
 import { LOCATIONS } from './config.js';
 
 import { runIntro } from './components/intro.js';
+import { playOpening } from './components/opening.js';
 import { initNav } from './components/nav.js';
 import { renderTicker, renderName, prepareHero, enterHero } from './components/hero.js';
 import { renderSections, initTopics, initStudioSwitch } from './components/sections.js';
@@ -161,18 +163,32 @@ const laurel = (async () => {
   return null;
 });
 
+// ── live silk behind the portrait ──
+if (!root.classList.contains('no-webgl')) {
+  try {
+    mountAura(document.querySelector('.hero__aura canvas'), { reduced });
+  } catch (err) {
+    console.warn('[aura] skipped', err);
+  }
+}
+
 prepareHero({ reduced });
-runIntro({ reduced }).then(async () => {
-  root.classList.remove('is-locked');
-  lenis?.start();
-  nav.show();
-  enterHero({ reduced });
-  const l = await laurel;
-  const grow = () => sound.chime();
-  if (l) setTimeout(() => l.grow(grow), reduced ? 0 : 350);
-  else laurelBox.querySelector('.hero__laurel-fallback').classList.add(reduced ? 'is-static' : 'is-drawn');
+runIntro({ reduced }).then(async ({ skipped }) => {
+  const cinematic = !skipped && !reduced;
+  const heroIn = async () => {
+    root.classList.remove('is-locked');
+    lenis?.start();
+    // after the opening the name has flown in from the intro card
+    enterHero({ reduced, skipName: cinematic });
+    setTimeout(() => nav.show(), cinematic ? 1100 : 0);
+    const l = await laurel;
+    if (l) setTimeout(() => l.grow(() => sound.chime()), reduced ? 0 : cinematic ? 1200 : 350);
+    else laurelBox.querySelector('.hero__laurel-fallback').classList.add(reduced ? 'is-static' : 'is-drawn');
+  };
+  if (cinematic) await playOpening({ silk, onHero: heroIn });
+  else heroIn();
   // let the browser restore a #hash target after the intro
   if (location.hash.length > 1) document.getElementById(location.hash.slice(1))?.scrollIntoView();
 });
 
-if (import.meta.env.DEV) window.__zoltan = { lenis, silk, sound };
+if (import.meta.env.DEV) window.__zoltan = { lenis, silk, sound, gsap };

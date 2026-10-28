@@ -7,5 +7,5 @@
     </radialGradient>
   </defs>
   <rect width="64" height="64" rx="16" fill="url(#g)"/>
-  <path d="M19 16H46L46 19.5L26 44.5H46.5V48H18L18 44.5L38 19.5H19Z" fill="#f6f1ec"/>
+  <g fill="#f6f1ec"><path d="M10 16L31 16L31 18.3L15.8 45.7L31.5 45.7L31.5 48L9.5 48L9.5 45.7L24.7 18.3L10 18.3Z"/><path d="M35 16L39.4 16L39.4 48L35 48Z"/><path d="M39.4 32.2L52.2 16L54.6 16L39.4 35.2Z"/><path d="M42.6 30.2L55.6 48L49.6 48L39.4 34.2Z"/></g>
 </svg>

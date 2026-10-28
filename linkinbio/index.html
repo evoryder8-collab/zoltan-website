@@ -55,8 +55,16 @@
     </header>
 
     <main id="main" class="bio">
-      <!-- Zoltan: who he is, in words; the film below shows him -->
+      <!-- Zoltan: live liquid behind him, a laurel, a soft still light on him -->
       <section class="me" aria-labelledby="me-name">
+        <div class="me__stage">
+          <div class="me__aura" aria-hidden="true"><canvas></canvas></div>
+          <svg class="me__laurel laurel-svg" viewBox="-120 -120 240 240" aria-hidden="true"></svg>
+          <div class="me__figure">
+            <img class="me__halo" src="../img/about-halo.webp" width="511" height="1020" alt="" aria-hidden="true" />
+            <img class="me__portrait" src="../img/cutout-stand-900.webp" srcset="../img/cutout-stand-900.webp 391w, ../img/cutout-stand-1600.webp 695w" sizes="260px" width="391" height="900" alt="Zoltan Kodor" fetchpriority="high" />
+          </div>
+        </div>
         <p class="me__welcome" data-i18n="bio.welcome"></p>
         <h1 class="me__name" id="me-name"></h1>
         <p class="me__brand" data-i18n="brand"></p>

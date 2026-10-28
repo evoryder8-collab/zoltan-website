@@ -1,7 +1,8 @@
-// /linkinbio: the page Zoltan's social profiles link to. Who he is, a booking
-// sheet that asks where and then opens WhatsApp or the dialler, the film in a
-// tilted frame that grows to fill the screen when played, every way to reach
-// him in platform-tinted glass, and the studios on the homepage's 3D map.
+// /linkinbio: the page Zoltan's social profiles link to. Who he is (live
+// liquid, laurel, his portrait), a booking sheet that asks where and then
+// opens WhatsApp or the dialler, the film in a tilted frame that grows to fill
+// the screen when played, every way to reach him in platform-tinted glass, and
+// the studios on the homepage's 3D map.
 // It shares the homepage's systems (silk, sound, ribbon, map).
 import '@fontsource-variable/bodoni-moda';
 import '@fontsource-variable/manrope';
@@ -22,6 +23,7 @@ import { drawLaurelSvg } from './lib/laurel.js';
 import { esc, initReveals } from './lib/dom.js';
 import { initGlass } from './lib/glass.js';
 import { initSilk } from './lib/silk.js';
+import { mountAura } from './lib/aura.js';
 import { sound } from './lib/audio.js';
 import { whenNear } from './lib/lazy.js';
 import { tilt, initTilt, buzz } from './lib/tilt.js';
@@ -158,6 +160,13 @@ const glass = initGlass();
 const reveals = initReveals({ reduced });
 const ribbon = mountRibbon($('.ticker'), $('.ticker__track'), '.ticker__set');
 initTilt();
+if (!root.classList.contains('no-webgl')) {
+  try {
+    mountAura($('.me__aura canvas'), { reduced });
+  } catch (err) {
+    console.warn('[aura] skipped', err);
+  }
+}
 
 addEventListener('langchange', () => {
   syncTitle();
@@ -579,6 +588,7 @@ function arrive() {
 }
 
 arrive().then(() => {
+  $('.me__laurel').classList.add(reduced ? 'is-static' : 'is-drawn');
   $('#book-invite').classList.add('is-on');
   // arriving with #studios (or another anchor) in the link
   if (location.hash.length > 1) document.getElementById(location.hash.slice(1))?.scrollIntoView();

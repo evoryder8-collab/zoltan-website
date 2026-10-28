@@ -322,12 +322,19 @@
   z-index: 3;
   /* identical to .intro's own background, so handing over is invisible */
   background: radial-gradient(60% 55% at 50% 46%, rgba(70, 8, 22, 0.35), rgba(11, 6, 7, 0.86) 72%);
+  /* the portal (opening.js sets its radii): clear inside, a long feathered
+     edge, the veil beyond */
+  -webkit-mask: radial-gradient(var(--rx, 0%) var(--ry, 0%) at 50% 50%, transparent 0%, transparent 52%, #000 100%);
+  mask: radial-gradient(var(--rx, 0%) var(--ry, 0%) at 50% 50%, transparent 0%, transparent 52%, #000 100%);
 }
-.intro__veil--top {
-  clip-path: inset(0 0 50% 0);
-}
-.intro__veil--bottom {
-  clip-path: inset(50% 0 0 0);
+/* a faint crimson light around the portal's edge */
+.intro__rim {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: radial-gradient(var(--rx, 0%) var(--ry, 0%) at 50% 50%, transparent 46%, rgba(255, 59, 78, 0.16) 64%, rgba(195, 18, 47, 0.06) 82%, transparent 100%);
+  opacity: 0;
+  pointer-events: none;
 }
 .intro.is-opening .intro__card,
 .intro.is-opening .intro__laurel {

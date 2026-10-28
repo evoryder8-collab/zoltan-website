@@ -4,9 +4,10 @@
 //   2 · the laurel swells, turns and burns out
 //   3 · the name lifts out of the card and flies into its place in the hero
 //   4 · his honours breathe in, one by one, at varied spots around the screen
-//   5 · the screen parts along the light like a curtain, carrying the honours
-//       away with it, with a low swell and a shockwave through the silk, and
-//       the portrait pushes in out of light
+//   5 · the light opens like a lens into a soft portal that widens until the
+//       hero fills the screen; the honours drift outward and dissolve into its
+//       edge, with a low swell and a shockwave through the silk, and the
+//       portrait pushes in out of light
 import { gsap } from 'gsap';
 import { sound } from '../lib/audio.js';
 import { t } from '../i18n/index.js';
@@ -38,14 +39,12 @@ export function playOpening({ silk, onHero }) {
   const laurel = intro.querySelector('.intro__laurel');
   const nameInner = document.querySelector('.hero__name-inner');
 
-  intro.insertAdjacentHTML(
-    'beforeend',
-    '<div class="intro__veil intro__veil--top"></div><div class="intro__veil intro__veil--bottom"></div><div class="intro__seam"></div>',
-  );
-  const [top, bottom] = intro.querySelectorAll('.intro__veil');
+  intro.insertAdjacentHTML('beforeend', '<div class="intro__veil"></div><div class="intro__rim"></div><div class="intro__seam"></div>');
+  const veil = intro.querySelector('.intro__veil');
+  const rim = intro.querySelector('.intro__rim');
   const seam = intro.querySelector('.intro__seam');
 
-  // honours ride the half of the curtain they appear on
+  // honours sit on the veil, so the opening portal takes them with it
   const zones = [...ZONES].sort(() => Math.random() - 0.5);
   const placed = [];
   const accolades = honours().map((h, i) => {
@@ -65,8 +64,8 @@ export function playOpening({ silk, onHero }) {
     el.style.left = `${x}%`;
     el.style.top = `${y}%`;
     el.innerHTML = `<span class="leaf"></span><span class="accolade__title">${esc(h.title)}</span><span class="accolade__event">${esc(h.event)}</span>`;
-    (y < 50 ? top : bottom).append(el);
-    return el;
+    veil.append(el);
+    return { el, x, y };
   });
   intro.classList.add('is-opening');
 
@@ -123,7 +122,7 @@ export function playOpening({ silk, onHero }) {
       // no blur: filtering a large SVG every frame stalls phone GPUs
       .to(laurel, { scale: 1.9, rotate: -16, opacity: 0, duration: 1.9, ease: 'power3.inOut' }, 0.3);
     // honours breathe in, one after another
-    accolades.forEach((el, i) => {
+    accolades.forEach(({ el }, i) => {
       const at = 0.55 + i * 0.25;
       tl.fromTo(el, { opacity: 0, scale: 0.94, filter: 'blur(12px)' }, { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 1.1, ease: 'power2.out' }, at)
         .add(() => {
@@ -132,16 +131,33 @@ export function playOpening({ silk, onHero }) {
         }, at + 0.15);
     });
     const open = 2.55;
-    // the curtain parts, carrying the honours with it
+    // the portal: the line of light opens into a narrow lens (rx, ry: the
+    // ellipse's radii, % of the screen), which then widens past every corner
+    const portal = { rx: 55, ry: 0.4 };
+    const draw = () => {
+      for (const el of [veil, rim]) {
+        el.style.setProperty('--rx', `${portal.rx.toFixed(2)}%`);
+        el.style.setProperty('--ry', `${portal.ry.toFixed(2)}%`);
+      }
+    };
+    draw();
     tl.add(() => {
       sound.reveal();
       silk.ripple(innerWidth / 2, innerHeight / 2);
       silk.flare();
     }, open)
-      .to(top, { yPercent: -101, duration: 1.6, ease: 'expo.inOut' }, open)
-      .to(bottom, { yPercent: 101, duration: 1.6, ease: 'expo.inOut' }, open)
-      .to(accolades, { opacity: 0, filter: 'blur(6px)', duration: 1.1, ease: 'power2.in' }, open + 0.2)
-      .to(seam, { scaleY: 60, opacity: 0, duration: 1, ease: 'power2.out' }, open + 0.03)
+      .to(portal, { rx: 78, ry: 16, duration: 0.75, ease: 'power2.out', onUpdate: draw }, open)
+      .to(portal, { rx: 210, ry: 210, duration: 1.9, ease: 'power3.inOut', onUpdate: draw }, open + 0.45)
+      .fromTo(rim, { opacity: 0 }, { opacity: 1, duration: 0.5, ease: 'power2.out' }, open + 0.1)
+      .to(rim, { opacity: 0, duration: 1.1, ease: 'power2.in' }, open + 1.1)
+      // the light itself softens into the opening rather than stretching
+      .to(seam, { scaleX: 1.15, opacity: 0, duration: 0.9, ease: 'power2.out' }, open + 0.05)
       .add(onHero, open - 0.1);
+    // the honours drift outward, away from the opening, and dissolve before
+    // the hero's own words arrive under them
+    accolades.forEach(({ el, x, y }) => {
+      tl.to(el, { x: (x - 50) * innerWidth * 0.004, y: (y - 50) * innerHeight * 0.005, scale: 1.08, filter: 'blur(6px)', duration: 1.3, ease: 'power2.in' }, open + 0.1)
+        .to(el, { opacity: 0, duration: 0.8, ease: 'power1.in' }, open + 0.1);
+    });
   });
 }

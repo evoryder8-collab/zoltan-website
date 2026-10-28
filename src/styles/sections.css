@@ -12,23 +12,18 @@
   place-items: end center;
   min-height: 560px;
 }
-/* a warm gold light behind him, breathing */
+/* a soft, still light behind him, high at the shoulders */
 .about__glow {
   position: absolute;
   left: 50%;
-  top: 38%;
-  width: 135%;
+  top: 30%;
+  width: 120%;
   aspect-ratio: 1;
   translate: -50% -50%;
   background:
-    radial-gradient(closest-side, rgba(255, 214, 140, 0.36), rgba(224, 181, 109, 0.14) 45%, transparent 76%),
-    radial-gradient(closest-side at 50% 72%, rgba(195, 18, 47, 0.24), transparent 82%);
-  animation: about-breathe 5.2s ease-in-out infinite;
+    radial-gradient(closest-side, rgba(255, 214, 150, 0.16), rgba(224, 181, 109, 0.06) 50%, transparent 78%),
+    radial-gradient(closest-side at 50% 75%, rgba(195, 18, 47, 0.14), transparent 80%);
   pointer-events: none;
-}
-@keyframes about-breathe {
-  0%, 100% { opacity: 0.45; scale: 0.9; }
-  50% { opacity: 1; scale: 1.06; }
 }
 .about__portrait {
   position: relative;
@@ -44,7 +39,7 @@
 }
 .about__figure .about__halo {
   /* his silhouette as soft gold light (pre-rendered, padded 60/391 × 60/900),
-     breathing with the glow behind */
+     kept faint: only enough to soften the cutout's edge against the dark */
   position: absolute;
   left: -15.35%;
   top: -6.67%;
@@ -53,12 +48,7 @@
   max-width: none;
   -webkit-mask-image: none;
   mask-image: none;
-  opacity: 0.5;
-  animation: about-halo 5.2s ease-in-out infinite;
-}
-@keyframes about-halo {
-  0%, 100% { opacity: 0.3; scale: 0.985; }
-  50% { opacity: 0.95; scale: 1.03; }
+  opacity: 0.12;
 }
 .about__text p {
   margin: 0 0 1.1rem;
@@ -690,9 +680,3 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .about__glow,
-  .about__figure .about__halo {
-    animation: none;
-  }
-}

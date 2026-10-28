@@ -515,7 +515,32 @@ whenNear($('#studio-map'), () => {
     });
 }, '1400px');
 
-// ── arrival: the laurel draws, the seam opens, everything rises in ──
+// ── arrival: the laurel draws, the line of light opens into a soft portal,
+// everything rises in ──
+// The portal's radii (% of the screen), timed as the homepage's opening: the
+// line opens into a narrow lens, which then widens past every corner.
+function portal(el, done) {
+  const out2 = (k) => 1 - (1 - k) ** 2;
+  const inOut3 = (k) => (k < 0.5 ? 4 * k ** 3 : 1 - (-2 * k + 2) ** 3 / 2);
+  const t0 = performance.now();
+  const step = (now) => {
+    const t = (now - t0) / 1000;
+    const a = out2(Math.min(1, t / 0.75));
+    let rx = 55 + 23 * a;
+    let ry = 0.4 + 15.6 * a;
+    if (t > 0.45) {
+      const b = inOut3(Math.min(1, (t - 0.45) / 1.9));
+      rx += (210 - rx) * b;
+      ry += (210 - ry) * b;
+    }
+    el.style.setProperty('--rx', `${rx.toFixed(2)}%`);
+    el.style.setProperty('--ry', `${ry.toFixed(2)}%`);
+    if (t < 2.35) requestAnimationFrame(step);
+    else done();
+  };
+  requestAnimationFrame(step);
+}
+
 function arrive() {
   const el = $('.arrival');
   let seen = false;
@@ -527,10 +552,12 @@ function arrive() {
     const finish = () => {
       root.classList.remove('is-arriving');
       el.classList.add('is-open');
-      setTimeout(() => {
+      const gone = () => {
         el.remove();
         done();
-      }, reduced || seen ? 0 : 1100);
+      };
+      if (reduced || seen) gone();
+      else portal(el, gone);
     };
     if (reduced || seen) return finish();
     el.querySelector('.arrival__laurel').classList.add('is-drawn');

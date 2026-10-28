@@ -25,18 +25,28 @@
 }
 .arrival__veil {
   position: absolute;
-  left: 0;
-  right: 0;
-  height: 50.5%;
-  background: radial-gradient(120% 90% at 50% 100%, #1d0a11, #0b0607 70%);
-  transition: transform 1.1s cubic-bezier(0.7, 0, 0.2, 1);
+  inset: 0;
+  background: radial-gradient(120% 45% at 50% 50%, #1d0a11, #0b0607 70%);
 }
-.arrival__veil--top {
-  top: 0;
+/* opening (bio.js sets the radii): clear inside, a long feathered edge, the
+   veil beyond; a faint crimson light rides its edge */
+.arrival.is-open .arrival__veil {
+  -webkit-mask: radial-gradient(var(--rx, 55%) var(--ry, 0.4%) at 50% 50%, transparent 0%, transparent 52%, #000 100%);
+  mask: radial-gradient(var(--rx, 55%) var(--ry, 0.4%) at 50% 50%, transparent 0%, transparent 52%, #000 100%);
 }
-.arrival__veil--bottom {
-  bottom: 0;
-  background: radial-gradient(120% 90% at 50% 0%, #1d0a11, #0b0607 70%);
+.arrival__rim {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(var(--rx, 55%) var(--ry, 0.4%) at 50% 50%, transparent 46%, rgba(255, 59, 78, 0.16) 64%, rgba(195, 18, 47, 0.06) 82%, transparent 100%);
+  opacity: 0;
+}
+.arrival.is-open .arrival__rim {
+  animation: arrival-rim 2.2s var(--ease) forwards;
+}
+@keyframes arrival-rim {
+  0% { opacity: 0; }
+  25%, 45% { opacity: 1; }
+  100% { opacity: 0; }
 }
 .arrival__seam {
   position: absolute;
@@ -105,12 +115,6 @@
 .arrival.is-open {
   pointer-events: none;
 }
-.arrival.is-open .arrival__veil--top {
-  transform: translateY(-101%);
-}
-.arrival.is-open .arrival__veil--bottom {
-  transform: translateY(101%);
-}
 .arrival.is-open .arrival__mark,
 .arrival.is-open .arrival__line {
   opacity: 0;
@@ -118,10 +122,11 @@
 }
 .arrival.is-open .arrival__seam {
   opacity: 0;
-  transition: opacity 0.6s 0.15s;
+  transform: scaleX(1.15);
+  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
 }
 
-/* everything rises in as the curtain opens */
+/* everything rises in as the portal opens */
 .bar,
 .me > *,
 .bio__ticker,

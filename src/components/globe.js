@@ -47,6 +47,7 @@ export async function mountGlobe(container, { events, home, reduced = false }) {
     scrollZoom: false,
     renderWorldCopies: false,
     fadeDuration: 250,
+    pixelRatio: Math.min(devicePixelRatio || 1, 2), // 3x screens draw at 2x: half the GPU memory
   });
   map.addControl(new AttributionControl({ compact: true }), 'bottom-right');
 

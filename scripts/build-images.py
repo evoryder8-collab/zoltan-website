@@ -86,7 +86,7 @@ def main():
 
     for slug, (src, cat) in GALLERY.items():
         im = ImageOps.exif_transpose(Image.open(resolve(src))).convert('RGB')
-        for edge in (800, 1600):
+        for edge in (800, 1200, 1600):
             fit(im, edge).save(os.path.join(OUT, f'g-{slug}-{edge}.webp'), 'WEBP', quality=82, method=6)
         big = fit(im, 1600)
         manifest['gallery'].append({'id': slug, 'cat': cat, 'w': big.width, 'h': big.height})

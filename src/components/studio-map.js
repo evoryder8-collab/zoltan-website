@@ -21,7 +21,10 @@ export async function mountStudioMap(container, { locations, reduced = false }) 
     interactive: !matchMedia('(pointer: coarse)').matches,
     scrollZoom: false,
     maxPitch: 70,
-    maxTileCacheSize: 800, // keep both studios' streets in memory
+    // enough for both studios' streets and the coarse levels a flight passes
+    // through, without holding hundreds of 3D tiles (a phone tab's memory)
+    maxTileCacheSize: 160,
+    pixelRatio: Math.min(devicePixelRatio || 1, 2), // 3x screens draw at 2x: half the GPU memory
   });
   map.addControl(new AttributionControl({ compact: true }), 'bottom-right');
 

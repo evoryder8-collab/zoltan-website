@@ -199,7 +199,9 @@
 @media (max-width: 900px) {
   .hero {
     grid-template-columns: 1fr;
-    padding-top: 88px;
+    /* the nav, then about a tenth of the portrait's height clear above his
+       head and the laurel */
+    padding-top: calc(88px + min(5.8svh, 56px));
     padding-bottom: 80px;
     gap: 0;
   }

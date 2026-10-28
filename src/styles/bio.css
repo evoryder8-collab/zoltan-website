@@ -1266,6 +1266,10 @@ html.is-film body {
 }
 
 @media (max-width: 720px) {
+  /* clear of the bar: about a tenth of the portrait's height above the laurel */
+  .me__stage {
+    margin-top: calc(min(340px, 82vw) * 0.13);
+  }
   .sheet {
     top: auto;
     bottom: 0;

@@ -1,8 +1,8 @@
-// Recognition: the judge's verdict plays while it's on screen. With the
-// page's sound on it speaks by itself, from the top, once through, and then
-// loops on quietly (its words are subtitled in the video); the button turns
-// it off, or on when the page is quiet, and the soundtrack steps back while
-// it speaks. Browsers only let a video speak unprompted after a tap has
+// Recognition: the judge's verdict plays while it's on screen. It speaks by
+// itself, from the top, once through, and then loops on quietly (its words
+// are subtitled in the video), for every visitor, whatever they answered at
+// the intro; the button mutes it, and so does switching the page's sound
+// off later. The soundtrack steps back while it speaks. Browsers only let a video speak unprompted after a tap has
 // played it, so the visitor's taps on the page unlock it on the way down.
 // Below it, the Bulgarian ticket celebrates each time it comes into view.
 import { t } from '../i18n/index.js';
@@ -40,10 +40,9 @@ export function initHonours({ reduced }) {
   celebrateTicket();
 
   let inView = false;
-  let chosen = null; // the visitor's own call on this button; until then the page's sound decides
+  let chosen = null; // the visitor's own call: this button, or the page's sound switched off
   let unlocked = false; // it has spoken once, so the browser lets it again
-  // saved too: after a refresh the page's sound only comes back at the first tap
-  const wants = () => chosen ?? (sound.enabled || sound.saved);
+  const wants = () => chosen ?? true;
 
   const quiet = () => {
     video.muted = true;
@@ -93,7 +92,9 @@ export function initHonours({ reduced }) {
   // the page's sound switched: the verdict follows it, the switch's tap
   // letting it speak at once if it's on screen
   addEventListener('soundchange', (e) => {
-    chosen = null;
+    // the intro's "No" doesn't silence it; the switch, used later, does
+    const atIntro = !document.getElementById('intro').hidden;
+    if (!atIntro) chosen = e.detail.on ? null : false;
     if (!inView) return;
     if (e.detail.on) speak();
     else quiet();

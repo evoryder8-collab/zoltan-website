@@ -374,12 +374,12 @@
 @media (max-width: 720px) {
   .orb-ask {
     left: 50%;
-    bottom: calc(max(16px, env(safe-area-inset-bottom)) + 92px);
+    bottom: max(16px, env(safe-area-inset-bottom));
     translate: -50% 0;
   }
 }
 
-/* ── the homepage rail: right edge on desktop, a row along the bottom on phones ── */
+/* ── the homepage rail: a column on the right edge, phones included ── */
 .orbs {
   position: fixed;
   top: 50%;
@@ -408,27 +408,17 @@ html.film-full .orbs {
 
 @media (max-width: 720px) {
   .orbs {
-    top: auto;
-    left: 0;
-    right: 0;
-    bottom: max(16px, env(safe-area-inset-bottom));
-    flex-direction: row;
-    justify-content: center;
-    gap: 14px;
-    translate: none;
+    right: max(10px, env(safe-area-inset-right));
+    gap: 12px;
   }
   .orbs .orb {
-    --size: 46px;
-    transform: translateY(260%) scale(0.2) rotate(-160deg);
+    --size: 44px;
   }
   .orbs .orb--whatsapp {
-    --size: 56px;
+    --size: 52px;
   }
   .orbs .orb__tip {
     display: none;
-  }
-  .footer {
-    padding-bottom: 104px !important;
   }
 }
 

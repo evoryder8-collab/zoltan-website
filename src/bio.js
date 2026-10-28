@@ -1,8 +1,8 @@
-// /linkinbio: the page Zoltan's social profiles link to. One screen of who he
-// is (live liquid, laurel, his gold light), every way to reach him in platform-
-// tinted glass, a booking sheet that asks where and then opens WhatsApp or the
-// dialler, the film in its own frame, and the studios on the homepage's 3D map.
-// It shares the homepage's systems (silk, sound, ribbon, jewels, map).
+// /linkinbio: the page Zoltan's social profiles link to. Who he is, a booking
+// sheet that asks where and then opens WhatsApp or the dialler, the film in a
+// tilted frame that grows to fill the screen when played, every way to reach
+// him in platform-tinted glass, and the studios on the homepage's 3D map.
+// It shares the homepage's systems (silk, sound, ribbon, map).
 import '@fontsource-variable/bodoni-moda';
 import '@fontsource-variable/manrope';
 import './styles/base.css';
@@ -22,13 +22,11 @@ import { drawLaurelSvg } from './lib/laurel.js';
 import { esc, initReveals } from './lib/dom.js';
 import { initGlass } from './lib/glass.js';
 import { initSilk } from './lib/silk.js';
-import { mountAura } from './lib/aura.js';
 import { sound } from './lib/audio.js';
 import { whenNear } from './lib/lazy.js';
 import { tilt, initTilt, buzz } from './lib/tilt.js';
 import { mountRibbon } from './lib/ribbon.js';
 import { waLink, telLink, mailLink } from './lib/links.js';
-import { renderOrbs, summonOrbs } from './components/orbs.js';
 import { initStudioSwitch } from './components/sections.js';
 import { initDirections } from './components/directions.js';
 
@@ -151,10 +149,6 @@ renderBook();
 renderCards();
 renderPlaces();
 renderSwitch();
-renderOrbs($('#jewels'), ['instagram', 'tiktok', 'whatsapp', 'youtube', 'facebook']);
-const labelJewels = () => $('#jewels').setAttribute('aria-label', t('bio.jewels'));
-labelJewels();
-addEventListener('langchange', labelJewels);
 fillIcons();
 syncTitle();
 
@@ -164,13 +158,6 @@ const glass = initGlass();
 const reveals = initReveals({ reduced });
 const ribbon = mountRibbon($('.ticker'), $('.ticker__track'), '.ticker__set');
 initTilt();
-if (!root.classList.contains('no-webgl')) {
-  try {
-    mountAura($('.me__aura canvas'), { reduced });
-  } catch (err) {
-    console.warn('[aura] skipped', err);
-  }
-}
 
 addEventListener('langchange', () => {
   syncTitle();
@@ -371,18 +358,27 @@ sheet.addEventListener('cancel', (e) => {
   sheetCard.addEventListener('pointercancel', end);
 }
 
-// ── the film: a tap plays it with sound; it stops when scrolled away ──
+// ── the film: nothing plays on its own. A tap on play grows the tilted frame
+// to fill the screen (phones: edge to edge; wider screens: full height, dark
+// around it) and plays it with sound; closing, Escape or the end sets it back ──
 {
   const reel = $('.reel');
+  const frame = reel.querySelector('.reel__frame');
+  const screen = reel.querySelector('.reel__screen');
   const v = reel.querySelector('video');
   const bar = reel.querySelector('.reel__track i');
   const time = reel.querySelector('.reel__time');
   const soundBtn = reel.querySelector('.reel__sound');
+  const toggleBtn = reel.querySelector('.reel__toggle');
+  const SRC = '../media/film-720.mp4';
+  const EASE = 'cubic-bezier(0.65, 0, 0.15, 1)';
   whenNear(reel, () => {
-    v.src = '../media/film-720.mp4';
+    if (!v.src) v.src = SRC;
     v.preload = 'metadata';
   }, '700px');
-  const toggleBtn = reel.querySelector('.reel__toggle');
+  // the cover stays underneath until the first frame is ready, so the screen
+  // never flashes black as it starts
+  v.style.backgroundImage = `url("${v.poster}")`;
   const sync = () => {
     toggleBtn.innerHTML = icon(v.paused ? 'play' : 'pause');
     toggleBtn.setAttribute('aria-label', t(v.paused ? 'bio.film.play' : 'bio.film.pause'));
@@ -393,32 +389,108 @@ sheet.addEventListener('cancel', (e) => {
     soundBtn.setAttribute('aria-label', t(v.muted ? 'film.soundOff' : 'film.soundOn'));
     sound.duck(!v.paused && !v.muted, 'reel');
   };
-  const toggle = () => {
-    if (v.paused) {
-      if (!v.src) v.src = '../media/film-720.mp4';
-      v.muted = false;
-      v.play().catch(() => {
-        v.muted = true;
-        v.play().catch(() => {});
-      });
-    } else v.pause();
+  const play = () => {
+    if (!v.src) v.src = SRC;
+    v.muted = false;
+    v.play().catch(() => {
+      v.muted = true;
+      v.play().catch(() => {});
+    });
   };
-  reel.querySelector('.reel__play').addEventListener('click', toggle);
-  reel.querySelector('.reel__toggle').addEventListener('click', toggle);
-  v.addEventListener('click', toggle);
+
+  // where the screen sits: its place on the page, and filling the screen
+  let full = false;
+  let tilt = 'none';
+  let anim = null;
+  const place = () => {
+    const r = frame.getBoundingClientRect(); // untilted while it's out
+    return { left: r.left, top: r.top, width: r.width, height: r.height };
+  };
+  const fill = () => {
+    const w = innerWidth / innerHeight < 0.75 ? innerWidth : Math.min(innerWidth, (innerHeight * 9) / 16);
+    return { left: (innerWidth - w) / 2, top: 0, width: w, height: innerHeight };
+  };
+  const px = (b) => ({ left: `${b.left}px`, top: `${b.top}px`, width: `${b.width}px`, height: `${b.height}px` });
+  const AT_REST = { padding: '8px', borderRadius: '30px' };
+  const FULL = { padding: '0px', borderRadius: '0px', boxShadow: 'none', transform: 'none' };
+  // the page stays put underneath, touch included
+  const hold = (e) => e.preventDefault();
+  const lock = (on) => {
+    root.classList.toggle('is-film', on);
+    for (const el of [screen, reel.querySelector('.reel__backdrop')]) {
+      if (on) el.addEventListener('touchmove', hold, { passive: false });
+      else el.removeEventListener('touchmove', hold);
+    }
+  };
+
+  const open = () => {
+    if (full) return;
+    full = true;
+    tilt = getComputedStyle(frame).transform;
+    const shadow = getComputedStyle(screen).boxShadow;
+    reel.classList.add('is-full');
+    lock(true);
+    const from = place();
+    const to = fill();
+    Object.assign(screen.style, px(to));
+    anim?.cancel();
+    if (!reduced) {
+      anim = screen.animate(
+        [{ ...px(from), ...AT_REST, boxShadow: shadow, transform: tilt }, { ...px(to), ...FULL }],
+        { duration: 950, easing: EASE },
+      );
+    }
+    reel.querySelector('.reel__close').focus({ preventScroll: true });
+  };
+  const close = () => {
+    if (!full) return;
+    full = false;
+    v.pause();
+    lock(false);
+    reel.classList.add('is-closing');
+    const done = () => {
+      reel.classList.remove('is-full', 'is-closing');
+      screen.removeAttribute('style');
+      anim = null;
+    };
+    anim?.cancel();
+    if (reduced) return done();
+    const to = place();
+    anim = screen.animate(
+      [{ ...px(screen.getBoundingClientRect()), ...FULL }, { ...px(to), ...AT_REST, transform: tilt }],
+      { duration: 800, easing: EASE },
+    );
+    anim.onfinish = done;
+  };
+  addEventListener('resize', () => full && Object.assign(screen.style, px(fill())));
+  addEventListener('keydown', (e) => e.key === 'Escape' && close());
+
+  // on the page, any tap on the film opens it; once open, taps pause and resume
+  const tap = () => {
+    if (!full) {
+      open();
+      if (v.paused) play();
+    } else if (v.paused) play();
+    else v.pause();
+  };
+  reel.querySelector('.reel__play').addEventListener('click', tap);
+  toggleBtn.addEventListener('click', tap);
+  v.addEventListener('click', tap);
+  reel.querySelector('.reel__close').addEventListener('click', close);
+  reel.querySelector('.reel__backdrop').addEventListener('click', close);
   soundBtn.addEventListener('click', () => {
     v.muted = !v.muted;
     sync();
   });
   reel.querySelector('.reel__full').addEventListener('click', () => {
     if (v.webkitEnterFullscreen && !document.fullscreenEnabled) return v.webkitEnterFullscreen();
-    const el = reel.querySelector('.reel__screen');
-    (el.requestFullscreen?.() || el.webkitRequestFullscreen?.())?.catch?.(() => {});
+    (screen.requestFullscreen?.() || screen.webkitRequestFullscreen?.())?.catch?.(() => {});
   });
   ['play', 'pause', 'volumechange'].forEach((ev) => v.addEventListener(ev, sync));
   v.addEventListener('ended', () => {
     v.currentTime = 0;
     sync();
+    setTimeout(close, 400);
   });
   v.addEventListener('timeupdate', () => {
     if (!v.duration) return;
@@ -426,7 +498,7 @@ sheet.addEventListener('cancel', (e) => {
     const left = Math.max(0, Math.round(v.duration - v.currentTime));
     time.textContent = `${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}`;
   });
-  new IntersectionObserver(([e]) => !e.isIntersecting && !v.paused && v.pause(), { threshold: 0.25 }).observe(reel);
+  new IntersectionObserver(([e]) => !full && !e.isIntersecting && !v.paused && v.pause(), { threshold: 0.25 }).observe(reel);
   addEventListener('langchange', sync);
   sync();
 }
@@ -480,9 +552,7 @@ function arrive() {
 }
 
 arrive().then(() => {
-  $('.me__laurel').classList.add(reduced ? 'is-static' : 'is-drawn');
   $('#book-invite').classList.add('is-on');
-  setTimeout(() => summonOrbs($('#jewels'), { reduced }), reduced ? 0 : 450);
   // arriving with #studios (or another anchor) in the link
   if (location.hash.length > 1) document.getElementById(location.hash.slice(1))?.scrollIntoView();
 });

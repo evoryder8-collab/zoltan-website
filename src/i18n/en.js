@@ -277,7 +277,6 @@ export default {
     arrival: 'Two-time overall champion',
     welcome: 'Lovely to see you here.',
     role: 'Massage therapist · Budapest & Mezőkeresztes',
-    jewels: 'Follow Zoltan',
     book: 'Book your treatment',
     bookDetail: 'About 70 minutes · from {price}',
     bookInvite: 'Let’s find a time that suits you.',
@@ -301,7 +300,7 @@ export default {
       gallery: ['Gallery', 'In the work'],
       training: ['Training', 'Learn from a champion'],
     },
-    film: { kicker: 'The film', play: 'Play the film', pause: 'Pause the film' },
+    film: { kicker: 'The film', play: 'Play the film', pause: 'Pause the film', close: 'Close the film' },
     sheet: {
       where: 'Where?',
       how: 'How would you like to book?',

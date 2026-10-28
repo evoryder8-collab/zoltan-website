@@ -1,6 +1,6 @@
 /* ───────── /linkinbio ─────────
-   One column, phone first. The homepage's silk, glass, jewels and map; gold
-   for what's precious, crimson for what to press. */
+   One column, phone first. The homepage's silk, glass and map; gold for
+   what's precious, crimson for what to press. */
 
 .bio {
   position: relative;
@@ -125,12 +125,10 @@
 .bar,
 .me > *,
 .bio__ticker,
-.jewels,
 .book {
   transition: opacity 1s var(--ease), transform 1.2s var(--ease);
   transition-delay: calc(0.25s + var(--rise, 0) * 0.09s);
 }
-.me__stage { --rise: 0; }
 .me__welcome { --rise: 1; }
 .me__name { --rise: 2; }
 .me__brand { --rise: 3; }
@@ -209,66 +207,6 @@ html.is-arriving .bar {
   justify-items: center;
   text-align: center;
 }
-/* the figure is the gold halo's box (511 × 1020) with the portrait inside it
-   at (60, 60, 391 × 900); the stage shows the top, a bust that dissolves */
-.me__stage {
-  position: relative;
-  width: min(300px, 76vw);
-  aspect-ratio: 511 / 700;
-  margin-bottom: -18%;
-}
-.me__aura {
-  position: absolute;
-  left: 50%;
-  top: 36%;
-  width: 165%;
-  aspect-ratio: 1;
-  translate: -50% -50%;
-  pointer-events: none;
-}
-.me__aura canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-.me__laurel {
-  position: absolute;
-  left: 50%;
-  top: 30%;
-  width: 118%;
-  height: auto;
-  aspect-ratio: 1;
-  translate: -50% -50%;
-  color: #e9c27a;
-  opacity: 0.85;
-}
-.me__figure {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  aspect-ratio: 511 / 1020;
-  -webkit-mask-image: linear-gradient(to bottom, #000 50%, transparent 67%);
-  mask-image: linear-gradient(to bottom, #000 50%, transparent 67%);
-}
-.me__halo {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  animation: me-halo 5.2s ease-in-out infinite;
-}
-@keyframes me-halo {
-  0%, 100% { opacity: 0.3; scale: 0.985; }
-  50% { opacity: 0.95; scale: 1.03; }
-}
-.me__portrait {
-  position: absolute;
-  left: 11.74%;
-  top: 5.88%;
-  width: 76.52%;
-  height: auto;
-}
 .me__welcome {
   margin: 0 0 0.35rem;
   color: #f0d49a;
@@ -340,32 +278,6 @@ html.is-arriving .bar {
 }
 .bio__ticker .ticker__item {
   font-size: 1.05rem;
-}
-
-/* the jewels: a row of the homepage's beads */
-.jewels {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-  min-height: 70px;
-  padding-bottom: 10px;
-}
-.jewels .orb {
-  --size: 50px;
-}
-.jewels .orb--whatsapp {
-  --size: 60px;
-}
-.jewels .orb__tip {
-  top: calc(100% + 16px);
-  right: auto;
-  left: 50%;
-  translate: -50% 6px;
-}
-.jewels .orb:hover .orb__tip,
-.jewels .orb:focus-visible .orb__tip {
-  translate: -50% 0;
 }
 
 /* ── booking ── */
@@ -717,9 +629,6 @@ html.is-arriving .bar {
   transform: perspective(1300px) rotateY(calc(-9deg + var(--tilt-x, 0) * 7deg)) rotateX(calc(4deg - var(--tilt-y, 0) * 4deg));
   transition: transform 0.8s var(--ease);
 }
-.reel.is-playing .reel__frame {
-  transform: none;
-}
 .reel__glow {
   position: absolute;
   inset: 6% -18% -8%;
@@ -748,8 +657,9 @@ html.is-arriving .bar {
   height: 100%;
   object-fit: cover;
   border-radius: 22px;
-  background: #000;
+  background: #000 center / cover no-repeat;
   cursor: pointer;
+  transition: border-radius 0.9s var(--ease);
 }
 .reel__play {
   position: absolute;
@@ -855,6 +765,81 @@ html.is-arriving .bar {
 .reel__sound.is-muted .spk__w,
 .reel__sound:not(.is-muted) .spk__slash {
   opacity: 0;
+}
+/* played: the screen leaves its tilt and fills the screen (bio.js animates
+   the way there and back); the page waits, dark, behind it */
+.reel__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 140;
+  background: #050304;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.7s var(--ease), visibility 0s 0.7s;
+}
+.reel.is-full .reel__backdrop {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.7s var(--ease);
+}
+.reel.is-closing .reel__backdrop {
+  opacity: 0;
+}
+.reel.is-full .reel__frame {
+  transform: none;
+  transition: none;
+}
+.reel.is-full .reel__glow {
+  opacity: 0;
+}
+.reel.is-full .reel__screen {
+  position: fixed;
+  z-index: 141;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.reel.is-full:not(.is-closing) .reel__video {
+  border-radius: 0;
+}
+.reel.is-full .reel__bar {
+  bottom: max(16px, env(safe-area-inset-bottom));
+}
+html.is-film,
+html.is-film body {
+  overflow: hidden;
+}
+.reel__close {
+  position: absolute;
+  top: max(14px, env(safe-area-inset-top));
+  right: 14px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(11, 6, 7, 0.55);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+  color: #fff;
+  cursor: pointer;
+  opacity: 0;
+  scale: 0.8;
+  pointer-events: none;
+  transition: opacity 0.4s var(--ease), scale 0.4s var(--spring);
+}
+.reel__close .i {
+  width: 18px;
+  height: 18px;
+}
+.reel.is-full:not(.is-closing) .reel__close {
+  opacity: 1;
+  scale: 1;
+  pointer-events: auto;
+  transition-delay: 0.6s;
 }
 .reel__screen:fullscreen {
   padding: 0;
@@ -1270,7 +1255,6 @@ html.is-arriving .bar {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .me__halo,
   .me__brand,
   .bio-foot__sig,
   .book__light,

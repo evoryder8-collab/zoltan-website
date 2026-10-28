@@ -276,7 +276,6 @@ export default {
     arrival: 'Kétszeres abszolút bajnok',
     welcome: 'Örülök, hogy itt vagy.',
     role: 'Masszőr · Budapest & Mezőkeresztes',
-    jewels: 'Kövesd Zoltánt',
     book: 'Foglalj időpontot',
     bookDetail: 'Kb. 70 perc · {price}-tól',
     bookInvite: 'Találjunk egy neked megfelelő időpontot.',
@@ -300,7 +299,7 @@ export default {
       gallery: ['Galéria', 'Munka közben'],
       training: ['Képzés', 'Tanulj egy bajnoktól'],
     },
-    film: { kicker: 'A film', play: 'A film lejátszása', pause: 'A film megállítása' },
+    film: { kicker: 'A film', play: 'A film lejátszása', pause: 'A film megállítása', close: 'A film bezárása' },
     sheet: {
       where: 'Hol?',
       how: 'Hogyan foglalnál?',

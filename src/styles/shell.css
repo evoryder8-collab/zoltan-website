@@ -367,14 +367,14 @@
   pointer-events: none;
   will-change: transform;
 }
-/* his honours, breathing in around the line of light */
+/* his honours, a column breathing in over the dimmed line of light */
 .accolade {
   position: absolute;
   display: grid;
   justify-items: center;
   gap: 0.35rem;
   width: max-content;
-  max-width: min(300px, 44vw);
+  max-width: min(360px, 88vw);
   translate: -50% -50%;
   text-align: center;
   opacity: 0;
@@ -395,15 +395,6 @@
   font-weight: 750;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-}
-@media (max-width: 720px) {
-  /* two side by side above the name's flight */
-  .accolade {
-    max-width: 41vw;
-  }
-  .accolade__title {
-    font-size: 0.95rem;
-  }
 }
 .accolade.is-breathing .accolade__title {
   animation: honour 2.4s ease-in-out infinite;

@@ -3,11 +3,11 @@
 //       single line of crimson light across the screen
 //   2 · the laurel swells, turns and burns out
 //   3 · the name lifts out of the card and flies into its place in the hero
-//   4 · his honours breathe in, one by one, at varied spots around the screen
-//       that never meet the light, the name's flight or the hero's words
-//   5 · the light opens like a lens into a soft portal that widens until the
-//       hero fills the screen; the honours drift outward and dissolve into its
-//       edge, with a low swell and a shockwave through the silk, and the
+//   4 · once it has landed, his honours breathe in one by one, a centred
+//       column in the middle of the free screen, while the light dims behind
+//   5 · they rise and dissolve out of the way as the light brightens and opens
+//       like a lens into a soft portal that widens until the hero fills the
+//       screen, with a low swell and a shockwave through the silk, and the
 //       portrait pushes in out of light
 import { gsap } from 'gsap';
 import { sound } from '../lib/audio.js';
@@ -22,66 +22,40 @@ function honours() {
   return [ausmc[0], slovakia, ...ausmc.slice(1), invitation];
 }
 
-// Honours go where they'll never meet anything: clear of each keep-out box
-// (the line of light, the name's whole flight, the hero's words), the
-// screen's edges and each other. Many random layouts are tried and the one
-// that fits the most, spread the widest, wins; on a small screen the ones
-// that don't fit stay out (the headline titles come first) rather than overlap.
-function placeHonours(veil, list, keepOut) {
+// The honours stand in a centred column in the middle of the free screen:
+// above the name's place on a phone (it lands across the bottom), beside it
+// on wider screens. As many as fit, the headline titles first.
+function stackHonours(veil, list, name) {
   const W = innerWidth;
   const H = innerHeight;
-  const EDGE = 12;
-  const GAP = 12;
-  const hits = (a, b) => a.l < b.r && a.r > b.l && a.t < b.b && a.b > b.t;
-  const els = list.map((h) => {
+  const beside = name.right < W * 0.62;
+  const band = beside ? { l: name.right + 40, r: W - 40, t: H * 0.08, b: H * 0.92 } : { l: 16, r: W - 16, t: H * 0.07, b: name.top - 32 };
+  const GAP = H < 700 ? 10 : 16;
+  const stack = [];
+  let used = 0;
+  for (const h of list) {
     const el = document.createElement('div');
     el.className = 'accolade';
     el.setAttribute('aria-hidden', 'true');
     el.innerHTML = `<span class="leaf"></span><span class="accolade__title">${esc(h.title)}</span><span class="accolade__event">${esc(h.event)}</span>`;
+    el.style.maxWidth = `${Math.min(beside ? 500 : 360, band.r - band.l)}px`;
     veil.append(el);
-    return el;
-  });
-  const sizes = els.map((el) => el.getBoundingClientRect());
-  let best = [];
-  let bestSpread = -1;
-  for (let attempt = 0; attempt < 40; attempt++) {
-    const layout = [];
-    sizes.forEach(({ width: w, height: h }, i) => {
-      let pick = null;
-      let far = -1;
-      for (let k = 0; k < 60; k++) {
-        const x = EDGE + w / 2 + Math.random() * (W - 2 * EDGE - w);
-        const y = EDGE + h / 2 + Math.random() * (H - 2 * EDGE - h);
-        const box = { l: x - w / 2 - GAP, r: x + w / 2 + GAP, t: y - h / 2 - GAP, b: y + h / 2 + GAP };
-        if (keepOut.some((o) => hits(box, o)) || layout.some((p) => hits(box, p.box))) continue;
-        const d = Math.min(Infinity, ...layout.map((p) => Math.hypot(p.x - x, (p.y - y) * 1.6)));
-        if (d > far) {
-          far = d;
-          pick = { i, x, y, box };
-        }
-      }
-      if (pick) layout.push(pick);
-    });
-    let spread = Infinity;
-    layout.forEach((p, j) => layout.slice(j + 1).forEach((q) => (spread = Math.min(spread, Math.hypot(p.x - q.x, (p.y - q.y) * 1.6)))));
-    // most honours first, then the more important ones, then the widest spread
-    const rank = (l) => l.reduce((sum, p) => sum + 2 ** (els.length - p.i), 0);
-    const better = layout.length !== best.length ? layout.length > best.length : rank(layout) !== rank(best) ? rank(layout) > rank(best) : spread > bestSpread;
-    if (better) {
-      best = layout;
-      bestSpread = spread;
+    const { height } = el.getBoundingClientRect();
+    const need = used + (stack.length ? GAP : 0) + height;
+    if (need > band.b - band.t) {
+      el.remove();
+      break;
     }
-    if (best.length === els.length && attempt > 12) break;
+    used = need;
+    stack.push({ el, height });
   }
-  const kept = new Set(best.map((p) => p.i));
-  els.forEach((el, i) => !kept.has(i) && el.remove());
-  return best.map(({ i, x, y }) => {
-    const el = els[i];
-    const px = (x / W) * 100;
-    const py = (y / H) * 100;
-    el.style.left = `${px}%`;
-    el.style.top = `${py}%`;
-    return { el, x: px, y: py };
+  const cx = (band.l + band.r) / 2;
+  let y = (band.t + band.b) / 2 - used / 2;
+  return stack.map(({ el, height }) => {
+    el.style.left = `${cx}px`;
+    el.style.top = `${y + height / 2}px`;
+    y += height + GAP;
+    return el;
   });
 }
 
@@ -131,13 +105,7 @@ export function playOpening({ silk, onHero }) {
   });
 
   // ── the honours: on the veil, so the opening portal takes them with it ──
-  const box = (r, p) => ({ l: r.left - p, r: r.right + p, t: r.top - p, b: r.bottom + p });
-  const accolades = placeHonours(veil, honours(), [
-    { l: 0, r: innerWidth, t: innerHeight / 2 - 40, b: innerHeight / 2 + 40 }, // the line of light
-    // the name's whole flight, from the card to its place in the hero
-    box({ left: Math.min(from.left, to.left), right: Math.max(from.right, to.right), top: Math.min(from.top, to.top), bottom: Math.max(from.bottom, to.bottom) }, 18),
-    box(document.querySelector('.hero__copy').getBoundingClientRect(), 10),
-  ]);
+  const accolades = stackHonours(veil, honours(), to);
 
   return new Promise((resolve) => {
     const bits = card.querySelectorAll('.intro__kicker, .intro__surname, .intro__line, .intro__step:not([hidden])');
@@ -154,24 +122,25 @@ export function playOpening({ silk, onHero }) {
       // the title becomes the hero's name
       .set(clone, { opacity: 1 }, 0.42)
       .set(title, { opacity: 0 }, 0.42)
-      .to(clone, { x: 0, y: 0, scale: 1, duration: 2.1, ease: 'expo.inOut' }, 0.42)
+      .to(clone, { x: 0, y: 0, scale: 1, duration: 1.5, ease: 'expo.inOut' }, 0.42)
       // the glass collapses into a line of light
       .to(card, { scaleY: 0.012, scaleX: 1.2, duration: 0.75, ease: 'power4.inOut' }, 0.38)
       .to(card, { opacity: 0, duration: 0.25 }, 0.95)
       .fromTo(seam, { scaleX: 0, opacity: 1 }, { scaleX: 1, duration: 0.85, ease: 'power3.inOut' }, 0.5)
+      // and dims behind the honours while they hold
+      .to(seam, { opacity: 0.18, duration: 0.6, ease: 'power2.out' }, 1.35)
       // no blur: filtering a large SVG every frame stalls phone GPUs
       .to(laurel, { scale: 1.9, rotate: -16, opacity: 0, duration: 1.9, ease: 'power3.inOut' }, 0.3);
-    // honours breathe in, one after another, once the card has folded into
-    // the light (so they may sit where it was)
-    accolades.forEach(({ el }, i) => {
-      const at = 0.9 + i * 0.14;
-      tl.fromTo(el, { opacity: 0, scale: 0.94, filter: 'blur(12px)' }, { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 0.9, ease: 'power2.out' }, at)
+    // honours breathe in, one after another, once the name has all but landed
+    accolades.forEach((el, i) => {
+      const at = 1.45 + i * 0.14;
+      tl.fromTo(el, { opacity: 0, y: 12, scale: 0.96, filter: 'blur(10px)' }, { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', duration: 0.8, ease: 'power2.out' }, at)
         .add(() => {
           el.classList.add('is-breathing');
           sound.accolade(i);
         }, at + 0.15);
     });
-    const open = 2.55;
+    const open = 3.3;
     // the portal: the line of light opens into a narrow lens (rx, ry: the
     // ellipse's radii, % of the screen), which then widens past every corner
     const portal = { rx: 55, ry: 0.4 };
@@ -191,14 +160,15 @@ export function playOpening({ silk, onHero }) {
       .to(portal, { rx: 210, ry: 210, duration: 1.9, ease: 'power3.inOut', onUpdate: draw }, open + 0.45)
       .fromTo(rim, { opacity: 0 }, { opacity: 1, duration: 0.5, ease: 'power2.out' }, open + 0.1)
       .to(rim, { opacity: 0, duration: 1.1, ease: 'power2.in' }, open + 1.1)
-      // the light itself softens into the opening at once, never across him
+      // the light gathers as the honours leave, then softens into the opening
+      // at once, never across him
+      .to(seam, { opacity: 1, duration: 0.35, ease: 'power2.in' }, open - 0.35)
       .to(seam, { scaleX: 1.15, opacity: 0, duration: 0.45, ease: 'power2.out' }, open + 0.02)
       .add(onHero, open - 0.1);
-    // the honours drift outward and are gone as the portal opens, before he
-    // shows through it
-    accolades.forEach(({ el, x, y }) => {
-      tl.to(el, { x: (x - 50) * innerWidth * 0.003, y: (y - 50) * innerHeight * 0.004, scale: 1.06, filter: 'blur(6px)', duration: 0.6, ease: 'power2.in' }, open - 0.3)
-        .to(el, { opacity: 0, duration: 0.55, ease: 'power1.in' }, open - 0.3);
+    // the honours rise and dissolve out of the way, top first, gone before
+    // he shows through the portal
+    accolades.forEach((el, i) => {
+      tl.to(el, { y: -40, opacity: 0, filter: 'blur(6px)', duration: 0.7, ease: 'power2.in' }, open - 0.45 + i * 0.05);
     });
   });
 }

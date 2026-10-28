@@ -25,13 +25,18 @@ export async function mountGlobe(container, { events, home, reduced = false }) {
   const small = innerWidth < 720;
   // size the globe to the frame: radius ≈ 42% of its height
   const fit = () => Math.log2(((Math.min(container.clientHeight, container.clientWidth * 0.9) * 0.42) * 2 * Math.PI) / 512);
+  // Phones: the map takes no gestures of its own, so a vertical swipe always
+  // scrolls the page; a sideways swipe turns the globe (swipeToTurn below).
+  // Desktop: drag with the mouse; the wheel always scrolls the page.
+  const touch = matchMedia('(pointer: coarse)').matches;
   const map = new Map({
     container,
     style,
     center: [76, 12],
     zoom: fit(),
     attributionControl: false,
-    cooperativeGestures: true,
+    interactive: !touch,
+    scrollZoom: false,
     renderWorldCopies: false,
     fadeDuration: 250,
   });
@@ -89,6 +94,7 @@ export async function mountGlobe(container, { events, home, reduced = false }) {
   io.observe(container);
   const takeOver = () => (idleUntil = performance.now() + 9000);
   ['mousedown', 'touchstart', 'wheel', 'dragstart'].forEach((ev) => map.on(ev, takeOver));
+  if (touch) swipeToTurn(container, map, takeOver);
   let last = 0;
   const loop = (now) => {
     requestAnimationFrame(loop);
@@ -113,4 +119,69 @@ export async function mountGlobe(container, { events, home, reduced = false }) {
     },
   };
   return api;
+}
+
+/** Sideways swipes turn the globe, with momentum; vertical swipes scroll the page. */
+function swipeToTurn(container, map, takeOver) {
+  container.style.touchAction = 'pan-y';
+  let start = null;
+  let turning = false;
+  let lastX = 0;
+  let lastT = 0;
+  let vel = 0; // degrees per ms
+  let glide = 0;
+  const degPerPx = () => 360 / (512 * 2 ** map.getZoom());
+  const turn = (deg) => {
+    const c = map.getCenter();
+    map.jumpTo({ center: [c.lng - deg, c.lat] });
+  };
+  container.addEventListener('pointerdown', (e) => {
+    if (e.pointerType !== 'touch' || !e.isPrimary) return;
+    cancelAnimationFrame(glide);
+    start = { x: e.clientX, y: e.clientY };
+    lastX = e.clientX;
+    lastT = performance.now();
+    turning = false;
+    vel = 0;
+    takeOver();
+  });
+  container.addEventListener('pointermove', (e) => {
+    if (!start || e.pointerType !== 'touch') return;
+    const dx = e.clientX - start.x;
+    const dy = e.clientY - start.y;
+    if (!turning) {
+      if (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+        turning = true;
+        try {
+          container.setPointerCapture(e.pointerId);
+        } catch {}
+      } else if (Math.abs(dy) > 10) {
+        start = null; // the page is scrolling
+        return;
+      } else return;
+    }
+    const now = performance.now();
+    const step = (e.clientX - lastX) * degPerPx();
+    turn(step);
+    vel = step / Math.max(8, now - lastT);
+    lastX = e.clientX;
+    lastT = now;
+    takeOver();
+  });
+  const release = () => {
+    if (!start) return;
+    start = null;
+    if (!turning || performance.now() - lastT > 90) return;
+    let prev = performance.now();
+    const coast = (now) => {
+      const dt = now - prev;
+      prev = now;
+      turn(vel * dt);
+      vel *= Math.exp(-dt / 420);
+      if (Math.abs(vel) > 0.0004) glide = requestAnimationFrame(coast);
+    };
+    glide = requestAnimationFrame(coast);
+  };
+  container.addEventListener('pointerup', release);
+  container.addEventListener('pointercancel', () => (start = null));
 }

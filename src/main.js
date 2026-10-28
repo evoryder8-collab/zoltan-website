@@ -96,7 +96,7 @@ whenNear(document.getElementById('studio-map'), () => {
       frame.classList.add('is-fallback');
       frame.querySelector('.studio__note span:last-child').textContent = document.documentElement.lang === 'hu' ? 'A térkép nem töltődött be.' : 'The map couldn’t load.';
     });
-}, '700px');
+}, '2200px'); // early, so its tiles are warm before anyone reaches it
 
 // ── the language can change at any time ──
 const RENDERED = '#stats [data-reveal], #treatment-steps [data-reveal], #treatment-prices [data-reveal], #event-cards [data-reveal]';

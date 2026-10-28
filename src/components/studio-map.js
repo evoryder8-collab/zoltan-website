@@ -17,8 +17,11 @@ export async function mountStudioMap(container, { locations, reduced = false }) 
     zoom: innerWidth < 720 ? 5.6 : 6.4,
     pitch: 0,
     attributionControl: false,
-    cooperativeGestures: true,
+    // phones: display only, so the page always scrolls; desktop: drag, no wheel zoom
+    interactive: !matchMedia('(pointer: coarse)').matches,
+    scrollZoom: false,
     maxPitch: 70,
+    maxTileCacheSize: 800, // keep both studios' streets in memory
   });
   map.addControl(new AttributionControl({ compact: true }), 'bottom-right');
 
@@ -78,7 +81,30 @@ export async function mountStudioMap(container, { locations, reduced = false }) 
     },
     { threshold: 0.35 },
   );
-  map.on('load', () => {
+  // Warm the tile cache while the map is still hidden: the zoomed-out view a
+  // flight passes through, then each studio exactly as the camera will frame
+  // it, so a switch never starts on a blank map. Coarse tiles also stand in
+  // while sharper ones arrive.
+  const settled = () => new Promise((r) => {
+    map.once('idle', r);
+    setTimeout(r, 4000);
+  });
+  const warm = async () => {
+    const lng = locations.reduce((a, l) => a + l.lngLat[0], 0) / locations.length;
+    const lat = locations.reduce((a, l) => a + l.lngLat[1], 0) / locations.length;
+    for (const z of [7, 9.5]) {
+      map.jumpTo({ center: [lng, lat], zoom: z, pitch: 0, bearing: 0 });
+      await settled();
+    }
+    for (const loc of [...locations].reverse()) {
+      map.jumpTo({ center: loc.lngLat, zoom: innerWidth < 720 ? 15 : 15.8, pitch: 60, bearing: -22 });
+      await settled();
+    }
+    map.jumpTo({ center: [19.9, 47.65], zoom: innerWidth < 720 ? 5.6 : 6.4, pitch: 0, bearing: 0 });
+    await settled();
+  };
+  map.on('load', async () => {
+    await warm();
     frame.classList.add('is-ready');
     container.querySelector('.maplibregl-ctrl-attrib')?.classList.remove('maplibregl-compact-show');
     io.observe(container);

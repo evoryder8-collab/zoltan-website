@@ -120,7 +120,8 @@ export function playOpening({ silk, onHero }) {
       .to(card, { scaleY: 0.012, scaleX: 1.2, duration: 0.75, ease: 'power4.inOut' }, 0.38)
       .to(card, { opacity: 0, duration: 0.25 }, 0.95)
       .fromTo(seam, { scaleX: 0, opacity: 1 }, { scaleX: 1, duration: 0.85, ease: 'power3.inOut' }, 0.5)
-      .to(laurel, { scale: 1.9, rotate: -16, opacity: 0, filter: 'blur(12px)', duration: 1.9, ease: 'power3.inOut' }, 0.3);
+      // no blur: filtering a large SVG every frame stalls phone GPUs
+      .to(laurel, { scale: 1.9, rotate: -16, opacity: 0, duration: 1.9, ease: 'power3.inOut' }, 0.3);
     // honours breathe in, one after another
     accolades.forEach((el, i) => {
       const at = 0.55 + i * 0.25;

@@ -169,6 +169,7 @@ export default {
     label: 'Interactive globe of Zoltan’s championship journeys',
     home: 'Home · Hungary',
     hint: 'Drag to turn the globe',
+    hintTouch: 'Swipe sideways to turn the globe',
   },
   gallery: {
     kicker: 'Gallery',

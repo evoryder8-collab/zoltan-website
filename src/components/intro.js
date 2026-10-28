@@ -20,6 +20,7 @@ export function runIntro({ reduced }) {
   try {
     seen = sessionStorage.getItem(SEEN) === '1';
   } catch {}
+  if (import.meta.env.DEV && new URLSearchParams(location.search).has('nointro')) seen = true;
   if (seen) {
     el.hidden = true;
     // sound needs a gesture: honour a saved "on" at the first tap

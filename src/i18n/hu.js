@@ -169,6 +169,7 @@ export default {
     label: 'Interaktív földgömb Zoltán bajnoki útjaival',
     home: 'Otthon · Magyarország',
     hint: 'Húzd a földgömböt a forgatáshoz',
+    hintTouch: 'Húzd oldalra a földgömb forgatásához',
   },
   gallery: {
     kicker: 'Galéria',

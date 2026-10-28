@@ -17,17 +17,16 @@ export function renderName() {
   document.querySelector('.hero__name-inner').innerHTML = `${esc(first.slice(0, 4))}<em>${esc(first.slice(4, 5))}</em>${esc(first.slice(5))}`;
 }
 
-// A faint warm rim and crimson glow around the portrait, plus its floor shadow.
-// Kept in one string so GSAP's filter tweens end exactly on the CSS value.
-export const PORTRAIT_GLOW =
-  'drop-shadow(0 0 1.5px rgba(255,196,204,0.38)) drop-shadow(0 0 26px rgba(227,37,63,0.24)) drop-shadow(0 30px 50px rgba(0,0,0,0.55))';
-
 export function prepareHero({ reduced }) {
   if (reduced) return;
   const q = (s) => document.querySelectorAll(`.hero ${s}`);
   gsap.set([...q('.hero__copy .kicker'), ...q('.hero__surname'), ...q('.hero__brand'), ...q('.hero__lead'), ...q('.hero__ctas > *'), ...q('.hero__chips > *')], { opacity: 0, y: 24 });
   gsap.set(q('.hero__name-inner'), { opacity: 0, yPercent: 40, filter: 'blur(12px)' });
-  gsap.set(q('.hero__portrait'), { opacity: 0, y: 30, scale: 1.12, filter: `blur(18px) brightness(1.7) ${PORTRAIT_GLOW}` });
+  // no filters animate on the portrait: WebKit can paint a transparent image
+  // under animated blur/brightness as a solid white block. The light it
+  // pushes in from is its own layer (.hero__flash).
+  gsap.set(q('.hero__portrait'), { opacity: 0, y: 30, scale: 1.08 });
+  gsap.set(q('.hero__flash'), { opacity: 0 });
   gsap.set(q('.hero__halo'), { opacity: 0, scale: 0.7 });
   gsap.set(q('.hero__aura'), { opacity: 0, scale: 0.6 });
   gsap.set(q('.hero__disc'), { opacity: 0, scale: 0.85 });
@@ -41,7 +40,9 @@ export function enterHero({ reduced, skipName = false }) {
   tl.to(q('.hero__halo'), { opacity: 1, scale: 1, duration: 2.2 }, 0)
     .to(q('.hero__aura'), { opacity: 1, scale: 1, duration: 2.6 }, 0)
     .to(q('.hero__disc'), { opacity: 1, scale: 1, duration: 2.2 }, 0.2)
-    .to(q('.hero__portrait'), { opacity: 1, y: 0, scale: 1, filter: `blur(0px) brightness(1) ${PORTRAIT_GLOW}`, duration: 2.2 }, 0.1)
+    .fromTo(q('.hero__flash'), { opacity: 0 }, { opacity: 0.85, duration: 0.35, ease: 'power2.out' }, 0)
+    .to(q('.hero__flash'), { opacity: 0, duration: 1.8, ease: 'power2.inOut' }, 0.35)
+    .to(q('.hero__portrait'), { opacity: 1, y: 0, scale: 1, duration: 2.2 }, 0.1)
     .to(q('.hero__copy .kicker'), { opacity: 1, y: 0, duration: 1.1 }, 0.3);
   if (!skipName) tl.to(q('.hero__name-inner'), { opacity: 1, yPercent: 0, filter: 'blur(0px)', duration: 1.6 }, 0.38);
   tl.to(q('.hero__surname'), { opacity: 1, y: 0, duration: 1.2 }, 0.5)

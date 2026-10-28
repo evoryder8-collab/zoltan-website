@@ -31,6 +31,13 @@ export function renderEvents() {
 }
 
 export function initChampionships({ reduced, lenis, onFail }) {
+  // phones turn the globe with a sideways swipe; say so
+  const hint = document.querySelector('.globe__hint [data-i18n]');
+  if (hint && matchMedia('(pointer: coarse)').matches) {
+    hint.setAttribute('data-i18n', 'globe.hintTouch');
+    hint.textContent = t('globe.hintTouch');
+  }
+
   // cards → globe
   document.getElementById('event-cards').addEventListener('click', async (ev) => {
     const btn = ev.target.closest('[data-event]');
@@ -71,5 +78,5 @@ export function initChampionships({ reduced, lenis, onFail }) {
         onFail?.(map.closest('.globe'));
         return null;
       });
-  }, '900px');
+  }, '1600px');
 }

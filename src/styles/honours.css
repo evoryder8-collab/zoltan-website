@@ -105,22 +105,24 @@
 .verdict__quote {
   position: relative;
   margin: 0 0 1.4rem;
+  /* the quote mark's own row, so it never reaches up into the kicker's leaf */
+  padding-top: 0.8em;
+  font: italic 400 clamp(1.6rem, 3.2vw, 2.7rem) / 1.18 var(--serif);
+  letter-spacing: -0.01em;
 }
 .verdict__quote::before {
   content: '“';
   position: absolute;
-  left: -0.12em;
-  top: -0.42em;
+  left: -0.05em;
+  top: -0.08em; /* Bodoni's mark inks low in its box: this sets the ink on the row's top */
   color: var(--crimson);
-  font: 400 clamp(4rem, 9vw, 7rem) / 1 var(--serif);
+  font: 400 2.6em / 1 var(--serif); /* sized to the quote, phones included */
   opacity: 0.55;
   pointer-events: none;
 }
 .verdict__quote p {
   position: relative;
   margin: 0;
-  font: italic 400 clamp(1.6rem, 3.2vw, 2.7rem) / 1.18 var(--serif);
-  letter-spacing: -0.01em;
   text-wrap: balance;
 }
 .verdict__who {
@@ -276,8 +278,6 @@
   }
   .verdict__quote {
     margin-bottom: 0.9rem;
-  }
-  .verdict__quote p {
     font-size: 1.12rem;
   }
   .verdict__who a {

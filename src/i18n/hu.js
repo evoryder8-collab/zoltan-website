@@ -308,6 +308,7 @@ export default {
       close: 'Bezárás',
       note: 'Egyetlen, személyre szabott kezelés, kb. 70 perc. Fix ár: akkor sem kerül többe, ha tovább tart.',
     },
+    showMap: 'Térképen',
     copy: 'Másolás',
     copied: 'Kimásolva',
     linkCopied: 'Link kimásolva',

@@ -309,6 +309,7 @@ export default {
       close: 'Close',
       note: 'One personalised treatment, about 70 minutes. A fixed price: never more if it runs longer.',
     },
+    showMap: 'On the map',
     copy: 'Copy',
     copied: 'Copied',
     linkCopied: 'Link copied',

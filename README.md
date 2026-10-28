@@ -19,6 +19,10 @@ https://evoryder8-collab.github.io/zoltan-website/
 
 Every push to `main` runs `.github/workflows/deploy.yml` (tests, build, deploy to GitHub Pages). The page carries `noindex` so search engines skip it until launch.
 
+## Link in bio
+
+`/linkinbio/` (`linkinbio/index.html`, `src/bio.js`, `src/styles/bio.css`) is the page for the social profiles: who Zoltan is, a booking sheet (studio, then WhatsApp or a call), every contact and social in tinted glass, the film, links into the site and the studio map. It isn't linked from the site. Live: https://evoryder8-collab.github.io/zoltan-website/linkinbio/ (at launch: `zoltankodor.com/linkinbio`). "Save my contact" downloads `public/zoltan-kodor.vcf`, written by `python3 scripts/build-vcard.py`.
+
 ## Edit content
 
 - Words, both languages: `src/i18n/hu.js` and `src/i18n/en.js`. Text in `[brackets]` shows as a placeholder on the page.
@@ -33,6 +37,8 @@ Every push to `main` runs `.github/workflows/deploy.yml` (tests, build, deploy t
 - `src/lib/glass.js`: liquid glass (pointer-lit rims, edge refraction in Chromium), adapted from the AusMC landing page
 - `src/components/laurel3d.js` and `medal3d.js`: procedural three.js laurel wreath and spinnable medal, loaded on demand
 - `src/components/globe.js` and `studio-map.js`: MapLibre globe with arcs to each championship, and the studio map with 3D buildings
+- `src/lib/space.js`: the universe around the globe (nebula, stars, shooting stars)
+- `src/components/orbs.js`: the floating contact jewels, each asking before it leaves the site
 - `src/lib/audio.js`: every sound synthesised with Web Audio; off until the visitor turns it on
 - Language: `?lang=hu|en`, then the saved choice, then the browser language
 - `prefers-reduced-motion` turns off the intro animation, ripples, orbit and marquee
@@ -40,5 +46,5 @@ Every push to `main` runs `.github/workflows/deploy.yml` (tests, build, deploy t
 ## Before going live
 
 - Fill in `docs/CONTENT-TODO.md`
-- Remove `<meta name="robots" content="noindex">` from `index.html`
-- If the site moves to its own domain, update `og:url` and `og:image` in `index.html` (share previews need absolute URLs)
+- Remove `<meta name="robots" content="noindex">` from `index.html` and `linkinbio/index.html`
+- If the site moves to its own domain, update `og:url` and `og:image` in both pages (share previews need absolute URLs), and `SITE` in `scripts/build-vcard.py` (then run it again)

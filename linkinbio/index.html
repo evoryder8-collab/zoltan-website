@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="hu" class="is-arriving">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Kódor Zoltán · Elérhetőségek és linkek</title>
+    <meta name="description" content="Foglalj időpontot Kódor Zoltánnál, a kétszeres abszolút masszázsbajnoknál Budapesten vagy Mezőkeresztesen." />
+    <!-- the page social profiles link to; not linked from the site. Test build: keep out of search engines until launch -->
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#0b0607" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+
+    <meta property="og:type" content="profile" />
+    <meta property="og:url" content="https://evoryder8-collab.github.io/zoltan-website/linkinbio/" />
+    <meta property="og:site_name" content="Zoltan Kodor" />
+    <meta property="og:locale" content="hu_HU" />
+    <meta property="og:locale:alternate" content="en_GB" />
+    <meta property="og:title" content="Zoltan Kodor · Contact & links" />
+    <meta property="og:description" content="Clinical Precision • Aesthetic Flow. Book by WhatsApp or phone in Budapest and Mezőkeresztes." />
+    <meta property="og:image" content="https://evoryder8-collab.github.io/zoltan-website/og.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body class="bio-page">
+    <a class="skip" href="#main" data-i18n="a11y.skip">Ugrás a tartalomra</a>
+    <canvas id="silk" class="silk" aria-hidden="true"></canvas>
+    <div class="grain" aria-hidden="true"></div>
+
+    <!-- Arrival: the ZK laurel draws, a crimson seam opens the curtain -->
+    <div class="arrival" aria-hidden="true">
+      <div class="arrival__veil arrival__veil--top"></div>
+      <div class="arrival__veil arrival__veil--bottom"></div>
+      <span class="arrival__seam"></span>
+      <div class="arrival__mark">
+        <svg class="arrival__laurel laurel-svg" viewBox="-120 -120 240 240"></svg>
+        <span class="arrival__zk">ZK</span>
+      </div>
+      <p class="arrival__line" data-i18n="bio.arrival"></p>
+    </div>
+
+    <header class="bar">
+      <div class="bar__pill glass">
+        <a class="bar__home" href="../" data-i18n-attr="aria-label:bio.home"><svg class="bar__mark" viewBox="-60 -60 120 120" aria-hidden="true"></svg></a>
+        <a class="bar__site" href="../"><span data-i18n="bio.website"></span><span data-icon="go"></span></a>
+        <span class="bar__space"></span>
+        <div class="langswitch" role="group" data-i18n-attr="aria-label:a11y.lang">
+          <span class="langswitch__thumb" aria-hidden="true"></span>
+          <button type="button" data-lang="hu" lang="hu">HU</button>
+          <button type="button" data-lang="en" lang="en">EN</button>
+        </div>
+        <button type="button" class="sound-toggle" aria-pressed="false" data-i18n-attr="aria-label:a11y.soundOn" data-icon="sound"></button>
+      </div>
+    </header>
+
+    <main id="main" class="bio">
+      <!-- Zoltan: live liquid behind him, a laurel, his gold light breathing -->
+      <section class="me" aria-labelledby="me-name">
+        <div class="me__stage">
+          <div class="me__aura" aria-hidden="true"><canvas></canvas></div>
+          <svg class="me__laurel laurel-svg" viewBox="-120 -120 240 240" aria-hidden="true"></svg>
+          <div class="me__figure">
+            <img class="me__halo" src="../img/about-halo.webp" width="511" height="1020" alt="" aria-hidden="true" />
+            <img class="me__portrait" src="../img/cutout-stand-900.webp" srcset="../img/cutout-stand-900.webp 391w, ../img/cutout-stand-1600.webp 695w" sizes="260px" width="391" height="900" alt="Zoltan Kodor" fetchpriority="high" />
+          </div>
+        </div>
+        <p class="me__welcome" data-i18n="bio.welcome"></p>
+        <h1 class="me__name" id="me-name"></h1>
+        <p class="me__brand" data-i18n="brand"></p>
+        <p class="me__role"><span class="me__dot" aria-hidden="true"></span><span data-i18n="bio.role"></span></p>
+      </section>
+
+      <div class="ticker bio__ticker" role="region" tabindex="0" data-i18n-attr="aria-label:a11y.results">
+        <div class="ticker__track"></div>
+      </div>
+
+      <nav class="jewels orb-set" id="jewels"></nav>
+
+      <!-- Booking: opens the sheet (where, then WhatsApp or a call) -->
+      <section class="book" data-reveal>
+        <button type="button" class="book__card" id="book-open" aria-haspopup="dialog" aria-controls="book-sheet">
+          <span class="book__light" aria-hidden="true"></span>
+          <span class="book__avatar" aria-hidden="true"><i></i><i></i><i></i><img src="../img/avatar-256.webp" width="256" height="256" alt="" /></span>
+          <span class="book__copy"><strong data-i18n="bio.book"></strong><small class="book__detail"></small></span>
+          <span class="book__go" data-icon="go"></span>
+        </button>
+        <p class="book__invite" id="book-invite" aria-hidden="true"></p>
+      </section>
+
+      <nav class="links" aria-labelledby="links-contact-label">
+        <p class="links__label" id="links-contact-label" data-i18n="bio.contact"></p>
+        <div class="links__list" id="links-contact"></div>
+      </nav>
+
+      <nav class="links" aria-labelledby="links-follow-label">
+        <p class="links__label" id="links-follow-label" data-i18n="bio.follow"></p>
+        <div class="links__list" id="links-follow"></div>
+      </nav>
+
+      <!-- The film, in its own frame: a tap plays it with sound -->
+      <section class="reel" aria-labelledby="reel-label" data-reveal>
+        <p class="links__label" id="reel-label" data-i18n="bio.film.kicker"></p>
+        <div class="reel__frame">
+          <span class="reel__glow" aria-hidden="true"></span>
+          <div class="reel__screen">
+            <video class="reel__video" playsinline preload="none" poster="../media/film-cover.jpg" data-i18n-attr="aria-label:film.aria"></video>
+            <button type="button" class="reel__play" data-i18n-attr="aria-label:bio.film.play"><span data-icon="play"></span></button>
+            <div class="reel__bar">
+              <button type="button" class="reel__toggle" data-i18n-attr="aria-label:bio.film.pause"><span data-icon="pause"></span></button>
+              <span class="reel__track" aria-hidden="true"><i></i></span>
+              <span class="reel__time" aria-hidden="true">1:30</span>
+              <button type="button" class="reel__sound" aria-pressed="true" data-icon="sound"></button>
+              <button type="button" class="reel__full" data-i18n-attr="aria-label:film.full"><span data-icon="expand"></span></button>
+            </div>
+          </div>
+        </div>
+        <p class="reel__caption"><span data-i18n="film.title"></span><span data-i18n="film.label"></span></p>
+      </section>
+
+      <nav class="links links--site" aria-labelledby="links-site-label">
+        <p class="links__label" id="links-site-label" data-i18n="bio.site"></p>
+        <div class="links__list" id="links-site"></div>
+      </nav>
+
+      <!-- The studios: the homepage's 3D map, with prices and addresses -->
+      <section class="studios" aria-labelledby="studios-label">
+        <p class="links__label" id="studios-label" data-i18n="bio.studios"></p>
+        <div class="studio glass" data-reveal>
+          <div class="studio__map" id="studio-map" role="region" data-i18n-attr="aria-label:contact.map.label"></div>
+          <div class="studio__switch glass" role="tablist" id="studio-switch" data-i18n-attr="aria-label:contact.map.switch"></div>
+          <div class="studio__loading" aria-hidden="true"><span></span></div>
+          <div class="studio__bar">
+            <p class="studio__note"><span data-icon="pin"></span><span></span></p>
+            <a class="btn btn--crimson btn--sm studio__go" id="studio-go" target="_blank" rel="noopener"><span data-icon="nav"></span><span data-i18n="contact.map.bring"></span></a>
+          </div>
+        </div>
+        <div class="places" id="places"></div>
+      </section>
+    </main>
+
+    <footer class="bio-foot">
+      <svg class="bio-foot__laurel laurel-svg is-static" viewBox="-120 -120 240 240" aria-hidden="true"></svg>
+      <p class="bio-foot__farewell" data-i18n="bio.farewell"></p>
+      <p class="bio-foot__sig" aria-hidden="true">Zoltan</p>
+      <p class="bio-foot__note" data-i18n="bio.footerNote"></p>
+      <nav class="bio-foot__nav" aria-label="Zoltan Kodor">
+        <a href="../" data-i18n="bio.website"></a>
+        <a href="#main" data-i18n="footer.top"></a>
+      </nav>
+      <p class="bio-foot__rights" data-i18n="footer.rights"></p>
+    </footer>
+
+    <!-- Booking sheet -->
+    <dialog class="sheet" id="book-sheet" aria-labelledby="sheet-title">
+      <div class="sheet__card" tabindex="-1">
+        <span class="sheet__handle" aria-hidden="true"></span>
+        <button type="button" class="sheet__close" data-close data-i18n-attr="aria-label:bio.sheet.close"><span data-icon="close"></span></button>
+        <img class="sheet__avatar" src="../img/avatar-256.webp" width="256" height="256" alt="" />
+        <h2 class="sheet__title" id="sheet-title" data-i18n="bio.book"></h2>
+        <p class="sheet__q" data-i18n="bio.sheet.where"></p>
+        <div class="sheet__places" id="sheet-places" role="radiogroup" data-i18n-attr="aria-label:bio.sheet.where"></div>
+        <p class="sheet__q" data-i18n="bio.sheet.how"></p>
+        <div class="sheet__actions">
+          <a class="sheet__wa" id="sheet-wa" target="_blank" rel="noopener"><span data-icon="whatsapp"></span><span>WhatsApp</span></a>
+          <a class="sheet__call" id="sheet-call"><span data-icon="phone"></span><span data-i18n="bio.sheet.call"></span></a>
+        </div>
+        <p class="sheet__note" data-i18n="bio.sheet.note"></p>
+      </div>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script type="module" src="../src/bio.js"></script>
+  </body>
+</html>

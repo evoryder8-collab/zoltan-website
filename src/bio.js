@@ -209,8 +209,8 @@ st.addEventListener('click', () => {
 addEventListener('soundchange', syncSound);
 addEventListener('langchange', syncSound);
 syncSound();
-// sound was on last time: it comes back with the first touch (browsers need one)
-if (sound.saved) addEventListener('pointerdown', () => !sound.enabled && sound.enable(true), { once: true });
+// sound was on last time: it comes back with the first tap (browsers need one)
+sound.restore();
 
 // ── touch: the silk ripples, taps click, hovers tick ──
 addEventListener('pointerdown', (e) => {
@@ -391,7 +391,7 @@ sheet.addEventListener('cancel', (e) => {
     soundBtn.setAttribute('aria-pressed', !v.muted);
     soundBtn.classList.toggle('is-muted', v.muted);
     soundBtn.setAttribute('aria-label', t(v.muted ? 'film.soundOff' : 'film.soundOn'));
-    sound.duck(!v.paused && !v.muted);
+    sound.duck(!v.paused && !v.muted, 'reel');
   };
   const toggle = () => {
     if (v.paused) {

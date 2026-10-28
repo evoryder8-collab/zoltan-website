@@ -1,8 +1,13 @@
-// Sound design, all synthesised with the Web Audio API: no audio files, so
-// every sound stays in step with the motion that triggers it. Nothing plays
-// until the visitor turns sound on; the choice is remembered.
+// Sound: Zoltan's soundtrack underneath, and UI sounds synthesised with the
+// Web Audio API on top, so each one stays in step with the motion that
+// triggers it. Nothing plays until the visitor turns sound on; the choice is
+// remembered, and so is where the soundtrack was, from page to page.
+import trackUrl from '../media/soundtrack.m4a?url';
 
 const STORE = 'zoltan.sound';
+const AT = 'zoltan.track';
+const LEVEL = 0.36; // the soundtrack under everything
+const DUCKED = 0.022; // while a film speaks
 const mtof = (m) => 440 * Math.pow(2, (m - 69) / 12);
 // D major pentatonic, the same family the laurel chime and hovers draw from
 const PENTA = [62, 64, 66, 69, 71, 74, 76, 78, 81, 83, 86, 88, 90];
@@ -12,7 +17,8 @@ class Sound {
     this.ctx = null;
     this.enabled = false;
     this.lastHover = 0;
-    this.pad = null;
+    this.track = null;
+    this.speaking = new Set(); // the films playing with sound
     this.supported = typeof window !== 'undefined' && !!(window.AudioContext || window.webkitAudioContext);
   }
 
@@ -33,9 +39,9 @@ class Sound {
     if (this.enabled) {
       this.boot();
       this.ctx.resume?.();
-      this.ambient(true);
+      this.soundtrack(true);
     } else {
-      this.ambient(false);
+      this.soundtrack(false);
     }
     dispatchEvent(new CustomEvent('soundchange', { detail: { on: this.enabled } }));
   }
@@ -219,56 +225,73 @@ class Sound {
     });
   }
 
-  /** Lowers the ambient pad while the film plays with sound. */
-  duck(on) {
-    if (!this.pad || !this.ctx) return;
-    const g = this.pad.out.gain;
+  /** Sound was on last time: it comes back with the first tap or key, since
+   *  browsers need one (on phones a swipe doesn't count, a tap does). */
+  restore() {
+    if (!this.saved || !this.supported) return;
+    const events = ['pointerdown', 'pointerup', 'touchend', 'keydown'];
+    const off = () => events.forEach((e) => removeEventListener(e, on, true));
+    const on = () => {
+      if (!this.saved) return off(); // turned off in the meantime
+      if (this.ctx?.state === 'running' && this.track && !this.track.el.paused) return off();
+      if (!this.enabled) this.enable(true);
+      else this.soundtrack(true); // the last try didn't count as a gesture: again
+    };
+    events.forEach((e) => addEventListener(e, on, { capture: true, passive: true }));
+  }
+
+  /** Steps the soundtrack back while a film plays with sound. `who` names the
+   *  film, so one stopping doesn't bring the music up under another. */
+  duck(on, who = 'film') {
+    if (on) this.speaking.add(who);
+    else this.speaking.delete(who);
+    if (this.enabled && this.track && !document.hidden) this.fade(this.speaking.size ? DUCKED : LEVEL, this.speaking.size ? 0.8 : 2.4);
+  }
+
+  fade(to, seconds) {
+    const g = this.track.gain.gain;
     const t = this.ctx.currentTime;
     g.cancelScheduledValues(t);
     g.setValueAtTime(Math.max(g.value, 0.0001), t);
-    g.exponentialRampToValueAtTime(on ? 0.003 : 0.035, t + (on ? 0.8 : 2.4));
+    g.exponentialRampToValueAtTime(to, t + seconds);
   }
 
-  /** A quiet, slowly breathing pad underneath everything. */
-  ambient(on) {
-    if (!this.ctx) return;
+  /** The soundtrack: streamed and looped (it ends in its own fade), faded
+   *  through a gain of its own because iOS ignores media volume, and kept off
+   *  the compressor so the UI sounds never pump it. It rests while the tab is
+   *  hidden and picks up where it was on the next page. */
+  soundtrack(on) {
     const ctx = this.ctx;
-    const t = ctx.currentTime;
-    if (on && !this.pad) {
-      const out = ctx.createGain();
-      out.gain.setValueAtTime(0.0001, t);
-      out.gain.exponentialRampToValueAtTime(0.035, t + 4);
-      const lp = ctx.createBiquadFilter();
-      lp.type = 'lowpass';
-      lp.frequency.value = 520;
-      lp.Q.value = 0.6;
-      const lfo = ctx.createOscillator();
-      const lfoGain = ctx.createGain();
-      lfo.frequency.value = 0.06;
-      lfoGain.gain.value = 180;
-      lfo.connect(lfoGain).connect(lp.frequency);
-      const oscs = [38, 45, 50, 54, 57].map((m, i) => {
-        const o = ctx.createOscillator();
-        o.type = i < 2 ? 'sine' : 'triangle';
-        o.frequency.value = mtof(m);
-        o.detune.value = (i - 2) * 4;
-        o.connect(lp);
-        o.start();
-        return o;
+    if (!ctx) return;
+    if (!this.track) {
+      if (!on) return;
+      let at = 0;
+      try {
+        at = parseFloat(sessionStorage.getItem(AT)) || 0;
+      } catch {}
+      const el = new Audio(at > 1 ? `${trackUrl}#t=${at.toFixed(1)}` : trackUrl);
+      el.loop = true;
+      el.preload = 'auto';
+      const gain = ctx.createGain();
+      gain.gain.value = 0.0001;
+      ctx.createMediaElementSource(el).connect(gain).connect(ctx.destination);
+      this.track = { el, gain, rest: 0 };
+      addEventListener('pagehide', () => {
+        try {
+          sessionStorage.setItem(AT, el.currentTime.toFixed(1));
+        } catch {}
       });
-      lp.connect(out).connect(this.master);
-      const s = ctx.createGain();
-      s.gain.value = 0.6;
-      out.connect(s).connect(this.verb);
-      lfo.start();
-      this.pad = { out, oscs, lfo };
-    } else if (!on && this.pad) {
-      const { out, oscs, lfo } = this.pad;
-      this.pad = null;
-      out.gain.cancelScheduledValues(t);
-      out.gain.setValueAtTime(Math.max(out.gain.value, 0.0001), t);
-      out.gain.exponentialRampToValueAtTime(0.0001, t + 1.2);
-      setTimeout(() => [...oscs, lfo].forEach((o) => o.stop()), 1400);
+      document.addEventListener('visibilitychange', () => this.enabled && this.soundtrack(!document.hidden));
+    }
+    const track = this.track;
+    clearTimeout(track.rest);
+    if (on) {
+      ctx.resume?.();
+      track.el.play()?.catch(() => {});
+      this.fade(this.speaking.size ? DUCKED : LEVEL, 3);
+    } else {
+      this.fade(0.0001, 1.2);
+      track.rest = setTimeout(() => track.el.pause(), 1300);
     }
   }
 }

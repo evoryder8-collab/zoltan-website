@@ -24,7 +24,7 @@ export function runIntro({ reduced }) {
   if (seen) {
     el.hidden = true;
     // sound needs a gesture: honour a saved "on" at the first tap
-    if (sound.saved) addEventListener('pointerdown', () => sound.enable(true), { once: true });
+    sound.restore();
     return Promise.resolve({ skipped: true });
   }
 

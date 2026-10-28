@@ -1,6 +1,6 @@
 // Recognition: the judge's verdict plays silently on a loop while it's on
 // screen (its words are subtitled in the video); a tap turns the sound on and
-// starts it from the top, and the ambient pad steps back while it speaks.
+// starts it from the top, and the soundtrack steps back while it speaks.
 import { t } from '../i18n/index.js';
 import { whenNear } from '../lib/lazy.js';
 import { sound } from '../lib/audio.js';
@@ -17,7 +17,7 @@ export function initHonours({ reduced }) {
     label.textContent = t(video.muted ? 'honours.soundOff' : 'honours.soundOn');
     btn.setAttribute('aria-pressed', !video.muted);
     btn.classList.toggle('is-muted', video.muted);
-    sound.duck(!video.muted && !video.paused);
+    sound.duck(!video.muted && !video.paused, 'verdict');
   };
   addEventListener('langchange', sync);
 

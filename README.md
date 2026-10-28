@@ -1,6 +1,6 @@
 # Zoltan website
 
-Bilingual (Hungarian / English) one-page site for Zoltan, massage therapist and AusMC 2026 Overall Winner. Crimson silk background, liquid-glass panels, a 3D laurel and medal (three.js), a championship globe and studio map (MapLibre + OpenFreeMap) and synthesised sound.
+Bilingual (Hungarian / English) one-page site for Zoltan, massage therapist and AusMC 2026 Overall Winner. Crimson silk background, liquid-glass panels, a 3D laurel and medal (three.js), a championship globe and studio map (MapLibre + OpenFreeMap) and Zoltan's soundtrack under synthesised UI sounds.
 
 Design: `docs/superpowers/specs/2026-10-27-zoltan-website-design.md`. Missing content: `docs/CONTENT-TODO.md`.
 
@@ -39,7 +39,7 @@ Every push to `main` runs `.github/workflows/deploy.yml` (tests, build, deploy t
 - `src/components/globe.js` and `studio-map.js`: MapLibre globe with arcs to each championship, and the studio map with 3D buildings
 - `src/lib/space.js`: the universe around the globe (nebula, stars, shooting stars)
 - `src/components/orbs.js`: the floating contact jewels, each asking before it leaves the site
-- `src/lib/audio.js`: every sound synthesised with Web Audio; off until the visitor turns it on
+- `src/lib/audio.js`: the soundtrack (`src/media/soundtrack.m4a`, looped, stepped back under the films) and the UI sounds synthesised with Web Audio; off until the visitor turns it on
 - Language: `?lang=hu|en`, then the saved choice, then the browser language
 - `prefers-reduced-motion` turns off the intro animation, ripples, orbit and marquee
 

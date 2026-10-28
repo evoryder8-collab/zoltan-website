@@ -214,6 +214,16 @@ class Sound {
     });
   }
 
+  /** The ticket's confetti: two soft pops, then high bells twinkling down. */
+  sparkle() {
+    if (!this.ready()) return;
+    this.air({ from: 2400, to: 700, q: 0.8, dur: 0.22, gain: 0.03, wet: 0.2, pan0: -0.5, pan1: -0.5 });
+    this.air({ from: 2400, to: 700, q: 0.8, dur: 0.22, gain: 0.03, when: 0.04, wet: 0.2, pan0: 0.5, pan1: 0.5 });
+    [93, 90, 88, 86, 83, 81, 86, 90].forEach((m, i) => {
+      this.tone({ freq: mtof(m), type: 'sine', gain: 0.012, attack: 0.004, decay: 0.7, when: 0.08 + i * 0.06 + Math.random() * 0.03, wet: 0.7, pan: (Math.random() - 0.5) * 0.8 });
+    });
+  }
+
   /** The opening: a low swell, rising air and a high shimmer as the curtain parts. */
   reveal() {
     if (!this.ready()) return;

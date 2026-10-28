@@ -4,10 +4,12 @@
 // it off, or on when the page is quiet, and the soundtrack steps back while
 // it speaks. Browsers only let a video speak unprompted after a tap has
 // played it, so the visitor's taps on the page unlock it on the way down.
+// Below it, the Bulgarian ticket celebrates each time it comes into view.
 import { t } from '../i18n/index.js';
 import { whenNear } from '../lib/lazy.js';
 import { sound } from '../lib/audio.js';
 import { buzz } from '../lib/tilt.js';
+import { confetti } from '../lib/confetti.js';
 
 const BASE = import.meta.env.BASE_URL;
 
@@ -35,6 +37,7 @@ export function initHonours({ reduced }) {
     sync();
     return;
   }
+  celebrateTicket();
 
   let inView = false;
   let chosen = null; // the visitor's own call on this button; until then the page's sound decides
@@ -136,3 +139,37 @@ export function initHonours({ reduced }) {
   sync();
 }
 
+// The ticket gives a small shake and throws confetti once it's fully in view,
+// after its card has settled; it does it again whenever the visitor leaves
+// and comes back (a refresh included).
+function celebrateTicket() {
+  const ticket = document.querySelector('.ticket');
+  const card = ticket.closest('[data-reveal]');
+  let armed = true;
+  let timer = 0;
+  let last = -Infinity;
+  const go = () => {
+    // the card fades in on its own; let it land first
+    if (!card.classList.contains('is-revealed')) {
+      timer = setTimeout(go, 200);
+      return;
+    }
+    armed = false;
+    last = performance.now();
+    ticket.classList.remove('is-won');
+    void ticket.offsetWidth; // restart the shake
+    ticket.classList.add('is-won');
+    confetti(ticket, { count: innerWidth < 760 ? 48 : 70 });
+    if (!sound.speaking.size) sound.sparkle();
+  };
+  ticket.addEventListener('animationend', (e) => e.animationName === 'ticket-won' && ticket.classList.remove('is-won'));
+  new IntersectionObserver(
+    ([e]) => {
+      clearTimeout(timer);
+      if (!e.isIntersecting) armed = true;
+      // not again while scrolling back and forth across its edge
+      else if (armed && e.intersectionRatio >= 0.9 && performance.now() - last > 4000) timer = setTimeout(go, 350);
+    },
+    { threshold: [0, 0.9] },
+  ).observe(ticket);
+}

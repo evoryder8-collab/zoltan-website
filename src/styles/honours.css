@@ -211,6 +211,27 @@
   0%, 35% { background-position: 120% 0; }
   75%, 100% { background-position: -30% 0; }
 }
+/* coming into view: lifted a touch, a small shake that settles, a glint
+   across it, while confetti flies (lib/confetti.js) */
+.ticket.is-won {
+  animation: ticket-won 1.1s var(--ease);
+}
+.ticket.is-won::after {
+  animation: ticket-glint 1.1s var(--ease);
+}
+@keyframes ticket-won {
+  0% { transform: none; }
+  14% { transform: translateY(-5px) rotate(-2.2deg) scale(1.035); }
+  30% { transform: translateY(-5px) rotate(1.8deg) scale(1.035); }
+  46% { transform: translateY(-3px) rotate(-1.1deg) scale(1.02); }
+  62% { transform: translateY(-1px) rotate(0.6deg) scale(1.01); }
+  80% { transform: rotate(-0.2deg); }
+  100% { transform: none; }
+}
+@keyframes ticket-glint {
+  0%, 10% { background-position: 120% 0; }
+  70%, 100% { background-position: -30% 0; }
+}
 .ticket__stub {
   flex: 0 0 var(--cut);
   display: grid;

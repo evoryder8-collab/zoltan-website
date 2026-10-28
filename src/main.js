@@ -7,6 +7,7 @@ import './styles/shell.css';
 import './styles/hero.css';
 import './styles/sections.css';
 import './styles/film.css';
+import './styles/honours.css';
 import './styles/gallery.css';
 import './styles/maps.css';
 
@@ -38,6 +39,7 @@ import { renderSections, initTopics, initStudioSwitch } from './components/secti
 import { renderEvents, initChampionships } from './components/championships.js';
 import { initGallery } from './components/gallery.js';
 import { initFilm } from './components/film.js';
+import { initHonours } from './components/honours.js';
 import { initDirections } from './components/directions.js';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -78,6 +80,7 @@ initTopics({ sound });
 initStudioSwitch();
 initGallery({ reduced });
 initFilm({ reduced });
+initHonours({ reduced });
 initChampionships({
   reduced,
   lenis,

@@ -27,7 +27,8 @@ const rand = ([a, b]) => a + Math.random() * (b - a);
 function honours() {
   const ausmc = t('champs.events.ausmc26.titles').map((title) => ({ title, event: t('champs.events.ausmc26.short') }));
   const slovakia = { title: t('champs.events.slovakia.titles')[0], event: t('champs.events.slovakia.short') };
-  return [...ausmc, slovakia];
+  const invitation = { title: t('honours.accolade'), event: t('honours.accoladeEvent') };
+  return [...ausmc, slovakia, invitation];
 }
 
 export function playOpening({ silk, onHero }) {
@@ -122,7 +123,7 @@ export function playOpening({ silk, onHero }) {
       .to(laurel, { scale: 1.9, rotate: -16, opacity: 0, filter: 'blur(12px)', duration: 1.9, ease: 'power3.inOut' }, 0.3);
     // honours breathe in, one after another
     accolades.forEach((el, i) => {
-      const at = 0.55 + i * 0.3;
+      const at = 0.55 + i * 0.25;
       tl.fromTo(el, { opacity: 0, scale: 0.94, filter: 'blur(12px)' }, { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 1.1, ease: 'power2.out' }, at)
         .add(() => {
           el.classList.add('is-breathing');

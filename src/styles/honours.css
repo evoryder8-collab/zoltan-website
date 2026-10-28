@@ -1,0 +1,298 @@
+/* ───────── Recognition ───────── */
+
+/* two moments, side by side and staggered, even on phones */
+.moments {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(12px, 3vw, 32px);
+  align-items: start;
+  max-width: 900px;
+  margin: 0 auto clamp(2.5rem, 6vw, 5rem);
+}
+.moment {
+  margin: 0;
+}
+.moment--b {
+  margin-top: clamp(32px, 9vw, 110px);
+}
+.moment__photo {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 2 / 3;
+  border-radius: var(--r-md);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 0 0 1px rgba(255, 95, 115, 0.18),
+    0 40px 80px -30px rgba(0, 0, 0, 0.9),
+    0 30px 70px -40px rgba(195, 18, 47, 0.6);
+}
+.moment__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.03);
+  transition: transform 1.4s var(--ease);
+}
+.moment:hover .moment__photo img {
+  transform: scale(1.08);
+}
+.moment figcaption {
+  margin-top: 0.85rem;
+  color: var(--pearl-dim);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+/* the judge's verdict */
+.verdict {
+  display: grid;
+  grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+  gap: clamp(1rem, 4vw, 3.5rem);
+  align-items: center;
+  margin-bottom: 18px;
+  padding: clamp(0.9rem, 2.5vw, 1.8rem);
+  border-radius: 34px;
+}
+.verdict__film {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 9 / 16;
+  border-radius: 24px;
+  background: #000;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12), 0 30px 60px -25px rgba(0, 0, 0, 0.9);
+}
+.verdict__video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+}
+.verdict__sound {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  translate: -50% 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  height: 38px;
+  padding: 0 0.85rem;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(11, 6, 7, 0.68);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+  color: var(--pearl);
+  font-size: 0.74rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.verdict__sound .i {
+  width: 16px;
+  height: 16px;
+}
+.verdict__sound.is-muted .spk__w,
+.verdict__sound:not(.is-muted) .spk__slash {
+  opacity: 0;
+}
+.verdict__sound.is-muted {
+  box-shadow: inset 0 0 0 1px rgba(255, 95, 115, 0.6);
+  animation: call 1.8s var(--ease) infinite;
+}
+.verdict__quote {
+  position: relative;
+  margin: 0 0 1.4rem;
+}
+.verdict__quote::before {
+  content: '“';
+  position: absolute;
+  left: -0.12em;
+  top: -0.42em;
+  color: var(--crimson);
+  font: 400 clamp(4rem, 9vw, 7rem) / 1 var(--serif);
+  opacity: 0.55;
+  pointer-events: none;
+}
+.verdict__quote p {
+  position: relative;
+  margin: 0;
+  font: italic 400 clamp(1.6rem, 3.2vw, 2.7rem) / 1.18 var(--serif);
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+.verdict__who {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0;
+}
+.verdict__who a {
+  justify-self: start;
+  color: var(--pearl);
+  font: 400 1.35rem/1.1 var(--serif);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 59, 78, 0.55);
+}
+.verdict__who span {
+  color: var(--pearl-faint);
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* the Bulgarian invitation */
+.invite {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: clamp(1.2rem, 4vw, 3.5rem);
+  align-items: center;
+  padding: clamp(0.9rem, 2.5vw, 1.8rem);
+  border-radius: 34px;
+}
+.invite__photo {
+  margin: 0;
+}
+.invite__photo img {
+  width: 100%;
+  height: auto; /* the height attribute would otherwise beat aspect-ratio */
+  aspect-ratio: 5 / 4;
+  object-fit: cover;
+  border-radius: 24px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1), 0 30px 60px -25px rgba(0, 0, 0, 0.9);
+}
+.invite__photo figcaption {
+  margin-top: 0.7rem;
+  color: var(--pearl-faint);
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
+.invite__title {
+  margin: 0 0 0.8rem;
+  font: 400 clamp(1.7rem, 3vw, 2.5rem) / 1.08 var(--serif);
+  text-wrap: balance;
+}
+.invite__body {
+  margin: 0;
+  color: var(--pearl-dim);
+  line-height: 1.7;
+}
+
+/* a ticket, punched where the stub tears off */
+.ticket {
+  --cut: 92px;
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  margin-top: 1.5rem;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(227, 37, 63, 0.42), rgba(110, 10, 28, 0.42));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), inset 0 0 0 1px rgba(255, 140, 155, 0.3), 0 20px 40px -20px rgba(195, 18, 47, 0.7);
+  -webkit-mask:
+    radial-gradient(circle 10px at var(--cut) 0, transparent 96%, #000) top / 100% 51% no-repeat,
+    radial-gradient(circle 10px at var(--cut) 100%, transparent 96%, #000) bottom / 100% 51% no-repeat;
+  mask:
+    radial-gradient(circle 10px at var(--cut) 0, transparent 96%, #000) top / 100% 51% no-repeat,
+    radial-gradient(circle 10px at var(--cut) 100%, transparent 96%, #000) bottom / 100% 51% no-repeat;
+}
+.ticket::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.22) 48%, transparent 60%) 120% 0 / 250% 100% no-repeat;
+  animation: ticket-shine 5.5s var(--ease) infinite;
+  pointer-events: none;
+}
+@keyframes ticket-shine {
+  0%, 35% { background-position: 120% 0; }
+  75%, 100% { background-position: -30% 0; }
+}
+.ticket__stub {
+  flex: 0 0 var(--cut);
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0.1rem;
+  padding: 1rem 0.4rem;
+  border-right: 2px dashed rgba(255, 255, 255, 0.35);
+}
+.ticket__stub span {
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+}
+.ticket__stub strong {
+  font: 400 1.75rem/1 var(--serif);
+}
+.ticket__main {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.95rem 1.1rem;
+}
+.ticket__name {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.ticket__row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: rgba(255, 236, 238, 0.85);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.ticket__row .i {
+  width: 14px;
+  height: 14px;
+}
+.ticket__admit {
+  margin-top: 0.2rem;
+  font: italic 400 1rem/1.2 var(--serif);
+}
+
+@media (max-width: 760px) {
+  .moment figcaption {
+    font-size: 0.72rem;
+  }
+  /* phones: the vertical film sits beside the quote, not above it */
+  .verdict {
+    grid-template-columns: 40% minmax(0, 1fr);
+    gap: 0.9rem;
+    border-radius: 26px;
+  }
+  .verdict__film {
+    border-radius: 18px;
+  }
+  .verdict__sound {
+    bottom: 8px;
+    height: 32px;
+    padding: 0 0.6rem;
+    font-size: 0.64rem;
+  }
+  .verdict__quote {
+    margin-bottom: 0.9rem;
+  }
+  .verdict__quote p {
+    font-size: 1.12rem;
+  }
+  .verdict__who a {
+    font-size: 1.05rem;
+  }
+  .verdict__who span {
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+  }
+  .verdict .kicker {
+    margin-bottom: 0.7rem;
+    font-size: 0.6rem;
+  }
+  .invite {
+    grid-template-columns: 1fr;
+    border-radius: 26px;
+  }
+}

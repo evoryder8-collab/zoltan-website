@@ -46,6 +46,16 @@ GALLERY = {
 }
 
 
+# Recognition photos the user sent in chat (originals outside the repo; the
+# generated WebP files are committed). Skipped if the originals are gone.
+UPLOADS = os.path.expanduser('~/.claude/uploads/dc3e7986-ee33-4639-bc83-edfc88d396a8')
+FEATURES = {
+    'award-lifted': ('6d1f7768-image.jpg', (640, 1066)),
+    'award-judges': ('c7678451-image.jpg', (640, 1066)),
+    'award-bmc': ('58e6ae73-image.jpg', (900, 1600)),
+}
+
+
 def resolve(src):
     if not src.startswith('proof:'):
         return os.path.join(HOME, src)
@@ -80,6 +90,17 @@ def main():
             fit(im, edge).save(os.path.join(OUT, f'g-{slug}-{edge}.webp'), 'WEBP', quality=82, method=6)
         big = fit(im, 1600)
         manifest['gallery'].append({'id': slug, 'cat': cat, 'w': big.width, 'h': big.height})
+
+    for slug, (src, widths) in FEATURES.items():
+        path = os.path.join(UPLOADS, src)
+        if not os.path.exists(path):
+            print(f'skip {slug}: original not found', file=sys.stderr)
+            continue
+        im = ImageOps.exif_transpose(Image.open(path)).convert('RGB')
+        for w in widths:
+            out = im.resize((w, round(im.height * w / im.width)), Image.LANCZOS)
+            out.save(os.path.join(OUT, f'{slug}-{w}.webp'), 'WEBP', quality=84, method=6)
+        manifest.setdefault('features', {})[slug] = {'w': im.width, 'h': im.height}
 
     print(json.dumps(manifest, indent=1))
 

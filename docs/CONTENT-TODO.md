@@ -24,3 +24,6 @@ Wording lives in `src/i18n/hu.js` and `src/i18n/en.js` (change both). Facts live
 - AusMC 2026 (Cockatoo Island, Sydney, 9–11 October 2026): Overall Winner, Freestyle Massage Award, Best Flow & Transition Award, Best International Therapist
 - Story (from the short film): started competing in May 2026, out of curiosity; two overall titles on two continents less than two months apart
 - Not shown, by request: EMC 2026 and the World Championship in Massage (IMA)
+- Judge's verdict (video, Matthew Hua, international massage judge, Zurich): "The styling, simplicity, the zen, the posture, the ergonomics. Well done."
+- Honorary invitation from the Bulgarian Massage Championship organiser, for winning the Slovakia Massage Championship: a free place at OBMC 2027, Veliko Tarnovo, Bulgaria, 14–16 May 2027 (read from the certificate)
+- AusMC moments: lifted with the Overall Winner board; with organiser Anh Ha and judge Matthew Hua, holding the Best Flow & Transition Award

@@ -23,7 +23,7 @@ export default {
   },
   intro: {
     kicker: 'Clinical Precision • Aesthetic Flow',
-    line: 'Abszolút győztes · Szlovákia & Ausztrália 2026',
+    line: 'Abszolút győztes · Ausztrália & Szlovákia 2026',
     soundTitle: 'Bekapcsolod a hangot?',
     soundHint: 'Hanggal a legszebb az élmény.',
     yes: 'Igen',
@@ -66,11 +66,11 @@ export default {
   },
   ticker: [
     'Clinical Precision • Aesthetic Flow',
-    'Szlovákiai Masszázsbajnokság · Abszolút győztes',
     'Sydney · AusMC 2026 · Abszolút győztes',
     'Freestyle Massage Award',
     'Best Flow & Transition Award',
     'Best International Therapist',
+    'Szlovákiai Masszázsbajnokság · Abszolút győztes',
     'Budapest · Mezőkeresztes',
   ],
   about: {
@@ -82,7 +82,7 @@ export default {
     quote: 'És ez… még csak a kezdet.',
     quoteBy: 'Kódor Zoltán · rövidfilm',
     stats: [
-      ['2× abszolút győztes', 'Szlovákia & Ausztrália'],
+      ['2× abszolút győztes', 'Ausztrália & Szlovákia'],
       ['3 különdíj', 'AusMC 2026'],
       ['2026 májusa óta', 'versenyez'],
       ['kb. 70 perc', 'egy kezelés'],

@@ -23,7 +23,7 @@ export default {
   },
   intro: {
     kicker: 'Clinical Precision • Aesthetic Flow',
-    line: 'Overall Winner · Slovakia & Australia 2026',
+    line: 'Overall Winner · Australia & Slovakia 2026',
     soundTitle: 'Sound on?',
     soundHint: 'Best experienced with sound.',
     yes: 'Yes',
@@ -66,11 +66,11 @@ export default {
   },
   ticker: [
     'Clinical Precision • Aesthetic Flow',
-    'Slovakia Massage Championship · Grand Champion',
     'Sydney · AusMC 2026 · Overall Winner',
     'Freestyle Massage Award',
     'Best Flow & Transition Award',
     'Best International Therapist',
+    'Slovakia Massage Championship · Grand Champion',
     'Budapest · Mezőkeresztes',
   ],
   about: {
@@ -82,7 +82,7 @@ export default {
     quote: 'And this… is just the beginning.',
     quoteBy: 'Zoltan Kodor · short film',
     stats: [
-      ['2× Overall Winner', 'Slovakia & Australia'],
+      ['2× Overall Winner', 'Australia & Slovakia'],
       ['3 special awards', 'AusMC 2026'],
       ['Since May 2026', 'competing'],
       ['~70 min', 'one treatment'],

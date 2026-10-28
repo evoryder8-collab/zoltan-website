@@ -3,6 +3,7 @@ import { setLang, getLang, t } from '../i18n/index.js';
 import { sound } from '../lib/audio.js';
 import { drawLaurelSvg } from '../lib/laurel.js';
 import { buzz } from '../lib/tilt.js';
+import { replayIntro } from './intro.js';
 
 export function initNav({ lenis }) {
   const nav = document.getElementById('nav');
@@ -10,6 +11,14 @@ export function initNav({ lenis }) {
   drawLaurelSvg(mark, { radius: 34, pairs: 6, stroke: 2.2 });
   mark.classList.add('laurel-svg', 'is-static');
   mark.insertAdjacentHTML('beforeend', '<text x="-1" y="11" text-anchor="middle" fill="var(--pearl)" font-family="Bodoni Moda Variable, Georgia, serif" font-size="31" font-style="italic" letter-spacing="-1">ZK</text>');
+
+  // the logo replays the opening, intro and all
+  nav.querySelector('.nav__brand').addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation(); // not the anchor scroll below
+    sound.tap();
+    replayIntro();
+  });
 
   // language
   const langBtns = nav.querySelectorAll('.langswitch button');

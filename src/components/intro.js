@@ -14,6 +14,16 @@ import { requestTilt, buzz } from '../lib/tilt.js';
 const SEEN = 'zoltan.entered';
 const WAIT = 5000;
 
+/** The header's logo plays it all again: the intro is forgotten for this visit
+ *  and the page loads afresh at the top (without any #section in the address,
+ *  which would send it back down). */
+export function replayIntro() {
+  try {
+    sessionStorage.removeItem(SEEN);
+  } catch {}
+  location.assign(location.pathname + location.search);
+}
+
 export function runIntro({ reduced }) {
   const el = document.getElementById('intro');
   let seen = false;

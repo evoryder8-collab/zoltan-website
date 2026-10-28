@@ -255,7 +255,30 @@ class Sound {
   duck(on, who = 'film') {
     if (on) this.speaking.add(who);
     else this.speaking.delete(who);
-    if (this.enabled && this.track && !document.hidden) this.fade(this.speaking.size ? DUCKED : LEVEL, this.speaking.size ? 0.8 : 2.4);
+    if (!this.enabled || !this.track || document.hidden) return;
+    if (this.speaking.size) this.fade(DUCKED, 0.8);
+    else this.wake();
+  }
+
+  /** The films are quiet again: the soundtrack comes back up, smoothly. A
+   *  phone pauses other audio while a video speaks (and may suspend the
+   *  audio context), so it's woken and started again first; if the phone
+   *  wants a tap for that, the next tap does it. */
+  wake() {
+    const { el } = this.track;
+    clearTimeout(this.track.rest);
+    if (this.ctx.state !== 'running') this.ctx.resume?.()?.catch?.(() => {});
+    if (el.paused) el.play()?.catch(() => this.onNextTap(() => this.enabled && !this.speaking.size && this.wake()));
+    this.fade(LEVEL, 2.8);
+  }
+
+  onNextTap(fn) {
+    const events = ['touchend', 'click', 'keydown'];
+    const once = () => {
+      events.forEach((e) => removeEventListener(e, once, true));
+      fn();
+    };
+    events.forEach((e) => addEventListener(e, once, { capture: true, passive: true }));
   }
 
   fade(to, seconds) {
@@ -286,6 +309,13 @@ class Sound {
       gain.gain.value = 0.0001;
       ctx.createMediaElementSource(el).connect(gain).connect(ctx.destination);
       this.track = { el, gain, rest: 0 };
+      // paused by the phone, not by us (sound still on, no film speaking,
+      // the tab in view): bring it back
+      el.addEventListener('pause', () => {
+        setTimeout(() => {
+          if (this.enabled && !this.speaking.size && !document.hidden && el.paused) this.wake();
+        }, 400);
+      });
       addEventListener('pagehide', () => {
         try {
           sessionStorage.setItem(AT, el.currentTime.toFixed(1));

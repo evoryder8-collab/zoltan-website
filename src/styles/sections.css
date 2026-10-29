@@ -227,11 +227,12 @@
   font: 400 clamp(2.2rem, 3.6vw, 3rem) / 1 var(--serif);
   letter-spacing: -0.01em;
 }
-.price__value small {
-  margin-left: 0.35em;
-  font: 700 0.8rem var(--sans);
-  letter-spacing: 0.14em;
+.price__huf {
+  display: block;
+  margin-top: 0.45rem;
   color: var(--pearl-faint);
+  font: 650 0.8rem/1.2 var(--sans);
+  letter-spacing: 0.02em;
 }
 .price .btn {
   margin-top: auto;
@@ -239,6 +240,76 @@
   white-space: normal;
   text-align: left;
   line-height: 1.2;
+}
+/* the signature experience: across both columns, edged in gold */
+.price.price--signature {
+  grid-column: 1 / -1;
+  background:
+    radial-gradient(80% 70% at 100% 0%, rgba(240, 212, 154, 0.16), transparent 65%),
+    radial-gradient(70% 60% at 0% 100%, rgba(227, 37, 63, 0.16), transparent 70%),
+    linear-gradient(165deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.025));
+  box-shadow:
+    inset 0 0 0 1px rgba(240, 212, 154, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    0 30px 70px -30px rgba(224, 181, 109, 0.45);
+}
+.price__new {
+  margin: 0 0 0.9rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: linear-gradient(160deg, #e6283f, #8a0a21);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 0 22px -6px rgba(255, 59, 78, 0.8);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+.price__name {
+  margin: 0;
+  font: 400 clamp(1.9rem, 3vw, 2.5rem) / 1.05 var(--serif);
+}
+.price__kind {
+  margin: 0.3rem 0 0;
+  color: #f0d49a;
+  font: italic 400 1.2rem/1.3 var(--serif);
+}
+.price__pitch {
+  margin: 0.9rem 0 0;
+  color: var(--pearl-dim);
+  line-height: 1.6;
+}
+.price__points {
+  display: grid;
+  gap: 0.55rem;
+  margin: 1.1rem 0 1.5rem;
+  padding: 0;
+  list-style: none;
+}
+.price__points li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+.price__points .i {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin-top: 0.15rem;
+  color: #f0d49a;
+}
+.price__deal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.4rem 1rem;
+  width: 100%;
+  margin-top: auto;
+}
+.price__deal .price__value {
+  margin-bottom: 0;
 }
 .toolkit {
   padding: clamp(1.6rem, 3vw, 2.2rem);

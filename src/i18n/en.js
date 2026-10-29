@@ -102,7 +102,8 @@ export default {
     priceLabel: 'Price per treatment',
     book: 'Book {where}',
     waText: 'Hi Zoltan! I’d like to book a treatment {where}. When do you have time?',
-    currency: 'HUF',
+    inForints: 'In forints: {price}',
+    inForintsFrom: 'In forints: from {price}',
     toolkitTitle: 'The toolkit',
     toolkitIntro: 'Chosen and combined individually for each client:',
     methods: [
@@ -118,6 +119,21 @@ export default {
       ['Mobilization'],
     ],
     note: 'Not sure it’s for you? Message Zoltan and describe what hurts or what you train for.',
+  },
+  signature: {
+    new: 'New',
+    name: 'Kódor Flow 90',
+    kind: 'Signature experience',
+    pitch: 'The signature style that earned Zoltan two international overall titles.',
+    points: [
+      '90 minutes: a brief consultation, 75 minutes of flowing full-body massage with assisted stretching and mobilization where suitable, then a calm finish.',
+      'His distinctive competition style, adapted to your comfort and needs.',
+      'A short personal follow-up after 48 hours.',
+      'Also available as a gift.',
+    ],
+    duration: '90 minutes',
+    book: 'Book Kódor Flow 90',
+    waText: 'Hi Zoltan! I’d like to book Kódor Flow 90. When do you have time?',
   },
   champs: {
     kicker: 'Championships',

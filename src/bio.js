@@ -17,10 +17,11 @@ import hu from './i18n/hu.js';
 import en from './i18n/en.js';
 import { registerDictionaries, setLang, storedLang, getLang, t } from './i18n/index.js';
 import { detectLang } from './lib/lang.js';
-import { CONTACT, LOCATIONS, TREATMENT } from './config.js';
+import { CONTACT, LOCATIONS, TREATMENT, SIGNATURE } from './config.js';
 import { fillIcons, icon } from './lib/icons.js';
 import { drawLaurelSvg } from './lib/laurel.js';
 import { esc, initReveals } from './lib/dom.js';
+import { eur, huf } from './lib/price.js';
 import { initGlass } from './lib/glass.js';
 import { initSilk } from './lib/silk.js';
 import { mountAura } from './lib/aura.js';
@@ -47,8 +48,9 @@ const IMG = '../img/';
 
 registerDictionaries({ hu, en });
 setLang(detectLang({ search: location.search, stored: storedLang(), languages: navigator.languages }), { persist: false });
-const money = (n) => `${new Intl.NumberFormat(getLang() === 'hu' ? 'hu-HU' : 'en-GB').format(n)}\u00a0${t('treatments.currency')}`;
-const fromPrice = () => money(Math.min(...LOCATIONS.map((l) => l.price)));
+const cheapest = () => LOCATIONS.reduce((a, b) => (b.price.eur < a.price.eur ? b : a)).price;
+// the forint price beneath the euros, in Hungarian only
+const hufLine = (price, cls, key = 'treatments.inForints') => (huf(price) ? `<span class="${cls}">${esc(t(key, { price: huf(price) }))}</span>` : '');
 
 // ── the cards: [id, tone, icon, href | action, extras] ──
 const CARDS = {
@@ -112,7 +114,7 @@ function renderTicker() {
 }
 
 function renderBook() {
-  $('.book__detail').textContent = t('bio.bookDetail', { price: fromPrice() });
+  $('.book__detail').innerHTML = esc(t('bio.bookDetail', { price: eur(cheapest()) })) + hufLine(cheapest(), 'book__huf', 'treatments.inForintsFrom');
   // the invitation, word by word, so each can rise and gleam in turn
   $('#book-invite').innerHTML = t('bio.bookInvite')
     .split(' ')
@@ -125,7 +127,7 @@ function renderPlaces() {
     (loc) => `
     <article class="place glass" data-reveal>
       <p class="place__name">${icon('pin')}<span>${esc(t(`locations.${loc.id}.name`))}</span></p>
-      <p class="place__price">${esc(money(loc.price))}<small>${esc(t('treatments.duration', { n: TREATMENT.minutes }))}</small></p>
+      <p class="place__price">${esc(eur(loc.price))}${hufLine(loc.price, 'place__huf')}<small>${esc(t('treatments.duration', { n: TREATMENT.minutes }))}</small></p>
       <p class="place__addr">${esc(t(`locations.${loc.id}.address`))}</p>
       <div class="place__actions">
         <button type="button" class="place__btn" data-copy="${esc(t(`locations.${loc.id}.address`))}">${icon('copy')}<span>${esc(t('bio.copy'))}</span></button>
@@ -133,6 +135,17 @@ function renderPlaces() {
       </div>
     </article>`,
   ).join('');
+}
+
+function renderSignature() {
+  $('#signature').innerHTML = `
+    <p class="signature__new">${esc(t('signature.new'))}</p>
+    <h2 class="signature__name" id="signature-name">${esc(t('signature.name'))}</h2>
+    <p class="signature__kind">${esc(t('signature.kind'))}</p>
+    <p class="signature__pitch">${esc(t('signature.pitch'))}</p>
+    <ul class="signature__points">${t('signature.points').map((p) => `<li>${icon('check')}<span>${esc(p)}</span></li>`).join('')}</ul>
+    <p class="signature__price">${esc(eur(SIGNATURE.price))}${hufLine(SIGNATURE.price, 'signature__huf')}<small>${esc(t('signature.duration'))}</small></p>
+    <a class="signature__book" href="${esc(waLink(CONTACT.whatsapp, t('signature.waText')))}" target="_blank" rel="noopener">${icon('whatsapp')}<span>${esc(t('signature.book'))}</span></a>`;
 }
 
 function renderSwitch() {
@@ -157,6 +170,7 @@ renderName();
 renderTicker();
 renderBook();
 renderCards();
+renderSignature();
 renderPlaces();
 renderSwitch();
 fillIcons();
@@ -183,6 +197,7 @@ addEventListener('langchange', () => {
   ribbon.refresh();
   renderBook();
   renderCards();
+  renderSignature();
   renderPlaces();
   renderSwitch();
   fillIcons();
@@ -309,7 +324,7 @@ function renderSheet() {
     <button type="button" class="sheet__place" role="radio" aria-checked="${loc.id === place}" data-place="${loc.id}">
       <span class="sheet__place-name">${esc(t(`locations.${loc.id}.name`))}</span>
       <span class="sheet__place-addr">${esc(t(`locations.${loc.id}.address`))}</span>
-      <span class="sheet__place-price">${esc(money(loc.price))}</span>
+      <span class="sheet__place-price">${esc(eur(loc.price))}${hufLine(loc.price, 'sheet__place-huf')}</span>
     </button>`,
   ).join('');
   $('#sheet-wa').href = waLink(CONTACT.whatsapp, t('treatments.waText', { where: t(`locations.${place}.in`) }));

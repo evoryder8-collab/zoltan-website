@@ -102,7 +102,8 @@ export default {
     priceLabel: 'Egy kezelés ára',
     book: 'Időpont {where}',
     waText: 'Szia Zoltán! Szeretnék időpontot foglalni {where}. Mikor lenne szabad időpontod?',
-    currency: 'Ft',
+    inForints: 'Forintban: {price}',
+    inForintsFrom: 'Forintban: {price}-tól',
     toolkitTitle: 'Az eszköztár',
     toolkitIntro: 'Minden vendégnél egyénileg kiválasztva és kombinálva:',
     methods: [
@@ -118,6 +119,21 @@ export default {
       ['Átmozgatás, mobilizáció'],
     ],
     note: 'Nem vagy biztos benne, hogy neked való? Írj Zoltánnak, mi fáj, vagy mire edzel.',
+  },
+  signature: {
+    new: 'Új',
+    name: 'Kódor Flow 90',
+    kind: 'Signature élmény',
+    pitch: 'A jellegzetes stílus, amellyel Zoltán két nemzetközi abszolút győzelmet szerzett.',
+    points: [
+      '90 perc: rövid konzultáció, 75 perc áramló, teljes testes masszázs, ahol indokolt, asszisztált nyújtással és mobilizációval, majd nyugodt lezárás.',
+      'Egyedi versenystílusa, a kényelmedhez és az igényeidhez igazítva.',
+      'Rövid, személyes utánkövetés 48 óra elteltével.',
+      'Ajándékba is adható.',
+    ],
+    duration: '90 perc',
+    book: 'Kódor Flow 90 foglalása',
+    waText: 'Szia Zoltán! Szeretnék időpontot foglalni a Kódor Flow 90 kezelésre. Mikor lenne szabad időpontod?',
   },
   champs: {
     kicker: 'Bajnokságok',

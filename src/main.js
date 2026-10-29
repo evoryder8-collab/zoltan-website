@@ -11,6 +11,7 @@ import './styles/film.css';
 import './styles/honours.css';
 import './styles/gallery.css';
 import './styles/maps.css';
+import './styles/terms.css';
 
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -41,6 +42,7 @@ import { renderEvents, initChampionships } from './components/championships.js';
 import { initGallery } from './components/gallery.js';
 import { initFilm } from './components/film.js';
 import { initHonours } from './components/honours.js';
+import { initTerms } from './components/terms.js';
 import { initDirections } from './components/directions.js';
 import { initOrbs } from './components/orbs.js';
 
@@ -84,6 +86,7 @@ initStudioSwitch();
 initGallery({ reduced });
 initFilm({ reduced, lenis });
 initHonours({ reduced });
+initTerms();
 initChampionships({
   reduced,
   lenis,

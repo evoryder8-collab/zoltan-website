@@ -28,8 +28,8 @@ export const TREATMENT = { minutes: 70 };
 // i18n under locations.<id>; `query` is what Google/Apple Maps search for.
 // Budapest is only published as a district (Sashalom), so its pin marks the area.
 export const LOCATIONS = [
-  { id: 'budapest', price: { eur: 70, huf: 22000 }, lngLat: [19.17397, 47.51038], query: 'Sashalom, Budapest XVI. kerület' },
-  { id: 'mezokeresztes', price: { eur: 50, huf: 16000 }, lngLat: [20.68864, 47.82599], query: 'Mezőkeresztes, Bornemissza u. 3, 3441' },
+  { id: 'budapest', price: { eur: 65, huf: 22000 }, lngLat: [19.17397, 47.51038], query: 'Sashalom, Budapest XVI. kerület' },
+  { id: 'mezokeresztes', price: { eur: 45, huf: 16000 }, lngLat: [20.68864, 47.82599], query: 'Mezőkeresztes, Bornemissza u. 3, 3441' },
 ];
 
 // Where the arcs on the championship globe start

@@ -33,6 +33,14 @@ export function renderSections() {
         <a class="btn btn--crimson btn--sm" href="${esc(href)}" target="_blank" rel="noopener">${icon('whatsapp')}${esc(t('treatments.book', { where }))}</a>
       </article>`;
   }).join('');
+  // cancellations, in brief; the full terms open from here
+  document.getElementById('treatment-policy').innerHTML = `
+    <h3 class="policy__title">${esc(t('terms.summary.title'))}</h3>
+    <ol class="policy__tiers">${t('terms.summary.tiers')
+      .map(([when, what], i) => `<li class="policy__tier" style="--tone:var(--tone-${i})"><span class="policy__when">${esc(when)}</span><span class="policy__what">${esc(what)}</span></li>`)
+      .join('')}</ol>
+    <p class="policy__goodwill">${esc(t('terms.summary.goodwill'))}</p>
+    <button type="button" class="policy__more" data-terms>${esc(t('terms.summary.more'))}${icon('go')}</button>`;
   document.getElementById('toolkit').innerHTML = t('treatments.methods')
     .map(([name, detail], i) => `<li class="tool"><span class="tool__n">${String(i + 1).padStart(2, '0')}</span><span class="tool__name">${esc(name)}</span>${detail ? `<span class="tool__detail">${esc(detail)}</span>` : ''}</li>`)
     .join('');
@@ -70,8 +78,8 @@ export function renderSections() {
   wireLinks();
 }
 
-// the forint price beneath the euros, in Hungarian only
-const hufLine = (price) => (huf(price) ? `<span class="price__huf">${esc(t('treatments.inForints', { price: huf(price) }))}</span>` : '');
+// the forint price beneath the euros, in Hungarian only, nearly as large
+const hufLine = (price) => (huf(price) ? `<span class="price__huf"><small>${esc(t('treatments.inForints'))}</small>${esc(huf(price))}</span>` : '');
 
 function updateTopic() {
   document.getElementById('topic-wa').href = waLink(CONTACT.whatsapp, t(`contact.topics.${topic}.wa`));

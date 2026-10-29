@@ -229,10 +229,18 @@
 }
 .price__huf {
   display: block;
-  margin-top: 0.45rem;
+  margin-top: 0.7rem;
+  color: var(--pearl);
+  font: 400 clamp(1.55rem, 2.3vw, 1.95rem) / 1.05 var(--serif);
+  letter-spacing: 0;
+}
+.price__huf small {
+  display: block;
+  margin-bottom: 0.3rem;
   color: var(--pearl-faint);
-  font: 650 0.8rem/1.2 var(--sans);
-  letter-spacing: 0.02em;
+  font: 750 0.68rem/1.2 var(--sans);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
 }
 .price .btn {
   margin-top: auto;
@@ -241,6 +249,92 @@
   text-align: left;
   line-height: 1.2;
 }
+/* cancellations, in brief, under the prices */
+.policy {
+  --tone-0: rgba(240, 212, 154, 0.8);
+  --tone-1: #e3253f;
+  --tone-2: #8a0a21;
+  display: grid;
+  gap: 1rem;
+  margin-top: 18px;
+  padding: clamp(1.4rem, 3vw, 2rem);
+  border-radius: var(--r-lg);
+}
+.policy__title {
+  margin: 0;
+  font: 400 clamp(1.5rem, 2.4vw, 1.9rem) / 1.15 var(--serif);
+}
+.policy__tiers {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.policy__tier {
+  display: grid;
+  align-content: start;
+  gap: 0.4rem;
+  padding: 1rem 1.1rem;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+.policy__tier::before {
+  content: '';
+  width: 28px;
+  height: 3px;
+  margin-bottom: 0.3rem;
+  border-radius: 2px;
+  background: var(--tone);
+}
+.policy__when {
+  color: var(--pearl-faint);
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.policy__what {
+  font-size: 1.02rem;
+  font-weight: 700;
+}
+.policy__goodwill {
+  max-width: 80ch;
+  margin: 0;
+  color: var(--pearl-dim);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+.policy__more,
+.footer__terms button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #f0d49a;
+  font: 700 0.9rem var(--sans);
+  text-decoration: underline;
+  text-decoration-color: rgba(240, 212, 154, 0.4);
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+.policy__more {
+  justify-self: start;
+}
+.policy__more .i {
+  width: 16px;
+  height: 16px;
+}
+@media (max-width: 720px) {
+  .policy__tiers {
+    grid-template-columns: 1fr;
+  }
+}
+
 .toolkit {
   padding: clamp(1.6rem, 3vw, 2.2rem);
   border-radius: var(--r-lg);

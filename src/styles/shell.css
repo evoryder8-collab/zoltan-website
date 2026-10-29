@@ -788,6 +788,9 @@ html[lang='en'] .langswitch__thumb {
   font-size: 0.72rem;
   line-height: 1.6;
 }
+.footer__terms {
+  margin: -1rem 0 2rem;
+}
 .footer__top {
   display: inline-flex;
   align-items: center;

@@ -102,8 +102,8 @@ export default {
     priceLabel: 'Price per treatment',
     book: 'Book {where}',
     waText: 'Hi Zoltan! I’d like to book a treatment {where}. When do you have time?',
-    inForints: 'In forints: {price}',
-    inForintsFrom: 'In forints: from {price}',
+    inForints: 'In forints',
+    inForintsFrom: 'from {price}',
     toolkitTitle: 'The toolkit',
     toolkitIntro: 'Chosen and combined individually for each client:',
     methods: [
@@ -119,6 +119,38 @@ export default {
       ['Mobilization'],
     ],
     note: 'Not sure it’s for you? Message Zoltan and describe what hurts or what you train for.',
+  },
+  terms: {
+    title: 'Booking terms',
+    close: 'Close',
+    intro: 'Your appointment is time set aside for you alone. These terms keep that fair for every client, and for Zoltan.',
+    // [heading, text, one of the cancellation rules themselves]
+    sections: [
+      ['Booking', 'Appointments are booked by WhatsApp, phone or email and are binding once Zoltan confirms them. By booking, you accept these terms. The price is the fixed treatment price at your chosen studio, as shown on this website.'],
+      ['Cancelling or moving an appointment', 'Free of charge up to 24 hours before your appointment. Let Zoltan know by WhatsApp, phone or email; what counts is when your message reaches him. Moving an appointment with less than 24 hours’ notice counts as a late cancellation.'],
+      ['Late cancellations and missed appointments', 'Cancellations made less than 24 hours before the appointment, and appointments missed without notice, are charged at 100% of the agreed treatment price.', true],
+      ['A one-off goodwill exception', 'The first time it happens, Zoltan may waive the fee if your notice reached him by 9:00 in the morning on the day of the appointment. It is a gesture at his discretion, not a right, and is offered once per client.', true],
+      ['Less than one hour’s notice', 'If your notice reaches Zoltan less than one hour before the appointment, or not at all, no exception and no refund is possible.', true],
+      ['Arriving late', 'Your treatment ends at the time booked, so the next client isn’t kept waiting, and the full price applies. If you are more than 20 minutes late without letting Zoltan know, the appointment may be treated as missed.'],
+      ['If Zoltan has to cancel', 'If illness or an emergency means Zoltan has to cancel, he will tell you as early as he can and offer you a new time first. You pay nothing for an appointment he cancels, and anything paid in advance is refunded in full.'],
+      ['Your health', 'Please tell Zoltan about any injuries, conditions, medication or pregnancy before your treatment. If you are unwell with a fever or an infection, please cancel as early as you can: the goodwill exception is there for moments like these.'],
+      ['Settling a fee', 'A cancellation fee is due within 8 days, or at your next appointment at the latest. New appointments can be booked once it is settled; after repeated missed appointments, Zoltan may ask for payment in advance.'],
+      ['Fairness', 'If another client takes your slot, the fee is reduced accordingly, or waived. Your rights as a consumer under Hungarian law remain unaffected.'],
+    ],
+    updated: 'Updated 29 October 2026. Applies to bookings made from this date.',
+    // under the prices
+    summary: {
+      title: 'Cancellations & missed appointments',
+      tiers: [
+        ['24 hours or more before', 'Free to cancel or move'],
+        ['Under 24 hours, or a no-show', 'Full treatment price'],
+        ['Under 1 hour', 'No exceptions, no refunds'],
+      ],
+      goodwill: 'The first time only, notice that reaches Zoltan by 9:00 on the morning of the appointment may be met with a one-off goodwill exception, at his discretion.',
+      more: 'Read the booking terms',
+    },
+    // in the link page's booking sheet
+    sheet: 'Free to cancel up to 24 hours before. Later cancellations and no-shows are charged in full.',
   },
   champs: {
     kicker: 'Championships',

@@ -102,8 +102,8 @@ export default {
     priceLabel: 'Egy kezelés ára',
     book: 'Időpont {where}',
     waText: 'Szia Zoltán! Szeretnék időpontot foglalni {where}. Mikor lenne szabad időpontod?',
-    inForints: 'Forintban: {price}',
-    inForintsFrom: 'Forintban: {price}-tól',
+    inForints: 'Forintban',
+    inForintsFrom: '{price}-tól',
     toolkitTitle: 'Az eszköztár',
     toolkitIntro: 'Minden vendégnél egyénileg kiválasztva és kombinálva:',
     methods: [
@@ -119,6 +119,38 @@ export default {
       ['Átmozgatás, mobilizáció'],
     ],
     note: 'Nem vagy biztos benne, hogy neked való? Írj Zoltánnak, mi fáj, vagy mire edzel.',
+  },
+  terms: {
+    title: 'Foglalási feltételek',
+    close: 'Bezárás',
+    intro: 'A lefoglalt időpont csak rád vár. Ezek a feltételek gondoskodnak róla, hogy ez minden vendég és Zoltán számára is méltányos maradjon.',
+    // [cím, szöveg, maga a lemondási szabály-e]
+    sections: [
+      ['Foglalás', 'Időpontot WhatsAppon, telefonon vagy e-mailben foglalhatsz; a foglalás Zoltán visszaigazolásával válik véglegessé. A foglalással elfogadod ezeket a feltételeket. A kezelés ára a választott helyszín fix ára, ahogy ezen az oldalon szerepel.'],
+      ['Lemondás és időpont-módosítás', 'Az időpont előtt legalább 24 órával díjmentesen lemondhatod vagy áthelyezheted. Jelezd WhatsAppon, telefonon vagy e-mailben; az számít, mikor ér el Zoltánhoz az üzeneted. A 24 órán belüli áthelyezés késői lemondásnak minősül.'],
+      ['Késői lemondás és meg nem jelenés', 'A 24 órán belül lemondott, illetve előzetes jelzés nélkül elmulasztott időpontokért a kezelés teljes, egyeztetett árát kell megfizetni.', true],
+      ['Egyszeri méltányosság', 'Ha először fordul elő, Zoltán eltekinthet a díjtól, ha a jelzésed az időpont napján legkésőbb reggel 9 óráig megérkezett hozzá. Ez gesztus, nem jog: Zoltán döntésén múlik, és vendégenként egyszer adható.', true],
+      ['Egy órán belüli jelzés', 'Ha a jelzésed kevesebb mint egy órával az időpont előtt ér el Zoltánhoz, vagy egyáltalán nem, kivételre és visszatérítésre nincs lehetőség.', true],
+      ['Késés', 'A kezelés a lefoglalt időpontban ér véget, hogy a következő vendégnek ne kelljen várnia, és a teljes ár ilyenkor is érvényes. Ha jelzés nélkül több mint 20 percet késel, az időpont elmulasztottnak tekinthető.'],
+      ['Ha Zoltán mondja le', 'Ha betegség vagy vészhelyzet miatt Zoltánnak kell lemondania, a lehető leghamarabb szól, és elsőként neked ajánl új időpontot. Az általa lemondott időpontért nem fizetsz semmit, az előre fizetett összeget pedig teljes egészében visszakapod.'],
+      ['Az egészséged', 'A kezelés előtt jelezd Zoltánnak, ha sérülésed, betegséged van, gyógyszert szedsz vagy várandós vagy. Ha lázas vagy fertőző beteg vagy, mondd le minél hamarabb: a méltányossági kivétel épp az ilyen helyzetekre való.'],
+      ['A díj rendezése', 'A lemondási díjat 8 napon belül, de legkésőbb a következő időpontodkor kell rendezni. Új időpontot a díj rendezése után foglalhatsz; ismételt meg nem jelenés esetén Zoltán előre fizetést kérhet.'],
+      ['Méltányosság', 'Ha az időpontodat másik vendég tölti be, a díj ennek megfelelően csökken, vagy el is marad. A fogyasztóként téged megillető, jogszabályban biztosított jogokat ezek a feltételek nem érintik.'],
+    ],
+    updated: 'Frissítve: 2026. október 29. Az ettől a naptól leadott foglalásokra érvényes.',
+    // az árak alatt
+    summary: {
+      title: 'Lemondás és meg nem jelenés',
+      tiers: [
+        ['Legalább 24 órával előtte', 'Díjmentes lemondás vagy áthelyezés'],
+        ['24 órán belül, vagy meg nem jelenés', 'A kezelés teljes ára'],
+        ['1 órán belül', 'Nincs kivétel, nincs visszatérítés'],
+      ],
+      goodwill: 'Kizárólag első alkalommal: ha a jelzésed az időpont napján reggel 9 óráig megérkezik Zoltánhoz, egyszeri méltányosságot gyakorolhat, saját döntése szerint.',
+      more: 'A foglalási feltételek',
+    },
+    // a linkoldal foglalási ablakában
+    sheet: 'Az időpont előtt 24 óráig díjmentesen lemondhatod. A későbbi lemondásért és a meg nem jelenésért a teljes árat kell fizetni.',
   },
   champs: {
     kicker: 'Bajnokságok',

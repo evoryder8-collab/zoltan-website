@@ -11,6 +11,7 @@ import './styles/glass.css';
 import './styles/shell.css';
 import './styles/orbs.css';
 import './styles/maps.css';
+import './styles/terms.css';
 import './styles/bio.css';
 
 import hu from './i18n/hu.js';
@@ -29,6 +30,7 @@ import { sound } from './lib/audio.js';
 import { whenNear } from './lib/lazy.js';
 import { tilt, initTilt, requestTilt, buzz } from './lib/tilt.js';
 import { mountRibbon } from './lib/ribbon.js';
+import { initTerms } from './components/terms.js';
 import { waLink, telLink, mailLink } from './lib/links.js';
 import { initStudioSwitch } from './components/sections.js';
 import { initDirections } from './components/directions.js';
@@ -49,8 +51,8 @@ const IMG = '../img/';
 registerDictionaries({ hu, en });
 setLang(detectLang({ search: location.search, stored: storedLang(), languages: navigator.languages }), { persist: false });
 const cheapest = () => LOCATIONS.reduce((a, b) => (b.price.eur < a.price.eur ? b : a)).price;
-// the forint price beneath the euros, in Hungarian only
-const hufLine = (price, cls, key = 'treatments.inForints') => (huf(price) ? `<span class="${cls}">${esc(t(key, { price: huf(price) }))}</span>` : '');
+// the forint price beneath the euros, in Hungarian only, labelled
+const hufLine = (price, cls, key) => (huf(price) ? `<span class="${cls}"><small>${esc(t('treatments.inForints'))}</small>${esc(key ? t(key, { price: huf(price) }) : huf(price))}</span>` : '');
 
 // ── the cards: [id, tone, icon, href | action, extras] ──
 const CARDS = {
@@ -161,6 +163,7 @@ renderBook();
 renderCards();
 renderPlaces();
 renderSwitch();
+initTerms();
 fillIcons();
 syncTitle();
 

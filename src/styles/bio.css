@@ -151,6 +151,7 @@
 /* everything rises in as the portal opens */
 .bar,
 .me > *,
+.bio__next,
 .bio__ticker,
 .book {
   transition: opacity 1s var(--ease), transform 1.2s var(--ease);
@@ -161,10 +162,12 @@
 .me__name { --rise: 2; }
 .me__brand { --rise: 3; }
 .me__role { --rise: 4; }
-.bio__ticker { --rise: 5; }
-.book { --rise: 6; }
+.bio__next { --rise: 5; }
+.bio__ticker { --rise: 6; }
+.book { --rise: 7; }
 html.is-arriving .bar,
 html.is-arriving .me > *,
+html.is-arriving .bio__next,
 html.is-arriving .bio__ticker,
 html.is-arriving .book {
   opacity: 0;

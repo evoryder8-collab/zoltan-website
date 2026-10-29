@@ -53,6 +53,17 @@ export default {
     chipSlovakia: 'Szlovákia 2026 · Abszolút győztes',
     scroll: 'Görgess',
   },
+  next: {
+    kicker: 'Hír · Következő állomás',
+    name: 'World Massage Super Cup',
+    place: 'Nagyszeben, Románia',
+    dates: '2026. október 30. – november 1.',
+    soon: '{n} nap múlva kezdődik',
+    tomorrow: 'Holnap kezdődik',
+    today: 'Ma kezdődik',
+    live: 'Most zajlik',
+    after: 'Eredmények hamarosan',
+  },
   film: {
     kicker: 'A film',
     title: 'Két kontinens. Két hónapon belül.',

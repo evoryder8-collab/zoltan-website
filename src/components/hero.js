@@ -20,7 +20,7 @@ export function renderName() {
 export function prepareHero({ reduced }) {
   if (reduced) return;
   const q = (s) => document.querySelectorAll(`.hero ${s}`);
-  gsap.set([...q('.hero__copy .kicker'), ...q('.hero__surname'), ...q('.hero__brand'), ...q('.hero__lead'), ...q('.hero__ctas > *'), ...q('.hero__chips > *')], { opacity: 0, y: 24 });
+  gsap.set([...q('.hero__copy .kicker'), ...q('.hero__surname'), ...q('.hero__brand'), ...q('.hero__lead'), ...q('.hero__ctas > *'), ...q('.hero__chips > *'), ...q('.hero__next')], { opacity: 0, y: 24 });
   gsap.set(q('.hero__name-inner'), { opacity: 0, yPercent: 40, filter: 'blur(12px)' });
   // no filters animate on the portrait: WebKit can paint a transparent image
   // under animated blur/brightness as a solid white block. The light it
@@ -47,6 +47,7 @@ export function enterHero({ reduced, skipName = false }) {
     .to(q('.hero__brand'), { opacity: 1, y: 0, duration: 1.2 }, 0.6)
     .to(q('.hero__lead'), { opacity: 1, y: 0, duration: 1.2 }, 0.62)
     .to(q('.hero__ctas > *'), { opacity: 1, y: 0, duration: 1.1, stagger: 0.08 }, 0.78)
-    .to(q('.hero__chips > *'), { opacity: 1, y: 0, duration: 1.1, stagger: 0.08 }, 0.92);
+    .to(q('.hero__chips > *'), { opacity: 1, y: 0, duration: 1.1, stagger: 0.08 }, 0.92)
+    .to(q('.hero__next'), { opacity: 1, y: 0, duration: 1.2 }, 1.1);
   return tl;
 }

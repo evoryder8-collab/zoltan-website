@@ -32,6 +32,11 @@ export const LOCATIONS = [
   { id: 'mezokeresztes', price: { eur: 45, huf: 16000 }, lngLat: [20.68864, 47.82599], query: 'Mezőkeresztes, Bornemissza u. 3, 3441' },
 ];
 
+// The next championship on the road, announced under the hero on both pages
+// until it's over (first and last day, in the visitor's own time). Wording in
+// i18n under next.
+export const NEXT = { start: '2026-10-30', end: '2026-11-01' };
+
 // Where the arcs on the championship globe start
 export const HOME = { lngLat: [19.0402, 47.4979] };
 

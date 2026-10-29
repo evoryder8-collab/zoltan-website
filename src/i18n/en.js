@@ -53,6 +53,17 @@ export default {
     chipSlovakia: 'Slovakia 2026 · Grand Champion',
     scroll: 'Scroll',
   },
+  next: {
+    kicker: 'Update · Next on the road',
+    name: 'World Massage Super Cup',
+    place: 'Sibiu, Romania',
+    dates: '30 October – 1 November 2026',
+    soon: 'Starts in {n} days',
+    tomorrow: 'Starts tomorrow',
+    today: 'Starts today',
+    live: 'Under way now',
+    after: 'Results to follow',
+  },
   film: {
     kicker: 'The film',
     title: 'Two continents. Under two months.',

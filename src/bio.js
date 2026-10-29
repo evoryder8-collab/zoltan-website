@@ -12,6 +12,7 @@ import './styles/shell.css';
 import './styles/orbs.css';
 import './styles/maps.css';
 import './styles/terms.css';
+import './styles/next.css';
 import './styles/bio.css';
 
 import hu from './i18n/hu.js';
@@ -31,6 +32,7 @@ import { whenNear } from './lib/lazy.js';
 import { tilt, initTilt, requestTilt, buzz } from './lib/tilt.js';
 import { mountRibbon } from './lib/ribbon.js';
 import { initTerms } from './components/terms.js';
+import { initNext } from './components/next-event.js';
 import { waLink, telLink, mailLink } from './lib/links.js';
 import { initStudioSwitch } from './components/sections.js';
 import { initDirections } from './components/directions.js';
@@ -164,6 +166,7 @@ renderCards();
 renderPlaces();
 renderSwitch();
 initTerms();
+initNext();
 fillIcons();
 syncTitle();
 

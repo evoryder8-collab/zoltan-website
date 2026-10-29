@@ -1,0 +1,101 @@
+/* ───────── the next championship: an update under the hero (both pages) ───────── */
+.next {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas: 'emblem copy status';
+  align-items: center;
+  gap: 0 1.1rem;
+  padding: 12px 20px 12px 16px;
+  border-radius: 24px;
+}
+/* dark enough to read over anything behind it, his white clothes included */
+.next.glass {
+  background:
+    radial-gradient(70% 120% at 0% 50%, rgba(240, 190, 90, 0.14), transparent 70%),
+    linear-gradient(165deg, rgba(42, 14, 20, 0.9), rgba(16, 7, 10, 0.93));
+}
+.next__emblem {
+  grid-area: emblem;
+  width: 42px;
+  height: auto;
+  filter: drop-shadow(0 6px 16px rgba(240, 170, 50, 0.35));
+}
+.next__copy {
+  grid-area: copy;
+  display: grid;
+  gap: 0.22rem;
+  min-width: 0;
+}
+.next__kicker {
+  margin: 0;
+  color: #f0d49a;
+  font: 800 0.62rem/1.3 var(--sans);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+.next__name {
+  margin: 0;
+  font: 400 clamp(1.3rem, 2vw, 1.6rem) / 1.1 var(--serif);
+}
+.next__meta {
+  margin: 0;
+  color: var(--pearl-dim);
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+.next__meta span {
+  white-space: nowrap;
+}
+.next__sep {
+  margin: 0 0.45em;
+  color: var(--pearl-faint);
+}
+.next__status {
+  grid-area: status;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(227, 37, 63, 0.16);
+  box-shadow: inset 0 0 0 1px rgba(255, 95, 115, 0.35);
+  font-size: 0.74rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.next__status::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #f0d49a;
+  box-shadow: 0 0 10px rgba(240, 212, 154, 0.8);
+}
+.next__status[data-phase='live']::before {
+  background: #ff3b4e;
+  box-shadow: 0 0 10px #ff3b4e;
+  animation: next-pulse 1.6s ease-in-out infinite;
+}
+@keyframes next-pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+@media (max-width: 560px) {
+  .next {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas: 'emblem copy' 'emblem status';
+    gap: 0.55rem 0.95rem;
+    padding: 14px 16px 14px 14px;
+  }
+  .next__meta span:not(.next__sep) {
+    display: block;
+  }
+  .next__sep {
+    display: none;
+  }
+  .next__status {
+    justify-self: start;
+  }
+}

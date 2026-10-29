@@ -248,6 +248,7 @@ export default {
     rights: '© 2026 Kódor Zoltán e.v. · Z-Wellness. All rights reserved.',
     disclaimer: 'Treatments are not a medical service and do not replace medical examination, diagnosis or treatment. For health complaints, please consult a doctor.',
     top: 'Back to top',
+    credit: 'Website built by Barbu Media',
   },
   orbs: {
     label: 'Follow and contact Zoltan',

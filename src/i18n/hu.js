@@ -248,6 +248,7 @@ export default {
     rights: '© 2026 Kódor Zoltán e.v. · Z-Wellness. Minden jog fenntartva.',
     disclaimer: 'A kezelések nem minősülnek orvosi tevékenységnek, és nem helyettesítik az orvosi vizsgálatot, diagnózist vagy kezelést. Egészségügyi panasz esetén javasolt orvosi konzultáció.',
     top: 'Vissza a tetejére',
+    credit: 'A weboldalt a Barbu Media készítette',
   },
   orbs: {
     label: 'Kövesd és keresd Zoltánt',

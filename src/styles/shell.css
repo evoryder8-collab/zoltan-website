@@ -803,3 +803,11 @@ html[lang='en'] .langswitch__thumb {
   width: 16px;
   height: 16px;
 }
+.footer__credit {
+  margin: 2.2rem 0 0;
+  color: rgba(246, 241, 236, 0.4);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}

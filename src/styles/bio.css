@@ -1100,6 +1100,14 @@ html.is-film body {
   color: var(--pearl-faint);
   font-size: 0.68rem;
 }
+.bio-foot__credit {
+  margin: 0;
+  color: rgba(246, 241, 236, 0.4);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
 
 /* ── the booking sheet ── */
 .sheet {

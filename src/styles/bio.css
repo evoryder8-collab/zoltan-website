@@ -952,20 +952,9 @@ html.is-film body {
   border-radius: 0;
 }
 .reel__caption {
-  display: grid;
-  justify-items: center;
-  gap: 0.25rem;
   margin: 0;
-}
-.reel__caption span:first-child {
+  text-align: center;
   font: italic 400 1.15rem/1.3 var(--serif);
-}
-.reel__caption span:last-child {
-  color: var(--pearl-faint);
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
 }
 
 /* ── the studios ── */

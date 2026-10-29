@@ -1,5 +1,5 @@
-// Generated from scripts/build-images.py output. Captions live in the i18n files
-// under gallery.captions.<id>; categories match gallery.filters. fx/fy: where
+// Generated from scripts/build-images.py output. No captions: each photo is
+// described by its category (gallery.filters) for screen readers. fx/fy: where
 // Zoltan is in the photo (fractions of width/height), so each card frames him.
 export const GALLERY = [
   { id: 'at-the-table', cat: 'treatment', w: 1002, h: 1600, fx: 0.46 },

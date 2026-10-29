@@ -36,7 +36,6 @@ export function initGallery({ reduced }) {
       <button type="button" data-open="${i}">
         <img src="${src(g.id, 800)}" srcset="${src(g.id, 800)} 800w, ${src(g.id, 1200)} 1200w, ${src(g.id, 1600)} 1600w" sizes="(max-width: 720px) 70vw, 480px" width="${g.w}" height="${g.h}" alt="" loading="${i < 4 ? 'eager' : 'lazy'}" decoding="async" draggable="false" />
       </button>
-      <p class="shot__cap"></p>
     </li>`,
   ).join('');
   const shots = [...track.children];
@@ -46,10 +45,9 @@ export function initGallery({ reduced }) {
     filters.innerHTML = CATS.map((c) => `<button type="button" class="filter" data-cat="${c}" aria-pressed="${c === cat}">${esc(t(`gallery.filters.${c}`))}</button>`).join('');
     shots.forEach((li) => {
       const g = GALLERY[+li.dataset.i];
-      const cap = t(`gallery.captions.${g.id}`);
-      li.querySelector('img').alt = cap;
-      li.querySelector('button').setAttribute('aria-label', t('gallery.open', { caption: cap }));
-      li.querySelector('.shot__cap').textContent = cap;
+      const alt = t('gallery.alt', { kind: t(`gallery.filters.${g.cat}`) });
+      li.querySelector('img').alt = alt;
+      li.querySelector('button').setAttribute('aria-label', t('gallery.open', { caption: alt }));
     });
   };
   label();
@@ -242,20 +240,18 @@ export function initGallery({ reduced }) {
   const dlg = document.getElementById('viewer');
   const img = dlg.querySelector('.viewer__img');
   const count = dlg.querySelector('.viewer__count');
-  const text = dlg.querySelector('.viewer__text');
   let list = [];
   let at = 0;
   const show = (dir = 0) => {
     const g = GALLERY[list[at]];
     img.classList.remove('is-swap');
     img.src = src(g.id, 1600);
-    img.alt = t(`gallery.captions.${g.id}`);
+    img.alt = t('gallery.alt', { kind: t(`gallery.filters.${g.cat}`) });
     if (dir) {
       img.style.setProperty('--dir', dir);
       void img.offsetWidth;
       img.classList.add('is-swap');
     }
-    text.textContent = img.alt;
     count.textContent = t('gallery.viewer.counter', { n: at + 1, total: list.length });
     // warm the neighbours
     [list[at + 1], list[at - 1]].filter((i) => i != null).forEach((i) => (new Image().src = src(GALLERY[i].id, 1600)));

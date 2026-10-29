@@ -19,7 +19,7 @@ export const GALLERY = [
   { id: 'head', cat: 'treatment', w: 1067, h: 1600, fx: 0.42 },
   { id: 'hip-stretch', cat: 'stretch', w: 1280, h: 1600, fx: 0.68, fy: 0.3 },
   { id: 'back-wide', cat: 'treatment', w: 1280, h: 1600, fx: 0.47 },
-  { id: 'lower-back', cat: 'treatment', w: 1067, h: 1600, fx: 0.5 },
+  { id: 'shoulder-blade', cat: 'treatment', w: 1067, h: 1600, fx: 0.5 },
   { id: 'crouch', cat: 'portrait', w: 1280, h: 1600, fx: 0.62, fy: 0.3 },
   { id: 'robe', cat: 'portrait', w: 1067, h: 1600, fx: 0.45, fy: 0.32 },
 ];

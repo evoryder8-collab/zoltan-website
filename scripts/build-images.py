@@ -39,7 +39,7 @@ GALLERY = {
     'head': ('proof:90439', 'treatment'),
     'hip-stretch': ('proof:21016', 'stretch'),
     'back-wide': ('proof:20822', 'treatment'),
-    'lower-back': ('proof:20962', 'treatment'),
+    'shoulder-blade': ('proof:20962', 'treatment'),
     'crouch': ('proof:20803', 'portrait'),
     'robe': ('proof:90715', 'portrait'),
 }

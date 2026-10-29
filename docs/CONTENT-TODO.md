@@ -18,8 +18,8 @@ Wording lives in `src/i18n/hu.js` and `src/i18n/en.js` (change both). Facts live
 - Brand line: "Clinical Precision • Aesthetic Flow" (English in both languages)
 - Contact from zwellness.hu: +36 30 416 2043, zwellness18@gmail.com, Facebook / Instagram / YouTube / TikTok `zwellness18`
 - Studios: 3441 Mezőkeresztes, Bornemissza utca 3. and Budapest XVI. kerület – Sashalom
-- One personalised treatment, about 70 minutes, fixed price, never extra if it runs longer: €70 / 24,000 HUF in Budapest, €50 / 17,000 HUF in Mezőkeresztes (prices in euros; the forint price shows beneath only in Hungarian, and is a little lower: no conversion fees)
-- NEW: Kódor Flow 90 · Signature experience, €105 / 36,000 HUF (exactly 50% above Budapest): 90 minutes (brief consultation, 75 minutes of flowing full-body massage with assisted stretching and mobilization where suitable, a calm finish), his competition style adapted to the client, a personal follow-up after 48 hours, available as a gift
+- One personalised treatment, about 70 minutes, fixed price, never extra if it runs longer: €70 / 22,000 HUF in Budapest, €50 / 16,000 HUF in Mezőkeresztes (prices in euros; the forint price shows beneath only in Hungarian, and is lower: no conversion fees)
+- Gift voucher ("Give the Gift of Care"): 30,000 HUF on the Hungarian site, €85 on the English one, redeemable toward his treatments, with a personal dedication, presented digitally; requested on WhatsApp
 - Methods: therapeutic and Swedish massage, FDM, trigger point techniques, cupping, IASTM, kinesiology taping, scar tissue treatment, vagus therapy, mobilization techniques
 - Slovakia Massage Championship, 12 September 2026: gold, Grand Champion (absolute winner)
 - AusMC 2026 (Cockatoo Island, Sydney, 9–11 October 2026): Overall Winner, Freestyle Massage Award, Best Flow & Transition Award, Best International Therapist

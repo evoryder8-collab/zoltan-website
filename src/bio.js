@@ -11,13 +11,14 @@ import './styles/glass.css';
 import './styles/shell.css';
 import './styles/orbs.css';
 import './styles/maps.css';
+import './styles/voucher.css';
 import './styles/bio.css';
 
 import hu from './i18n/hu.js';
 import en from './i18n/en.js';
 import { registerDictionaries, setLang, storedLang, getLang, t } from './i18n/index.js';
 import { detectLang } from './lib/lang.js';
-import { CONTACT, LOCATIONS, TREATMENT, SIGNATURE } from './config.js';
+import { CONTACT, LOCATIONS, TREATMENT } from './config.js';
 import { fillIcons, icon } from './lib/icons.js';
 import { drawLaurelSvg } from './lib/laurel.js';
 import { esc, initReveals } from './lib/dom.js';
@@ -29,6 +30,7 @@ import { sound } from './lib/audio.js';
 import { whenNear } from './lib/lazy.js';
 import { tilt, initTilt, requestTilt, buzz } from './lib/tilt.js';
 import { mountRibbon } from './lib/ribbon.js';
+import { initGift } from './components/gift.js';
 import { waLink, telLink, mailLink } from './lib/links.js';
 import { initStudioSwitch } from './components/sections.js';
 import { initDirections } from './components/directions.js';
@@ -137,17 +139,6 @@ function renderPlaces() {
   ).join('');
 }
 
-function renderSignature() {
-  $('#signature').innerHTML = `
-    <p class="signature__new">${esc(t('signature.new'))}</p>
-    <h2 class="signature__name" id="signature-name">${esc(t('signature.name'))}</h2>
-    <p class="signature__kind">${esc(t('signature.kind'))}</p>
-    <p class="signature__pitch">${esc(t('signature.pitch'))}</p>
-    <ul class="signature__points">${t('signature.points').map((p) => `<li>${icon('check')}<span>${esc(p)}</span></li>`).join('')}</ul>
-    <p class="signature__price">${esc(eur(SIGNATURE.price))}${hufLine(SIGNATURE.price, 'signature__huf')}<small>${esc(t('signature.duration'))}</small></p>
-    <a class="signature__book" href="${esc(waLink(CONTACT.whatsapp, t('signature.waText')))}" target="_blank" rel="noopener">${icon('whatsapp')}<span>${esc(t('signature.book'))}</span></a>`;
-}
-
 function renderSwitch() {
   const current = document.querySelector('#studio-switch [aria-selected="true"]')?.dataset.studio || LOCATIONS[0].id;
   $('#studio-switch').innerHTML = LOCATIONS.map(
@@ -170,9 +161,9 @@ renderName();
 renderTicker();
 renderBook();
 renderCards();
-renderSignature();
 renderPlaces();
 renderSwitch();
+initGift({ reduced });
 fillIcons();
 syncTitle();
 
@@ -197,7 +188,6 @@ addEventListener('langchange', () => {
   ribbon.refresh();
   renderBook();
   renderCards();
-  renderSignature();
   renderPlaces();
   renderSwitch();
   fillIcons();
@@ -235,7 +225,7 @@ if (!askSound) sound.restore();
 // ── touch: the silk ripples, taps click, hovers tick ──
 addEventListener('pointerdown', (e) => {
   silk.ripple(e.clientX, e.clientY);
-  if (!e.target.closest('a, button, .studio, .ticker')) sound.ripple(e.clientX / innerWidth - 0.5);
+  if (!e.target.closest('a, button, .studio, .ticker, .voucher')) sound.ripple(e.clientX / innerWidth - 0.5);
 }, { passive: true });
 document.addEventListener('click', (e) => {
   if (e.target.closest('a, button')) {

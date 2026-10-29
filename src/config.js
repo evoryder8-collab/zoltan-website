@@ -20,21 +20,21 @@ export const CONTACT = {
 export const TREATMENT = { minutes: 70 };
 
 // Prices are shown in euros; in Hungarian his forint price follows beneath.
-// The euros are set a little above the forints (24 000 Ft was about €65 at the
-// ECB rate of 28 Oct 2026), so paying in forints comes out cheaper, as paying
-// in euros costs more in conversion fees.
+// The euros are set above the forints (22 000 Ft was about €60 at the ECB
+// rate of 28 Oct 2026), so paying in forints comes out cheaper, as paying in
+// euros costs more in conversion fees.
 
 // Where Zoltan works, with the price at each. Names and addresses live in
 // i18n under locations.<id>; `query` is what Google/Apple Maps search for.
 // Budapest is only published as a district (Sashalom), so its pin marks the area.
 export const LOCATIONS = [
-  { id: 'budapest', price: { eur: 70, huf: 24000 }, lngLat: [19.17397, 47.51038], query: 'Sashalom, Budapest XVI. kerület' },
-  { id: 'mezokeresztes', price: { eur: 50, huf: 17000 }, lngLat: [20.68864, 47.82599], query: 'Mezőkeresztes, Bornemissza u. 3, 3441' },
+  { id: 'budapest', price: { eur: 70, huf: 22000 }, lngLat: [19.17397, 47.51038], query: 'Sashalom, Budapest XVI. kerület' },
+  { id: 'mezokeresztes', price: { eur: 50, huf: 16000 }, lngLat: [20.68864, 47.82599], query: 'Mezőkeresztes, Bornemissza u. 3, 3441' },
 ];
 
-// The signature experience, Kódor Flow 90: priced exactly 50% above the
-// highest standard treatment, in both currencies. Wording in i18n under signature.
-export const SIGNATURE = { minutes: 90, price: { eur: 105, huf: 36000 } };
+// The gift voucher, redeemable toward his treatments: 30 000 Ft for the
+// Hungarian site, €85 for the English one. Wording in i18n under gift.
+export const GIFT = { price: { eur: 85, huf: 30000 } };
 
 // Where the arcs on the championship globe start
 export const HOME = { lngLat: [19.0402, 47.4979] };

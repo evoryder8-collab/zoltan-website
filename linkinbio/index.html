@@ -126,10 +126,21 @@
         <p class="reel__caption" data-i18n="film.title"></p>
       </section>
 
-      <!-- The signature experience: new, longer, booked on WhatsApp -->
-      <section class="signature" aria-labelledby="signature-name" data-reveal>
-        <p class="links__label" data-i18n="signature.kind"></p>
-        <article class="signature__card glass" id="signature"></article>
+      <!-- Gift voucher: the engraved card to turn, and a request on WhatsApp -->
+      <section class="gift" aria-labelledby="gift-title" data-reveal>
+        <p class="links__label" data-i18n="gift.kicker"></p>
+        <div class="gift__card glass">
+          <div class="voucher" role="img" data-i18n-attr="aria-label:gift.aria">
+            <div class="voucher__glow" aria-hidden="true"></div>
+            <div class="voucher__canvas"></div>
+            <p class="voucher__hint"><span data-icon="drag"></span><span data-i18n="gift.hint"></span></p>
+          </div>
+          <h2 class="gift__title" id="gift-title" data-i18n="gift.title"></h2>
+          <p class="gift__body" data-i18n="gift.body"></p>
+          <ul class="gift__points" id="gift-points"></ul>
+          <p class="gift__value"><small data-i18n="gift.value"></small><span id="gift-value"></span></p>
+          <a class="gift__book" id="gift-wa" target="_blank" rel="noopener"><span data-icon="whatsapp"></span><span data-i18n="gift.cta"></span></a>
+        </div>
       </section>
 
       <nav class="links" aria-labelledby="links-contact-label">

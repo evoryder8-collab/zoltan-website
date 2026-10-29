@@ -10,3 +10,6 @@ export const eur = (price) => format(price.eur, 'EUR', getLang() === 'hu' ? 'hu-
 
 /** The forint price, 24 000 Ft: only in Hungarian, otherwise '' */
 export const huf = (price) => (getLang() === 'hu' ? format(price.huf, 'HUF', 'hu-HU') : '');
+
+/** In the visitor's own currency: forints in Hungarian, euros otherwise */
+export const local = (price) => (getLang() === 'hu' ? format(price.huf, 'HUF', 'hu-HU') : format(price.eur, 'EUR', 'en-GB'));

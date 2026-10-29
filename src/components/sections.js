@@ -1,7 +1,7 @@
 // The content sections that are plain markup: about stats, the treatment,
 // training, contact and every booking link on the page. Everything re-renders
 // when the language changes.
-import { CONTACT, TREATMENT, LOCATIONS, SIGNATURE } from '../config.js';
+import { CONTACT, TREATMENT, LOCATIONS } from '../config.js';
 import { t } from '../i18n/index.js';
 import { waLink, telLink, mailLink } from '../lib/links.js';
 import { icon } from '../lib/icons.js';
@@ -17,7 +17,7 @@ export function renderSections() {
     .map(([v, l]) => `<li class="stat glass" data-reveal><span class="stat__value">${esc(v)}</span><span class="stat__label">${esc(l)}</span></li>`)
     .join('');
 
-  // the treatment: steps, prices per location, the signature experience, the toolkit
+  // the treatment: steps, prices per location, the toolkit
   document.getElementById('treatment-steps').innerHTML = t('treatments.steps')
     .map(([h, p], i) => `<li class="step glass" data-reveal><span class="step__n">0${i + 1}</span><h3 class="step__title">${esc(h)}</h3><p class="step__text">${esc(p)}</p></li>`)
     .join('');
@@ -32,21 +32,7 @@ export function renderSections() {
         <p class="price__value">${esc(eur(loc.price))}${hufLine(loc.price)}</p>
         <a class="btn btn--crimson btn--sm" href="${esc(href)}" target="_blank" rel="noopener">${icon('whatsapp')}${esc(t('treatments.book', { where }))}</a>
       </article>`;
-  }).join('') + `
-      <article class="price price--signature glass" data-reveal>
-        <p class="price__new">${esc(t('signature.new'))}</p>
-        <h3 class="price__name">${esc(t('signature.name'))}</h3>
-        <p class="price__kind">${esc(t('signature.kind'))}</p>
-        <p class="price__pitch">${esc(t('signature.pitch'))}</p>
-        <ul class="price__points">${t('signature.points').map((p) => `<li>${icon('check')}<span>${esc(p)}</span></li>`).join('')}</ul>
-        <div class="price__deal">
-          <div>
-            <p class="price__label">${esc(t('signature.duration'))}</p>
-            <p class="price__value">${esc(eur(SIGNATURE.price))}${hufLine(SIGNATURE.price)}</p>
-          </div>
-          <a class="btn btn--crimson btn--sm" href="${esc(waLink(CONTACT.whatsapp, t('signature.waText')))}" target="_blank" rel="noopener">${icon('whatsapp')}${esc(t('signature.book'))}</a>
-        </div>
-      </article>`;
+  }).join('');
   document.getElementById('toolkit').innerHTML = t('treatments.methods')
     .map(([name, detail], i) => `<li class="tool"><span class="tool__n">${String(i + 1).padStart(2, '0')}</span><span class="tool__name">${esc(name)}</span>${detail ? `<span class="tool__detail">${esc(detail)}</span>` : ''}</li>`)
     .join('');

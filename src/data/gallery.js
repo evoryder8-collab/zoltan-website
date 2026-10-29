@@ -18,7 +18,6 @@ export const GALLERY = [
   { id: 'forearm', cat: 'treatment', w: 1067, h: 1600, fx: 0.55 },
   { id: 'head', cat: 'treatment', w: 1067, h: 1600, fx: 0.42 },
   { id: 'hip-stretch', cat: 'stretch', w: 1280, h: 1600, fx: 0.68, fy: 0.3 },
-  { id: 'explaining', cat: 'portrait', w: 1067, h: 1600, fx: 0.4 },
   { id: 'back-wide', cat: 'treatment', w: 1280, h: 1600, fx: 0.47 },
   { id: 'lower-back', cat: 'treatment', w: 1067, h: 1600, fx: 0.5 },
   { id: 'crouch', cat: 'portrait', w: 1280, h: 1600, fx: 0.62, fy: 0.3 },

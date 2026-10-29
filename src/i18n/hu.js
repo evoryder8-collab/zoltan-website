@@ -239,7 +239,6 @@ export default {
       forearm: 'Alkarral végzett munka a háton.',
       head: 'Nyugodt kezek a fejnek és a nyaknak.',
       'hip-stretch': 'Csípő- és lábmobilizáció verseny közben.',
-      explaining: 'A kezelés elmagyarázása.',
       'back-wide': 'Hosszú simítások, teljes testsúllyal.',
       'lower-back': 'Munka a deréktájon.',
       crouch: 'Két forduló között, AusMC 2026.',

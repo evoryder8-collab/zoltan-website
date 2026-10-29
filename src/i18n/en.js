@@ -239,7 +239,6 @@ export default {
       forearm: 'Forearm work through the back.',
       head: 'Calm hands for the head and neck.',
       'hip-stretch': 'Hip and leg mobility, in competition.',
-      explaining: 'Explaining the treatment.',
       'back-wide': 'Long strokes, full body weight.',
       'lower-back': 'Working the lower back.',
       crouch: 'Between rounds, AusMC 2026.',

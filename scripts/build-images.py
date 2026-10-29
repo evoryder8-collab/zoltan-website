@@ -38,7 +38,6 @@ GALLERY = {
     'forearm': ('proof:90361', 'treatment'),
     'head': ('proof:90439', 'treatment'),
     'hip-stretch': ('proof:21016', 'stretch'),
-    'explaining': ('proof:21106', 'portrait'),
     'back-wide': ('proof:20822', 'treatment'),
     'lower-back': ('proof:20962', 'treatment'),
     'crouch': ('proof:20803', 'portrait'),

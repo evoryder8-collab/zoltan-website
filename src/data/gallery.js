@@ -11,7 +11,7 @@ export const GALLERY = [
   { id: 'shoulders', cat: 'treatment', w: 1067, h: 1600, fx: 0.52 },
   { id: 'arch-stretch', cat: 'stretch', w: 1067, h: 1600, fx: 0.55 },
   { id: 'focus', cat: 'portrait', w: 1067, h: 1600, fx: 0.47 },
-  { id: 'stones', cat: 'treatment', w: 1067, h: 1600, fx: 0.5 },
+  { id: 'cupping', cat: 'treatment', w: 1067, h: 1600, fx: 0.5 },
   { id: 'assisted-stretch', cat: 'stretch', w: 1067, h: 1600, fx: 0.5 },
   { id: 'ready', cat: 'portrait', w: 1067, h: 1600, fx: 0.44 },
   { id: 'leg-stretch', cat: 'stretch', w: 1280, h: 1600, fx: 0.35, fy: 0.3 },

@@ -232,7 +232,7 @@ export default {
       shoulders: 'A vállak feltérképezése, mielőtt a munka elkezdődik.',
       'arch-stretch': 'Asszisztált nyújtás: a teljes elülső lánc megnyitása.',
       focus: 'Csendes fókusz két technika között.',
-      stones: 'Kövekkel végzett munka a gerinc mentén.',
+      cupping: 'Köpölyözés a gerinc mentén.',
       'assisted-stretch': 'Kar- és mellkasnyitás állva.',
       ready: 'Az asztal kész, indulhat a kezelés.',
       'leg-stretch': 'Combhajlító-nyújtás kontrollált testsúllyal.',

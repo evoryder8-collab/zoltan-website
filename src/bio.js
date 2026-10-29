@@ -75,7 +75,7 @@ const CARDS = {
     { id: 'treatment', tone: 'site', icon: 'spark', href: () => '../#treatments', art: 'g-at-the-table-800.webp', fx: 46 },
     { id: 'champs', tone: 'site', icon: 'trophy', href: () => '../#championships', art: 'g-trophy-800.webp', fx: 42 },
     { id: 'recognition', tone: 'site', icon: 'star', href: () => '../#recognition', art: 'award-judges-640.webp', fx: 50 },
-    { id: 'gallery', tone: 'site', icon: 'image', href: () => '../#gallery', art: 'g-stones-800.webp', fx: 50 },
+    { id: 'gallery', tone: 'site', icon: 'image', href: () => '../#gallery', art: 'g-cupping-800.webp', fx: 50 },
     { id: 'training', tone: 'site', icon: 'cap', href: () => '../#training', art: 'g-explaining-800.webp', fx: 40 },
   ],
 };

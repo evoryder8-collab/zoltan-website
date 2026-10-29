@@ -31,7 +31,7 @@ GALLERY = {
     'shoulders': ('proof:20922', 'treatment'),
     'arch-stretch': ('proof:21063', 'stretch'),
     'focus': ('proof:90424', 'portrait'),
-    'stones': ('proof:90400', 'treatment'),
+    'cupping': ('proof:90400', 'treatment'),
     'assisted-stretch': ('proof:21052', 'stretch'),
     'ready': ('proof:20792', 'portrait'),
     'leg-stretch': ('proof:21006', 'stretch'),

@@ -232,7 +232,7 @@ export default {
       shoulders: 'Reading the shoulders before the work begins.',
       'arch-stretch': 'Assisted stretch: opening the whole front line.',
       focus: 'Quiet focus between techniques.',
-      stones: 'Stone work along the spine.',
+      cupping: 'Cupping along the spine.',
       'assisted-stretch': 'Arm and chest opening, standing.',
       ready: 'Table set, ready to begin.',
       'leg-stretch': 'Hamstring stretch with controlled body weight.',

@@ -11,7 +11,6 @@ import './styles/film.css';
 import './styles/honours.css';
 import './styles/gallery.css';
 import './styles/maps.css';
-import './styles/voucher.css';
 
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -42,7 +41,6 @@ import { renderEvents, initChampionships } from './components/championships.js';
 import { initGallery } from './components/gallery.js';
 import { initFilm } from './components/film.js';
 import { initHonours } from './components/honours.js';
-import { initGift } from './components/gift.js';
 import { initDirections } from './components/directions.js';
 import { initOrbs } from './components/orbs.js';
 
@@ -86,7 +84,6 @@ initStudioSwitch();
 initGallery({ reduced });
 initFilm({ reduced, lenis });
 initHonours({ reduced });
-initGift({ reduced });
 initChampionships({
   reduced,
   lenis,
@@ -121,7 +118,7 @@ reveals.observe(document.querySelectorAll(RENDERED));
 glass.track();
 
 // ── touch the silk; sounds for taps and hovers ──
-const INTERACTIVE = 'a, button, input, label, [role="radio"], .medal, .voucher, .gallery__viewport, .globe, .studio';
+const INTERACTIVE = 'a, button, input, label, [role="radio"], .medal, .gallery__viewport, .globe, .studio';
 addEventListener('pointerdown', (e) => {
   silk.ripple(e.clientX, e.clientY);
   if (!e.target.closest(INTERACTIVE)) sound.ripple(e.clientX / innerWidth - 0.5);

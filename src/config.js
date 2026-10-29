@@ -32,10 +32,6 @@ export const LOCATIONS = [
   { id: 'mezokeresztes', price: { eur: 50, huf: 16000 }, lngLat: [20.68864, 47.82599], query: 'Mezőkeresztes, Bornemissza u. 3, 3441' },
 ];
 
-// The gift voucher, redeemable toward his treatments: 30 000 Ft for the
-// Hungarian site, €85 for the English one. Wording in i18n under gift.
-export const GIFT = { price: { eur: 85, huf: 30000 } };
-
 // Where the arcs on the championship globe start
 export const HOME = { lngLat: [19.0402, 47.4979] };
 

@@ -120,23 +120,6 @@ export default {
     ],
     note: 'Not sure it’s for you? Message Zoltan and describe what hurts or what you train for.',
   },
-  gift: {
-    kicker: 'Gift voucher',
-    title: 'Give the Gift of Care.',
-    body: 'For someone you love: time with Zoltan, and the same exceptional care every client receives. A thoughtful gift for a birthday, an anniversary, or simply to say you care.',
-    points: [
-      'Redeemable toward Zoltan’s treatments, in Budapest or Mezőkeresztes',
-      'With your own personal dedication',
-      'Beautifully presented, delivered digitally',
-    ],
-    value: 'Voucher value',
-    cta: 'Request a gift voucher',
-    waText: 'Hi Zoltan! I’d like to request a gift voucher ({value}).\nWho it’s for: \nMy dedication: ',
-    hint: 'Drag to turn the voucher',
-    aria: '3D gift voucher you can turn',
-    // engraved on the card itself
-    card: { word: 'Gift', kind: 'VOUCHER', care: 'The Gift of Care', for: 'FOR', from: 'FROM', value: 'VALUE', redeem: 'REDEEMABLE TOWARD ANY TREATMENT' },
-  },
   champs: {
     kicker: 'Championships',
     title: 'Two overall titles. Two continents.',

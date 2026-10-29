@@ -11,7 +11,6 @@ import './styles/glass.css';
 import './styles/shell.css';
 import './styles/orbs.css';
 import './styles/maps.css';
-import './styles/voucher.css';
 import './styles/bio.css';
 
 import hu from './i18n/hu.js';
@@ -30,7 +29,6 @@ import { sound } from './lib/audio.js';
 import { whenNear } from './lib/lazy.js';
 import { tilt, initTilt, requestTilt, buzz } from './lib/tilt.js';
 import { mountRibbon } from './lib/ribbon.js';
-import { initGift } from './components/gift.js';
 import { waLink, telLink, mailLink } from './lib/links.js';
 import { initStudioSwitch } from './components/sections.js';
 import { initDirections } from './components/directions.js';
@@ -163,7 +161,6 @@ renderBook();
 renderCards();
 renderPlaces();
 renderSwitch();
-initGift({ reduced });
 fillIcons();
 syncTitle();
 
@@ -225,7 +222,7 @@ if (!askSound) sound.restore();
 // ── touch: the silk ripples, taps click, hovers tick ──
 addEventListener('pointerdown', (e) => {
   silk.ripple(e.clientX, e.clientY);
-  if (!e.target.closest('a, button, .studio, .ticker, .voucher')) sound.ripple(e.clientX / innerWidth - 0.5);
+  if (!e.target.closest('a, button, .studio, .ticker')) sound.ripple(e.clientX / innerWidth - 0.5);
 }, { passive: true });
 document.addEventListener('click', (e) => {
   if (e.target.closest('a, button')) {

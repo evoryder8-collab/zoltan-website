@@ -188,7 +188,7 @@ runIntro({ reduced }).then(async ({ skipped }) => {
     enterHero({ reduced, skipName: cinematic });
     setTimeout(() => nav.show(), cinematic ? 1100 : 0);
     const l = await laurel;
-    if (l) setTimeout(() => l.grow(() => sound.chime()), reduced ? 0 : cinematic ? 1200 : 350);
+    if (l) setTimeout(() => l.grow(), reduced ? 0 : cinematic ? 1200 : 350);
     else laurelBox.querySelector('.hero__laurel-fallback').classList.add(reduced ? 'is-static' : 'is-drawn');
   };
   if (cinematic) await playOpening({ silk, onHero: heroIn });

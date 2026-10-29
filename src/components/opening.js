@@ -2,13 +2,14 @@
 //   1 · the card's contents dissolve upward and the glass collapses into a
 //       single line of crimson light across the screen
 //   2 · the laurel swells, turns and burns out
-//   3 · the name lifts out of the card and flies into its place in the hero
+//   3 · the name lifts out of the card and flies into its place in the hero,
+//       on a deep whoosh
 //   4 · once it has landed, his honours breathe in one by one, a centred
 //       column in the middle of the free screen, while the light dims behind
-//   5 · they rise and dissolve out of the way as the light brightens and opens
-//       like a lens into a soft portal that widens until the hero fills the
-//       screen, with a low swell and a shockwave through the silk, and the
-//       portrait pushes in out of light
+//   5 · they rise and dissolve out of the way on a breath of air as the light
+//       brightens and opens like a lens into a soft portal that widens until
+//       the hero fills the screen, with a low swell, a whoosh and a shockwave
+//       through the silk, and the portrait pushes in out of light
 import { gsap } from 'gsap';
 import { sound } from '../lib/audio.js';
 import { t } from '../i18n/index.js';
@@ -123,6 +124,7 @@ export function playOpening({ silk, onHero }) {
       .set(clone, { opacity: 1 }, 0.42)
       .set(title, { opacity: 0 }, 0.42)
       .to(clone, { x: 0, y: 0, scale: 1, duration: 1.5, ease: 'expo.inOut' }, 0.42)
+      .add(() => sound.flight(1.5), 0.42)
       // the glass collapses into a line of light
       .to(card, { scaleY: 0.012, scaleX: 1.2, duration: 0.75, ease: 'power4.inOut' }, 0.38)
       .to(card, { opacity: 0, duration: 0.25 }, 0.95)
@@ -135,10 +137,7 @@ export function playOpening({ silk, onHero }) {
     accolades.forEach((el, i) => {
       const at = 1.45 + i * 0.14;
       tl.fromTo(el, { opacity: 0, y: 12, scale: 0.96, filter: 'blur(10px)' }, { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', duration: 0.8, ease: 'power2.out' }, at)
-        .add(() => {
-          el.classList.add('is-breathing');
-          sound.accolade(i);
-        }, at + 0.15);
+        .add(() => el.classList.add('is-breathing'), at + 0.15);
     });
     const open = 3.3;
     // the portal: the line of light opens into a narrow lens (rx, ry: the
@@ -167,6 +166,7 @@ export function playOpening({ silk, onHero }) {
       .add(onHero, open - 0.1);
     // the honours rise and dissolve out of the way, top first, gone before
     // he shows through the portal
+    tl.add(() => sound.lift(), open - 0.45);
     accolades.forEach((el, i) => {
       tl.to(el, { y: -40, opacity: 0, filter: 'blur(6px)', duration: 0.7, ease: 'power2.in' }, open - 0.45 + i * 0.05);
     });

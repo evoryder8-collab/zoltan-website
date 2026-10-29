@@ -8,7 +8,6 @@ import trackUrl from '../media/soundtrack.m4a?url';
 import tapUrl from '../media/sfx/tap.mp3?url';
 import tickUrl from '../media/sfx/tick.mp3?url';
 import bellUrl from '../media/sfx/bell.mp3?url';
-import chimesUrl from '../media/sfx/chimes.mp3?url';
 import clinkUrl from '../media/sfx/clink.mp3?url';
 import swooshUrl from '../media/sfx/swoosh.mp3?url';
 import whooshUrl from '../media/sfx/whoosh.mp3?url';
@@ -21,11 +20,10 @@ const STORE = 'zoltan.sound';
 const AT = 'zoltan.track';
 const LEVEL = 0.36; // the soundtrack under everything
 const DUCKED = 0.022; // while a film speaks
-const SFX = { tap: tapUrl, tick: tickUrl, bell: bellUrl, chimes: chimesUrl, clink: clinkUrl, swoosh: swooshUrl, whoosh: whooshUrl, silk: silkUrl, swell: swellUrl, pop: popUrl, sparkle: sparkleUrl };
-// the glockenspiel bar in bell.mp3 rings at C7 (a touch sharp); every bell is
-// pitched from it, in D major pentatonic, the soundtrack's family
+const SFX = { tap: tapUrl, tick: tickUrl, bell: bellUrl, clink: clinkUrl, swoosh: swooshUrl, whoosh: whooshUrl, silk: silkUrl, swell: swellUrl, pop: popUrl, sparkle: sparkleUrl };
+// the glockenspiel bar in bell.mp3 rings at C7 (a touch sharp); the bell is
+// pitched from it to D, the soundtrack's key
 const BELL = 96.16;
-const PENTA = [62, 64, 66, 69, 71, 74, 76, 78, 81, 83, 86, 88, 90];
 const pitch = (m) => 2 ** ((m - BELL) / 12);
 const vary = (amount) => 1 + (Math.random() - 0.5) * amount;
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -122,22 +120,35 @@ class Sound {
   }
 
   /** One recording: `rate` pitches it (and stretches it), `pan` places it,
-   *  `wet` sends some to the hall. Not decoded yet: it plays when it is, if
-   *  that's soon enough to still belong to the moment. */
-  play(name, { gain = 0.2, rate = 1, pan = 0, when = 0, wet = 0 } = {}) {
+   *  `wet` sends some to the hall, `lp` softens its top (Hz) and `attack`
+   *  fades it in (s). Not decoded yet: it plays when it is, if that's soon
+   *  enough to still belong to the moment. */
+  play(name, opts = {}) {
+    const { gain = 0.2, rate = 1, pan = 0, when = 0, wet = 0, lp = 0, attack = 0 } = opts;
     const buf = this.buffers[name];
     if (!buf) {
       const asked = performance.now();
-      this.decoding[name]?.then(() => performance.now() - asked < 500 && this.buffers[name] && this.play(name, { gain, rate, pan, when, wet }));
+      this.decoding[name]?.then(() => performance.now() - asked < 500 && this.buffers[name] && this.play(name, opts));
       return;
     }
     const ctx = this.ctx;
+    const at = ctx.currentTime + when;
     const src = ctx.createBufferSource();
     src.buffer = buf;
     src.playbackRate.value = rate;
     const g = ctx.createGain();
-    g.gain.value = gain;
-    let node = src.connect(g);
+    if (attack) {
+      g.gain.setValueAtTime(0, at);
+      g.gain.linearRampToValueAtTime(gain, at + attack);
+    } else g.gain.value = gain;
+    let node = src;
+    if (lp) {
+      const f = ctx.createBiquadFilter();
+      f.type = 'lowpass';
+      f.frequency.value = lp;
+      node = node.connect(f);
+    }
+    node = node.connect(g);
     if (pan && ctx.createStereoPanner) {
       const p = ctx.createStereoPanner();
       p.pan.value = clamp(pan, -1, 1);
@@ -149,7 +160,7 @@ class Sound {
       send.gain.value = wet;
       node.connect(send).connect(this.verb);
     }
-    src.start(ctx.currentTime + when);
+    src.start(at);
   }
 
   /** A glass tapped, for buttons and chips. */
@@ -167,13 +178,10 @@ class Sound {
     this.play('tick', { gain: 0.07, rate: 0.85 + Math.random() * 0.4 });
   }
 
-  /** The laurel completes: a rising run of bells under a wind-chime shimmer. */
+  /** Sound switched on: one soft bell, ringing out into the hall. */
   chime() {
     if (!this.ready()) return;
-    [81, 86, 90, 93, 98, 102].forEach((m, i) => {
-      this.play('bell', { gain: 0.2 - i * 0.015, rate: pitch(m), when: i * 0.075, pan: (i % 2 ? 1 : -1) * 0.25, wet: 0.3 });
-    });
-    this.play('chimes', { gain: 0.1, when: 0.18, wet: 0.2 });
+    this.play('bell', { gain: 0.17, rate: pitch(86), wet: 0.35 });
   }
 
   /** Medal clink, louder for harder spins. */
@@ -197,18 +205,24 @@ class Sound {
     this.play('silk', { gain: 0.12, rate: vary(0.2), pan: clamp(x * 1.2, -0.6, 0.6) });
   }
 
-  /** One honour appearing in the opening: a soft bell, a step higher each time. */
-  accolade(i = 0) {
+  /** The name flies from the card into the hero (over `dur`): a deep whoosh,
+   *  softened and faded in, at its fullest as the name moves fastest. */
+  flight(dur = 1.5) {
     if (!this.ready()) return;
-    this.play('bell', { gain: 0.13, rate: pitch(PENTA[6 + (i % 6)] + 12), pan: (i % 2 ? 1 : -1) * 0.4, wet: 0.4 });
+    this.play('whoosh', { gain: 0.22, rate: 0.9, when: Math.max(0, dur / 2 - 0.42), lp: 2400, attack: 0.25, wet: 0.18 });
   }
 
-  /** The contact jewels arrive: small bells, from the middle out. */
+  /** The honours (or the question) lift away: a soft breath of air. */
+  lift() {
+    if (!this.ready()) return;
+    this.play('swoosh', { gain: 0.13, rate: 0.72, when: 0.2, lp: 3200, wet: 0.22 });
+  }
+
+  /** The contact beads fly in at the side: two soft swooshes, one after the other. */
   summon() {
     if (!this.ready()) return;
-    [[86, 0, 0.12], [83, -0.3, 0.23], [88, 0.3, 0.23], [81, -0.55, 0.34], [93, 0.55, 0.34]].forEach(([m, pan, when]) => {
-      this.play('bell', { gain: 0.09, rate: pitch(m + 12), when, pan, wet: 0.35 });
-    });
+    this.play('swoosh', { gain: 0.14, rate: 0.8, pan: 0.5, lp: 3500, wet: 0.15 });
+    this.play('swoosh', { gain: 0.09, rate: 0.95, pan: 0.6, when: 0.2, lp: 3500, wet: 0.2 });
   }
 
   /** The ticket's confetti: two soft pops, then a sparkle. */
@@ -219,11 +233,12 @@ class Sound {
     this.play('sparkle', { gain: 0.14, when: 0.08, wet: 0.25 });
   }
 
-  /** The opening: a cinematic swell as the portal opens, with a shimmer above. */
+  /** The opening: a cinematic swell as the portal opens, and a deep whoosh as
+   *  it widens past the corners, at its fullest when it moves fastest. */
   reveal() {
     if (!this.ready()) return;
     this.play('swell', { gain: 0.42 });
-    this.play('chimes', { gain: 0.08, when: 0.6, wet: 0.3 });
+    this.play('whoosh', { gain: 0.2, rate: 0.8, when: 0.9, lp: 2000, attack: 0.3, wet: 0.25 });
   }
 
   /** Sound was on last time: it comes back with the first tap or key, since

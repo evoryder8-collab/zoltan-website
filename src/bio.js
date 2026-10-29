@@ -612,6 +612,7 @@ function arrive() {
         if (reduced) return finish();
         // the answer drew the line of light; it opens into the portal
         el.classList.add('is-line');
+        sound.lift();
         setTimeout(() => {
           silk.ripple(innerWidth / 2, innerHeight / 2);
           silk.flare?.();
@@ -623,7 +624,10 @@ function arrive() {
     if (reduced || seen) return finish();
     el.querySelector('.arrival__laurel').classList.add('is-drawn');
     const timers = [
-      setTimeout(() => el.classList.add('is-line'), 450),
+      setTimeout(() => {
+        el.classList.add('is-line');
+        sound.lift();
+      }, 450),
       setTimeout(() => {
         silk.ripple(innerWidth / 2, innerHeight / 2);
         silk.flare?.();

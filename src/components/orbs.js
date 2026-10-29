@@ -133,7 +133,7 @@ function ask(orb) {
   card.style.transformOrigin = `${o.left + o.width / 2 - d.left}px ${o.top + o.height / 2 - d.top}px`;
 }
 
-/** Brings a set in (once), with its bells. */
+/** Brings a set in (once), on a soft swoosh. */
 export function summonOrbs(container, { reduced }) {
   if (container.classList.contains('is-in')) return;
   container.classList.add('is-in');

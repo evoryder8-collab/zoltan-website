@@ -12,7 +12,6 @@ import './styles/honours.css';
 import './styles/gallery.css';
 import './styles/maps.css';
 import './styles/terms.css';
-import './styles/next.css';
 
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -44,7 +43,6 @@ import { initGallery } from './components/gallery.js';
 import { initFilm } from './components/film.js';
 import { initHonours } from './components/honours.js';
 import { initTerms } from './components/terms.js';
-import { initNext } from './components/next-event.js';
 import { initDirections } from './components/directions.js';
 import { initOrbs } from './components/orbs.js';
 
@@ -89,7 +87,6 @@ initGallery({ reduced });
 initFilm({ reduced, lenis });
 initHonours({ reduced });
 initTerms();
-initNext();
 initChampionships({
   reduced,
   lenis,

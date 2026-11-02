@@ -71,6 +71,7 @@ export default {
     'Best Flow & Transition Award',
     'Best International Therapist',
     'Slovakia Massage Championship · Grand Champion',
+    'Sibiu · World Massage Super Cup · Silver, Swedish Massage',
     'Budapest · Mezőkeresztes',
   ],
   about: {
@@ -173,6 +174,13 @@ export default {
         place: 'Cockatoo Island, Sydney',
         date: '9–11 October 2026',
         titles: ['Overall Winner', 'Freestyle Massage Award', 'Best Flow & Transition Award', 'Best International Therapist'],
+      },
+      wmsc26: {
+        short: 'WMSC 2026 · Sibiu',
+        name: 'World Massage Super Cup 2026',
+        place: 'Sibiu, Romania',
+        date: '30 October – 1 November 2026',
+        titles: ['Silver Medal · Swedish Massage'],
       },
     },
   },

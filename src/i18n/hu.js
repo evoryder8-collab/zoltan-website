@@ -71,6 +71,7 @@ export default {
     'Best Flow & Transition Award',
     'Best International Therapist',
     'Szlovákiai Masszázsbajnokság · Abszolút győztes',
+    'Nagyszeben · World Massage Super Cup · Ezüstérem, svédmasszázs',
     'Budapest · Mezőkeresztes',
   ],
   about: {
@@ -173,6 +174,13 @@ export default {
         place: 'Cockatoo-sziget, Sydney',
         date: '2026. október 9–11.',
         titles: ['Abszolút győztes', 'Freestyle Massage Award', 'Best Flow & Transition Award', 'Best International Therapist'],
+      },
+      wmsc26: {
+        short: 'WMSC 2026 · Nagyszeben',
+        name: 'World Massage Super Cup 2026',
+        place: 'Nagyszeben, Románia',
+        date: '2026. október 30. – november 1.',
+        titles: ['Ezüstérem · Svédmasszázs'],
       },
     },
   },

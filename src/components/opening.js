@@ -19,8 +19,9 @@ function honours() {
   const ausmc = t('champs.events.ausmc26.titles').map((title) => ({ title, event: t('champs.events.ausmc26.short') }));
   const slovakia = { title: t('champs.events.slovakia.titles')[0], event: t('champs.events.slovakia.short') };
   const invitation = { title: t('honours.accolade'), event: t('honours.accoladeEvent') };
+  const supercup = { title: t('champs.events.wmsc26.titles')[0], event: t('champs.events.wmsc26.short') };
   // the headline titles first: when a small screen has room for only a few
-  return [ausmc[0], slovakia, ...ausmc.slice(1), invitation];
+  return [ausmc[0], slovakia, ...ausmc.slice(1), invitation, supercup];
 }
 
 // The honours stand in a centred column in the middle of the free screen:

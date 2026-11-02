@@ -128,7 +128,7 @@ export async function mountGlobe(container, { events, home, reduced = false }) {
     return el;
   };
   addMarker('home', home.lngLat, 'gmark--home gmark--below');
-  placed.forEach((e) => addMarker(e.id, e.lngLat).addEventListener('click', () => api.flyTo(e.id)));
+  placed.forEach((e) => addMarker(e.id, e.lngLat, e.label ? `gmark--${e.label}` : '').addEventListener('click', () => api.flyTo(e.id)));
   const label = () => {
     markers.home.el.querySelector('.gmark__label').innerHTML = esc(t('globe.home'));
     placed.forEach((e) => (markers[e.id].el.querySelector('.gmark__label').innerHTML = esc(t(`champs.events.${e.id}.short`))));

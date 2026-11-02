@@ -22,6 +22,7 @@ Wording lives in `src/i18n/hu.js` and `src/i18n/en.js` (change both). Facts live
 - Methods: therapeutic and Swedish massage, FDM, trigger point techniques, cupping, IASTM, kinesiology taping, scar tissue treatment, vagus therapy, mobilization techniques
 - Slovakia Massage Championship, 12 September 2026: gold, Grand Champion (absolute winner)
 - AusMC 2026 (Cockatoo Island, Sydney, 9–11 October 2026): Overall Winner, Freestyle Massage Award, Best Flow & Transition Award, Best International Therapist
+- World Massage Super Cup 2026 (Sibiu, Romania, 30 October – 1 November 2026): Silver Medal, Swedish Massage
 - Story (from the short film): started competing in May 2026, out of curiosity; two overall titles on two continents less than two months apart
 - Not shown, by request: EMC 2026 and the World Championship in Massage (IMA)
 - Judge's verdict (video, Matthew Hua, international massage judge, Zurich): "The styling, simplicity, the zen, the posture, the ergonomics. Well done."

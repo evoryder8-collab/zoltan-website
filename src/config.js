@@ -35,9 +35,12 @@ export const LOCATIONS = [
 // Where the arcs on the championship globe start
 export const HOME = { lngLat: [19.0402, 47.4979] };
 
-// Championships, most recent first: wording in i18n under champs.events.<id>.
-// The Slovakia championship's city isn't published, so its pin marks the country.
+// Championships, the overall titles first (most recent first), then the
+// rest: wording in i18n under champs.events.<id>. The Slovakia championship's
+// city isn't published, so its pin marks the country. `label` sets which side
+// of its pin the globe writes the name, where pins sit close together.
 export const EVENTS = [
   { id: 'ausmc26', lngLat: [151.1717, -33.8477], featured: true },
   { id: 'slovakia', lngLat: [19.699, 48.669], featured: true },
+  { id: 'wmsc26', lngLat: [24.1256, 45.7983], label: 'right' },
 ];

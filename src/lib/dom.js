@@ -1,5 +1,16 @@
 export const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
+/**
+ * style.setProperty for values a loop writes every frame: skips a value that
+ * is already set, so a still loop costs the browser no restyle.
+ */
+export function setVar(el, name, value) {
+  const set = (el.__vars ??= {});
+  if (set[name] === value) return;
+  set[name] = value;
+  el.style.setProperty(name, value);
+}
+
 const BRACKET = /\[[^\]]+\]/;
 
 /** Wraps [placeholder] text in <span class="ph"> so it reads as unfinished. */

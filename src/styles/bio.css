@@ -2,6 +2,14 @@
    One column, phone first. The homepage's silk, glass and map; gold for
    what's precious, crimson for what to press. */
 
+/* The lean (pointer) and tilt (phone) change every frame on the cards that
+   use them, so they don't pass down to the cards' contents: inherited, each
+   change would restyle everything inside every card. */
+@property --lx { syntax: '<number>'; inherits: false; initial-value: 0; }
+@property --ly { syntax: '<number>'; inherits: false; initial-value: 0; }
+@property --tilt-x { syntax: '<number>'; inherits: false; initial-value: 0; }
+@property --tilt-y { syntax: '<number>'; inherits: false; initial-value: 0; }
+
 .bio {
   position: relative;
   overflow-x: clip; /* the liquid and glows are wider than a phone */

@@ -3,7 +3,7 @@
 // On Chromium desktop a displacement ripple follows fast drags.
 import { GALLERY } from '../data/gallery.js';
 import { t } from '../i18n/index.js';
-import { esc } from '../lib/dom.js';
+import { esc, setVar } from '../lib/dom.js';
 import { sound } from '../lib/audio.js';
 
 const BASE = import.meta.env.BASE_URL;
@@ -94,11 +94,9 @@ export function initGallery({ reduced }) {
     track.style.transform = `translate3d(${S.x.toFixed(2)}px,0,0) skewX(${skew.toFixed(2)}deg)`;
     const mid = viewport.clientWidth / 2;
     if (!reduced) {
-      for (const li of shots) {
-        if (li.hidden) continue;
-        const r = li.getBoundingClientRect();
-        li.style.setProperty('--px', `${((r.left + r.width / 2 - mid) * -0.06).toFixed(1)}px`);
-      }
+      // all the reads, then all the writes: one restyle a frame, not one per photo
+      const rects = shots.filter((li) => !li.hidden).map((li) => [li, li.getBoundingClientRect()]);
+      for (const [li, r] of rects) setVar(li, '--px', `${((r.left + r.width / 2 - mid) * -0.06).toFixed(1)}px`);
     }
     if (rippleFilter) {
       const a = Math.abs(S.v);

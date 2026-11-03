@@ -8,7 +8,8 @@
 import { t } from '../i18n/index.js';
 import { sound } from '../lib/audio.js';
 import { tilt, buzz } from '../lib/tilt.js';
-import { whenNear } from '../lib/lazy.js';
+import { whileNear } from '../lib/lazy.js';
+import { setVar } from '../lib/dom.js';
 
 const BASE = import.meta.env.BASE_URL;
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
@@ -35,17 +36,29 @@ export function initFilm({ reduced, lenis }) {
   let inWindow = false;
   let ended = false;
 
-  // ── source: picked for the screen, set only when it's close ──
+  // ── source: picked for the screen, set only when it's close; it buffers
+  // in full once the section is on screen, and on phones it's let go again
+  // when the visitor is far away, so the tab keeps its memory ──
   const pickSrc = () => {
     const sharp = innerWidth * (devicePixelRatio || 1) >= 900 && !navigator.connection?.saveData;
     return `${BASE}media/film-${sharp ? 1080 : 720}.mp4`;
   };
+  let here = false;
   const load = () => {
-    if (video.src) return;
+    if (video.getAttribute('src')) return;
     video.src = pickSrc();
-    video.preload = 'auto';
+    video.preload = here ? 'auto' : 'metadata';
   };
-  whenNear(section, load, '1400px');
+  const release = () => {
+    if (!video.getAttribute('src') || !video.paused) return;
+    video.removeAttribute('src');
+    video.load();
+  };
+  whileNear(section, { near: '1400px', far: matchMedia('(pointer: coarse)').matches ? '2600px' : null, mount: load, unmount: release });
+  new IntersectionObserver(([e]) => {
+    here = e.isIntersecting;
+    if (here && video.getAttribute('src')) video.preload = 'auto';
+  }).observe(section);
 
   // ── iOS: the intro's sound tap unlocks this element for audible play later.
   // Safari lifts the restriction at the moment play() is called inside a tap,
@@ -216,16 +229,15 @@ export function initFilm({ reduced, lenis }) {
     const float = 1 - k;
     const lx = tilt.active ? tilt.x : px;
     const ly = tilt.active ? tilt.y : py;
-    const s = frame.style;
-    s.setProperty('--w', `${lerp(rect.w0, rect.W, k).toFixed(1)}px`);
-    s.setProperty('--h', `${lerp(rect.h0, rect.H, k).toFixed(1)}px`);
-    s.setProperty('--x', `${lerp(rect.x0, 0, k).toFixed(1)}px`);
-    s.setProperty('--y', `${lerp(rect.y0, 0, k).toFixed(1)}px`);
-    s.setProperty('--ry', `${(float * (-16 + lx * 14)).toFixed(2)}deg`);
-    s.setProperty('--rx', `${(float * (6 - ly * 8)).toFixed(2)}deg`);
-    s.setProperty('--r', `${lerp(30, rect.portrait ? 0 : 18, k).toFixed(1)}px`);
-    s.setProperty('--pad', `${lerp(10, 0, k).toFixed(1)}px`);
-    section.style.setProperty('--k', k.toFixed(3));
+    setVar(frame, '--w', `${lerp(rect.w0, rect.W, k).toFixed(1)}px`);
+    setVar(frame, '--h', `${lerp(rect.h0, rect.H, k).toFixed(1)}px`);
+    setVar(frame, '--x', `${lerp(rect.x0, 0, k).toFixed(1)}px`);
+    setVar(frame, '--y', `${lerp(rect.y0, 0, k).toFixed(1)}px`);
+    setVar(frame, '--ry', `${(float * (-16 + lx * 14)).toFixed(2)}deg`);
+    setVar(frame, '--rx', `${(float * (6 - ly * 8)).toFixed(2)}deg`);
+    setVar(frame, '--r', `${lerp(30, rect.portrait ? 0 : 18, k).toFixed(1)}px`);
+    setVar(frame, '--pad', `${lerp(10, 0, k).toFixed(1)}px`);
+    setVar(section, '--k', k.toFixed(3));
     // only while pinned: once the section scrolls away the nav comes back
     const full = k > 0.98 && p < 0.99;
     root.classList.toggle('film-full', full);
@@ -245,7 +257,9 @@ export function initFilm({ reduced, lenis }) {
   // a quiet float while the frame waits
   const idle = () => {
     requestAnimationFrame(idle);
-    if (lastP < GROW[1] && section.getBoundingClientRect().top < vh && section.getBoundingClientRect().bottom > 0) update(lastP);
+    if (lastP >= GROW[1]) return;
+    const r = section.getBoundingClientRect();
+    if (r.top < vh && r.bottom > 0) update(lastP);
   };
   requestAnimationFrame(idle);
 

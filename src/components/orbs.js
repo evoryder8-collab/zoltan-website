@@ -10,6 +10,7 @@ import { icon } from '../lib/icons.js';
 import { waLink, telLink } from '../lib/links.js';
 import { tilt, buzz } from '../lib/tilt.js';
 import { sound } from '../lib/audio.js';
+import { setVar } from '../lib/dom.js';
 
 const HREFS = {
   instagram: () => CONTACT.socials.instagram,
@@ -170,9 +171,9 @@ function floatOrbs(container) {
     const target = clamp(-v * 0.01, 14);
     sVel += ((target - sv) * 160 - sVel * 13) * dt;
     sv += sVel * dt;
-    container.style.setProperty('--px', lx.toFixed(3));
-    container.style.setProperty('--py', ly.toFixed(3));
-    container.style.setProperty('--sv', `${sv.toFixed(2)}px`);
+    setVar(container, '--px', lx.toFixed(3));
+    setVar(container, '--py', ly.toFixed(3));
+    setVar(container, '--sv', `${sv.toFixed(2)}px`);
   };
   requestAnimationFrame(frame);
 }

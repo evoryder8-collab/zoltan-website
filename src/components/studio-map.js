@@ -68,11 +68,12 @@ export async function mountStudioMap(container, { locations, reduced = false }) 
     map.once('moveend', () => mine === token && startOrbit());
     sound.whoosh(first ? 2.6 : 2);
   };
+  const gone = new AbortController();
   addEventListener('studiochange', (e) => {
     current = locations.find((l) => l.id === e.detail.id) || current;
     mark();
     if (flown) fly();
-  });
+  }, { signal: gone.signal });
 
   const io = new IntersectionObserver(
     ([e]) => {
@@ -98,19 +99,31 @@ export async function mountStudioMap(container, { locations, reduced = false }) 
     for (const z of [7, 9.5]) {
       map.jumpTo({ center: [lng, lat], zoom: z, pitch: 0, bearing: 0 });
       await settled();
+      if (gone.signal.aborted) return;
     }
     for (const loc of [...locations].reverse()) {
       map.jumpTo({ center: loc.lngLat, zoom: innerWidth < 720 ? 15 : 15.8, pitch: 60, bearing: -22 });
       await settled();
+      if (gone.signal.aborted) return;
     }
     map.jumpTo({ center: [19.9, 47.65], zoom: innerWidth < 720 ? 5.6 : 6.4, pitch: 0, bearing: 0 });
     await settled();
   };
   map.on('load', async () => {
     await warm();
+    if (gone.signal.aborted) return;
     frame.classList.add('is-ready');
     container.querySelector('.maplibregl-ctrl-attrib')?.classList.remove('maplibregl-compact-show');
     io.observe(container);
   });
-  return map;
+  return {
+    map,
+    destroy() {
+      gone.abort();
+      stopOrbit();
+      io.disconnect();
+      map.remove();
+      frame.classList.remove('is-ready');
+    },
+  };
 }

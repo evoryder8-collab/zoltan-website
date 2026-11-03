@@ -27,7 +27,7 @@ import { markPlaceholders, initReveals } from './lib/dom.js';
 import { initGlass } from './lib/glass.js';
 import { initSilk } from './lib/silk.js';
 import { sound } from './lib/audio.js';
-import { whenNear } from './lib/lazy.js';
+import { whileNear } from './lib/lazy.js';
 import { tilt, initTilt, buzz } from './lib/tilt.js';
 import { mountRibbon } from './lib/ribbon.js';
 import { mountAura } from './lib/aura.js';
@@ -93,16 +93,28 @@ initChampionships({
   onFail: (frame) => frame.classList.add('is-fallback'),
 });
 initDirections(LOCATIONS);
-whenNear(document.getElementById('studio-map'), () => {
-  import('./components/studio-map.js')
-    .then((m) => m.mountStudioMap(document.getElementById('studio-map'), { locations: LOCATIONS, reduced }))
-    .catch((err) => {
-      console.warn('[studio map] unavailable', err);
-      const frame = document.querySelector('.studio');
-      frame.classList.add('is-fallback');
-      frame.querySelector('.studio__note span:last-child').textContent = document.documentElement.lang === 'hu' ? 'A térkép nem töltődött be.' : 'The map couldn’t load.';
-    });
-}, '2200px'); // early, so its tiles are warm before anyone reaches it
+// early, so its tiles are warm before anyone reaches it; on phones it goes
+// again when it is far away, so the globe (and everything else) has the memory
+let studioMap = null;
+whileNear(document.getElementById('studio-map'), {
+  near: '2200px',
+  far: matchMedia('(pointer: coarse)').matches ? '3800px' : null,
+  mount: () => {
+    studioMap = import('./components/studio-map.js')
+      .then((m) => m.mountStudioMap(document.getElementById('studio-map'), { locations: LOCATIONS, reduced }))
+      .catch((err) => {
+        console.warn('[studio map] unavailable', err);
+        const frame = document.querySelector('.studio');
+        frame.classList.add('is-fallback');
+        frame.querySelector('.studio__note span:last-child').textContent = document.documentElement.lang === 'hu' ? 'A térkép nem töltődött be.' : 'The map couldn’t load.';
+        return null;
+      });
+  },
+  unmount: () => {
+    studioMap?.then((m) => m?.destroy());
+    studioMap = null;
+  },
+});
 
 // ── the language can change at any time ──
 const RENDERED = '#stats [data-reveal], #treatment-steps [data-reveal], #treatment-prices [data-reveal], #event-cards [data-reveal]';

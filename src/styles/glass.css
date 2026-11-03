@@ -34,6 +34,12 @@
   backdrop-filter: var(--lens) blur(var(--blur-lens, 5px)) saturate(185%) brightness(1.05);
 }
 
+/* far off screen: no blur, so no GPU layer (lib/glass.js) */
+.is-far {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
 .glass-chip {
   display: inline-flex;
   align-items: center;

@@ -21,7 +21,7 @@ import { detectLang } from './lib/lang.js';
 import { CONTACT, LOCATIONS, TREATMENT } from './config.js';
 import { fillIcons, icon } from './lib/icons.js';
 import { drawLaurelSvg } from './lib/laurel.js';
-import { esc, initReveals } from './lib/dom.js';
+import { esc, initReveals, setVar } from './lib/dom.js';
 import { eur, huf } from './lib/price.js';
 import { initGlass } from './lib/glass.js';
 import { initSilk } from './lib/silk.js';
@@ -254,12 +254,19 @@ document.addEventListener('pointerout', (e) => {
     card.style.removeProperty('--ly');
   }
 });
+// The tilt goes on the cards that lean, not on the page root: a variable set
+// on the root restyles every element on the page, every frame.
+const TILTED = '.book__card, .link, .reel__frame';
 if (!reduced) {
   const follow = () => {
     requestAnimationFrame(follow);
     if (!tilt.active) return;
-    root.style.setProperty('--tilt-x', tilt.x.toFixed(3));
-    root.style.setProperty('--tilt-y', tilt.y.toFixed(3));
+    const x = tilt.x.toFixed(3);
+    const y = tilt.y.toFixed(3);
+    for (const el of document.querySelectorAll(TILTED)) {
+      setVar(el, '--tilt-x', x);
+      setVar(el, '--tilt-y', y);
+    }
     glass.light(tilt.x, tilt.y);
   };
   requestAnimationFrame(follow);

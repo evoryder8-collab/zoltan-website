@@ -4,6 +4,7 @@
 //  2. True edge refraction on [data-lens] panels in Chromium, where an SVG
 //     displacement filter can be used as a backdrop-filter. Other engines
 //     keep the blur + specular version.
+import { setVar } from './dom.js';
 
 const supportsLens = (() => {
   try {
@@ -133,12 +134,36 @@ function applyLens(el) {
   update();
 }
 
+// Blur only near the screen. Every backdrop-filter is a GPU layer of its own,
+// and a phone holding dozens of them (most of them far off screen) runs out of
+// memory and reloads the tab. Out of range they drop the blur (.is-far in
+// glass.css); a screen's height of margin brings it back before it shows.
+const hasBlur = (el) => {
+  const cs = getComputedStyle(el);
+  const f = cs.backdropFilter || cs.webkitBackdropFilter;
+  return !!f && f !== 'none';
+};
+const far = new IntersectionObserver((entries) => {
+  for (const e of entries) e.target.classList.toggle('is-far', !e.isIntersecting);
+}, { rootMargin: '100% 0px' });
+const culled = new WeakSet();
+const cullBlur = () => {
+  for (const el of document.querySelectorAll('main *, footer *')) {
+    if (culled.has(el) || !hasBlur(el)) continue;
+    culled.add(el);
+    far.observe(el);
+  }
+};
+
 export function initGlass() {
   const visible = new Set();
   const io = new IntersectionObserver((entries) => {
     for (const e of entries) (e.isIntersecting ? visible.add(e.target) : visible.delete(e.target));
   });
-  const track = (root = document) => root.querySelectorAll('.glass').forEach((el) => io.observe(el));
+  const track = (root = document) => {
+    root.querySelectorAll('.glass').forEach((el) => io.observe(el));
+    cullBlur();
+  };
   track();
 
   if (supportsLens) document.querySelectorAll('[data-lens]').forEach(applyLens);
@@ -146,16 +171,18 @@ export function initGlass() {
   let px = innerWidth / 2;
   let py = -200;
   let queued = false;
+  // every rect first, then every write: a write between two reads would make
+  // the browser restyle the page once per panel, every frame
   const paint = () => {
     queued = false;
-    for (const el of visible) {
-      const r = el.getBoundingClientRect();
+    const rects = [...visible].map((el) => [el, el.getBoundingClientRect()]);
+    for (const [el, r] of rects) {
       const mx = ((px - r.left) / r.width) * 100;
       const my = ((py - r.top) / r.height) * 100;
       const ang = (Math.atan2(py - (r.top + r.height / 2), px - (r.left + r.width / 2)) * 180) / Math.PI + 90;
-      el.style.setProperty('--mx', `${mx.toFixed(1)}%`);
-      el.style.setProperty('--my', `${my.toFixed(1)}%`);
-      el.style.setProperty('--rim', `${ang.toFixed(1)}deg`);
+      setVar(el, '--mx', `${mx.toFixed(1)}%`);
+      setVar(el, '--my', `${my.toFixed(1)}%`);
+      setVar(el, '--rim', `${ang.toFixed(1)}deg`);
     }
   };
   addEventListener('pointermove', (e) => {

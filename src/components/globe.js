@@ -10,6 +10,10 @@ import { t } from '../i18n/index.js';
 import { esc } from '../lib/dom.js';
 import { sound } from '../lib/audio.js';
 
+// the universe outlives the globe: a phone lets the map go when it is far
+// away (championships.js) and builds a new one on the way back
+let space = null;
+
 export async function mountGlobe(container, { events, home, reduced = false }) {
   const [{ Map, Marker, AttributionControl }, style] = await Promise.all([loadMapLibre(), darkStyle()]);
   // a lit face: rose land, deep plum seas, borders as fine light lines
@@ -27,7 +31,9 @@ export async function mountGlobe(container, { events, home, reduced = false }) {
     'fog-ground-blend': 0.8,
     'atmosphere-blend': ['interpolate', ['linear'], ['zoom'], 0, 0.85, 4, 0.5, 7, 0],
   };
-  const space = mountSpace(container.parentElement.querySelector('.globe__space'), { reduced });
+  space ??= mountSpace(container.parentElement.querySelector('.globe__space'), { reduced });
+  const gone = new AbortController();
+  const { signal } = gone;
 
   const placed = events.filter((e) => e.lngLat);
   const small = innerWidth < 720;
@@ -134,7 +140,7 @@ export async function mountGlobe(container, { events, home, reduced = false }) {
     placed.forEach((e) => (markers[e.id].el.querySelector('.gmark__label').innerHTML = esc(t(`champs.events.${e.id}.short`))));
   };
   label();
-  addEventListener('langchange', label);
+  addEventListener('langchange', label, { signal });
 
   // slow turn while idle and on screen; comets travel
   let onScreen = false;
@@ -143,10 +149,11 @@ export async function mountGlobe(container, { events, home, reduced = false }) {
   io.observe(container);
   const takeOver = () => (idleUntil = performance.now() + 9000);
   ['mousedown', 'touchstart', 'wheel', 'dragstart'].forEach((ev) => map.on(ev, takeOver));
-  const halt = touch ? swipeToTurn(container, map, { takeOver, resting, away }) : () => {};
+  const halt = touch ? swipeToTurn(container, map, { takeOver, resting, away, signal }) : () => {};
   let last = 0;
+  let raf = 0;
   const loop = (now) => {
-    requestAnimationFrame(loop);
+    raf = requestAnimationFrame(loop);
     if (!onScreen || document.hidden || reduced || now - last < 33) return;
     last = now;
     map.getSource('comets')?.setData(comets(now / 1000));
@@ -157,7 +164,7 @@ export async function mountGlobe(container, { events, home, reduced = false }) {
       else map.jumpTo({ center: [c.lng + 0.045, c.lat] });
     }
   };
-  requestAnimationFrame(loop);
+  raf = requestAnimationFrame(loop);
 
   const api = {
     flyTo(id) {
@@ -169,6 +176,14 @@ export async function mountGlobe(container, { events, home, reduced = false }) {
       map.flyTo({ center: e.lngLat, zoom: small ? 2.6 : 3.4, duration: reduced ? 0 : 3200, curve: 1.5, essential: true });
       sound.whoosh(2.2);
     },
+    destroy() {
+      cancelAnimationFrame(raf);
+      io.disconnect();
+      halt();
+      gone.abort();
+      map.remove();
+      container.closest('.globe')?.classList.remove('is-ready');
+    },
   };
   return api;
 }
@@ -179,7 +194,7 @@ export async function mountGlobe(container, { events, home, reduced = false }) {
  * after a fly-in also eases the camera back out to the whole globe: otherwise
  * it would slide along that one latitude, Sydney's being mostly ocean.
  */
-function swipeToTurn(container, map, { takeOver, resting, away }) {
+function swipeToTurn(container, map, { takeOver, resting, away, signal }) {
   container.style.touchAction = 'pan-y';
   let start = null;
   let turning = false;
@@ -218,7 +233,7 @@ function swipeToTurn(container, map, { takeOver, resting, away }) {
     turning = false;
     vel = 0;
     takeOver();
-  });
+  }, { signal });
   container.addEventListener('pointermove', (e) => {
     if (!start || e.pointerType !== 'touch') return;
     const dx = e.clientX - start.x;
@@ -242,7 +257,7 @@ function swipeToTurn(container, map, { takeOver, resting, away }) {
     lastX = e.clientX;
     lastT = now;
     takeOver();
-  });
+  }, { signal });
   const release = () => {
     if (!start) return;
     start = null;
@@ -257,8 +272,8 @@ function swipeToTurn(container, map, { takeOver, resting, away }) {
     };
     glide = requestAnimationFrame(coast);
   };
-  container.addEventListener('pointerup', release);
-  container.addEventListener('pointercancel', () => (start = null));
+  container.addEventListener('pointerup', release, { signal });
+  container.addEventListener('pointercancel', () => (start = null), { signal });
   // a fly-in takes the camera: stop any glide or settle that would cut it short
   return () => {
     cancelAnimationFrame(glide);

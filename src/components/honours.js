@@ -6,7 +6,7 @@
 // played it, so the visitor's taps on the page unlock it on the way down.
 // Below it, the Bulgarian ticket celebrates each time it comes into view.
 import { t } from '../i18n/index.js';
-import { whenNear } from '../lib/lazy.js';
+import { whileNear } from '../lib/lazy.js';
 import { sound } from '../lib/audio.js';
 import { buzz } from '../lib/tilt.js';
 import { confetti } from '../lib/confetti.js';
@@ -27,10 +27,20 @@ export function initHonours({ reduced }) {
   };
   addEventListener('langchange', sync);
 
-  whenNear(video, () => {
-    video.src = `${BASE}media/verdict-720.mp4`;
-    video.preload = 'auto';
-  }, '800px');
+  // set when it's close; on phones let go again when it's far away
+  whileNear(video, {
+    near: '800px',
+    far: matchMedia('(pointer: coarse)').matches ? '2400px' : null,
+    mount: () => {
+      video.src = `${BASE}media/verdict-720.mp4`;
+      video.preload = 'auto';
+    },
+    unmount: () => {
+      video.pause();
+      video.removeAttribute('src');
+      video.load();
+    },
+  });
 
   if (reduced) {
     video.controls = true;

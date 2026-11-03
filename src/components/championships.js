@@ -3,7 +3,7 @@ import { EVENTS, HOME } from '../config.js';
 import { t } from '../i18n/index.js';
 import { icon } from '../lib/icons.js';
 import { esc } from '../lib/dom.js';
-import { whenNear } from '../lib/lazy.js';
+import { whileNear } from '../lib/lazy.js';
 import { drawLaurelSvg } from '../lib/laurel.js';
 import { sound } from '../lib/audio.js';
 
@@ -58,25 +58,44 @@ export function initChampionships({ reduced, lenis, onFail }) {
     drawLaurelSvg(medal.querySelector('svg'));
     document.querySelector('.medal__hint').hidden = true;
   };
-  whenNear(medal, () => {
-    if (document.documentElement.classList.contains('no-webgl')) return medalFallback();
-    import('./medal3d.js')
-      .then((m) => m.mountMedal(medal, { reduced }))
-      .catch((err) => {
-        console.warn('[medal] fallback', err);
-        medalFallback();
-      });
+  // on phones it goes with the globe when it's far away, and comes back
+  let toy = null;
+  whileNear(medal, {
+    far: matchMedia('(pointer: coarse)').matches ? '3200px' : null,
+    mount: () => {
+      if (document.documentElement.classList.contains('no-webgl')) return medalFallback();
+      toy = import('./medal3d.js')
+        .then((m) => m.mountMedal(medal, { reduced }))
+        .catch((err) => {
+          console.warn('[medal] fallback', err);
+          medalFallback();
+          return null;
+        });
+    },
+    unmount: () => {
+      toy?.then((m) => m?.destroy());
+      toy = null;
+    },
   });
 
-  // globe
+  // globe: on phones it goes when it is far away, so the studio map (and
+  // everything else) has the memory, and comes back on the way up
   const map = document.getElementById('globe');
-  whenNear(map, () => {
-    globe = import('./globe.js')
-      .then((m) => m.mountGlobe(map, { events: EVENTS, home: HOME, reduced }))
-      .catch((err) => {
-        console.warn('[globe] unavailable', err);
-        onFail?.(map.closest('.globe'));
-        return null;
-      });
-  }, '1600px');
+  whileNear(map, {
+    near: '1600px',
+    far: matchMedia('(pointer: coarse)').matches ? '3200px' : null,
+    mount: () => {
+      globe = import('./globe.js')
+        .then((m) => m.mountGlobe(map, { events: EVENTS, home: HOME, reduced }))
+        .catch((err) => {
+          console.warn('[globe] unavailable', err);
+          onFail?.(map.closest('.globe'));
+          return null;
+        });
+    },
+    unmount: () => {
+      globe?.then((g) => g?.destroy());
+      globe = null;
+    },
+  });
 }

@@ -143,6 +143,9 @@ export function initSilk(canvas, { reduced = false } = {}) {
   const resize = () => {
     const w = Math.max(2, Math.round(innerWidth * SCALE));
     const h = Math.max(2, Math.round(innerHeight * SCALE));
+    // a phone's toolbar sliding in or out mid-scroll only nudges the height:
+    // the soft light stretches a little rather than reallocating every time
+    if (w === canvas.width && Math.abs(h - canvas.height) < canvas.height * 0.2) return;
     canvas.width = w;
     canvas.height = h;
     gl.viewport(0, 0, w, h);

@@ -309,7 +309,9 @@ export async function mountMedal(container, { reduced = false } = {}) {
       ro.disconnect();
       io.disconnect();
       removeEventListener('scroll', onScroll);
+      document.removeEventListener('visibilitychange', start);
       renderer.dispose();
+      renderer.forceContextLoss(); // its GPU memory back now, not at the next GC
       el.remove();
     },
   };

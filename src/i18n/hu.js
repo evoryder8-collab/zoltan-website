@@ -161,6 +161,7 @@ export default {
     noLocation: 'Helyszín hamarosan',
     events: {
       slovakia: {
+        city: 'Szlovákia',
         short: 'Szlovákia 2026',
         name: 'Szlovákiai Masszázsbajnokság 2026',
         place: 'Szlovákia',
@@ -168,6 +169,7 @@ export default {
         titles: ['Abszolút győztes · Grand Champion', 'Aranyérem'],
       },
       ausmc26: {
+        city: 'Sydney',
         short: 'AusMC 2026 · Sydney',
         name: 'Ausztrál Masszázsbajnokság 2026',
         place: 'Cockatoo-sziget, Sydney',
@@ -175,12 +177,21 @@ export default {
         titles: ['Abszolút győztes', 'Freestyle Massage Award', 'Best Flow & Transition Award', 'Best International Therapist'],
       },
       wmsc26: {
+        city: 'Nagyszeben',
         short: 'WMSC 2026 · Nagyszeben',
         name: 'World Massage Super Cup 2026',
         place: 'Nagyszeben, Románia',
         date: '2026. október 30. – november 1.',
         titles: ['Ezüstérem · Svédmasszázs'],
       },
+      emc26: { city: 'Párizs', name: 'NewMa Euro Massage Championship 2026', place: 'Párizs, Franciaország', date: '2026. május 22–24.' },
+      wcm26: { city: 'Koppenhága', name: 'Masszázs-világbajnokság 2026', place: 'Koppenhága, Dánia', date: '2026. július' },
+      seamc27: { city: 'Penang', name: 'Délkelet-ázsiai Masszázsbajnokság 2027', place: 'Penang, Malajzia', date: '2027. január 15–17.' },
+      newma27: { city: 'Phuket', name: 'NewMa Asia Massage Championship 2027', place: 'Phuket, Thaiföld', date: '2027. január 22–24.' },
+      phlwms27: { city: 'Manila', name: 'Philippines World Massage Summit 2027', place: 'Manila, Fülöp-szigetek', date: '2027. április 17–18.' },
+      obmc27: { city: 'Veliko Tarnovo', name: 'Bolgár Masszázsbajnokság 2027', place: 'Veliko Tarnovo, Bulgária', date: '2027. május 14–16.' },
+      mcwt27: { city: 'Tokió', name: 'Massage Championship World Tour 2027', place: 'Tokió, Japán', date: '2027. május 26–27.' },
+      wcm27: { city: 'Koppenhága', name: 'Masszázs-világbajnokság 2027', note: 'A jubileumi, 10. világbajnokság', place: 'Koppenhága, Dánia', date: '2027. július 2–4.' },
     },
   },
   honours: {
@@ -205,8 +216,13 @@ export default {
   globe: {
     label: 'Interaktív földgömb Zoltán bajnoki útjaival',
     home: 'Otthon · Magyarország',
-    hint: 'Húzd a földgömböt a forgatáshoz',
-    hintTouch: 'Húzd oldalra a földgömb forgatásához',
+    hint: 'Húzd a forgatáshoz, kattints egy jelölőre a részletekért',
+    hintTouch: 'Húzd oldalra a forgatáshoz, két ujjal nagyíts',
+    past: 'Korábbi',
+    next: 'Közelgő',
+    zoomIn: 'Nagyítás',
+    zoomOut: 'Kicsinyítés',
+    close: 'Bezárás',
   },
   gallery: {
     kicker: 'Galéria',

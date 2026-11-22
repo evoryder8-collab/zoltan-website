@@ -1,5 +1,5 @@
 // Championship cards, the medal toy and the globe. The cards drive the globe.
-import { EVENTS, HOME } from '../config.js';
+import { EVENTS, CARDS, HOME } from '../config.js';
 import { t } from '../i18n/index.js';
 import { icon } from '../lib/icons.js';
 import { esc } from '../lib/dom.js';
@@ -12,7 +12,7 @@ let globe = null;
 let active = null;
 
 export function renderEvents() {
-  document.getElementById('event-cards').innerHTML = EVENTS.map((e) => {
+  document.getElementById('event-cards').innerHTML = CARDS.map((id) => EVENTS.find((e) => e.id === id)).map((e) => {
     const k = `champs.events.${e.id}`;
     const titles = t(`${k}.titles`)
       .map((ti) => `<li class="event__title${e.featured && !isPlaceholder(ti) ? ' is-win' : ''}">${esc(ti)}</li>`)

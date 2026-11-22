@@ -34,12 +34,25 @@ export const LOCATIONS = [
 // Where the arcs on the championship globe start
 export const HOME = { lngLat: [19.0402, 47.4979] };
 
-// Championships, the overall titles first (most recent first), then the
-// rest: wording in i18n under champs.events.<id>. The Slovakia championship's
-// city isn't published, so its pin marks the country. `label` sets which side
-// of its pin the globe writes the name, where pins sit close together.
+// Every championship Zoltan has entered or is entered for, in date order,
+// all pinned on the globe: wording in i18n under champs.events.<id>. `end` is
+// its last day; until then the globe shows it as upcoming. Events in the same
+// city share one pin; `featured` marks an overall title. The Slovakia
+// championship's city isn't published, so its pin marks the country.
+const COPENHAGEN = [12.5683, 55.6761];
 export const EVENTS = [
-  { id: 'ausmc26', lngLat: [151.1717, -33.8477], featured: true },
-  { id: 'slovakia', lngLat: [19.699, 48.669], featured: true },
-  { id: 'wmsc26', lngLat: [24.1256, 45.7983], label: 'right' },
+  { id: 'emc26', end: '2026-05-24', lngLat: [2.3522, 48.8566] },
+  { id: 'wcm26', end: '2026-07-05', lngLat: COPENHAGEN }, // early July; the exact days aren't published
+  { id: 'slovakia', end: '2026-09-12', lngLat: [19.699, 48.669], featured: true },
+  { id: 'ausmc26', end: '2026-10-11', lngLat: [151.1717, -33.8477], featured: true },
+  { id: 'wmsc26', end: '2026-11-01', lngLat: [24.1256, 45.7983] },
+  { id: 'seamc27', end: '2027-01-17', lngLat: [100.3327, 5.4141] },
+  { id: 'newma27', end: '2027-01-24', lngLat: [98.3923, 7.8804] },
+  { id: 'phlwms27', end: '2027-04-18', lngLat: [120.9842, 14.5995] },
+  { id: 'obmc27', end: '2027-05-16', lngLat: [25.6172, 43.0757] },
+  { id: 'mcwt27', end: '2027-05-27', lngLat: [139.6917, 35.6895] },
+  { id: 'wcm27', end: '2027-07-04', lngLat: COPENHAGEN },
 ];
+
+// The championships with a card under the medal, overall titles first
+export const CARDS = ['ausmc26', 'slovakia', 'wmsc26'];

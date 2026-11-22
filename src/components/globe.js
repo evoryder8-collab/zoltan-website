@@ -8,16 +8,20 @@ import { greatCircle } from '../lib/geo.js';
 import { mountSpace } from '../lib/space.js';
 import { t } from '../i18n/index.js';
 import { esc } from '../lib/dom.js';
+import { icon } from '../lib/icons.js';
 import { sound } from '../lib/audio.js';
 
 // the universe outlives the globe: a phone lets the map go when it is far
 // away (championships.js) and builds a new one on the way back
 let space = null;
+const GOLD = '#e0b56d';
 
 export async function mountGlobe(container, { events, home, reduced = false }) {
   const [{ Map, Marker, AttributionControl }, style] = await Promise.all([loadMapLibre(), darkStyle()]);
   // a lit face: rose land, deep plum seas, borders as fine light lines
   restyle(style, { labels: false, colors: { bg: '#6a2131', park: '#702333', water: '#2d101e', boundary: '#f08a9c' } });
+  // land, sea and country borders only: no regions, roads or rail when zoomed in
+  style.layers = style.layers.filter((l) => !/^(boundary_state|highway|road|railway|aeroway)/.test(l.id));
   for (const l of style.layers) if (l.id.startsWith('boundary')) l.paint['line-opacity'] = 0.32;
   style.projection = { type: 'globe' };
   // the sun behind the visitor's shoulder, up and to the left
@@ -31,49 +35,94 @@ export async function mountGlobe(container, { events, home, reduced = false }) {
     'fog-ground-blend': 0.8,
     'atmosphere-blend': ['interpolate', ['linear'], ['zoom'], 0, 0.85, 4, 0.5, 7, 0],
   };
-  space ??= mountSpace(container.parentElement.querySelector('.globe__space'), { reduced });
+  const frame = container.closest('.globe');
+  space ??= mountSpace(frame.querySelector('.globe__space'), { reduced });
   const gone = new AbortController();
   const { signal } = gone;
 
-  const placed = events.filter((e) => e.lngLat);
+  // One pin per city. An event is upcoming until its last day is over, so the
+  // globe moves each one to "competed" by itself; Copenhagen holds both.
+  const today = new Date().toISOString().slice(0, 10);
+  const isNext = (e) => e.end >= today;
+  const places = [];
+  for (const e of events.filter((x) => x.lngLat)) {
+    const key = e.lngLat.join();
+    let place = places.find((x) => x.key === key);
+    if (!place) places.push((place = { key, lngLat: e.lngLat, events: [] }));
+    place.events.push(e);
+  }
+  for (const place of places) {
+    const next = place.events.filter(isNext).length;
+    place.status = next === 0 ? 'past' : next === place.events.length ? 'next' : 'both';
+  }
+  // labels are placed in this order when pins crowd: overall titles, then
+  // the rest he competed in, then the upcoming ones (each in date order)
+  const rank = (place) => (place.events.some((e) => e.featured) ? 0 : place.status === 'next' ? 2 : 1);
+  places.sort((a, b) => rank(a) - rank(b));
+
   const small = innerWidth < 720;
   // size the globe to the frame: radius ≈ 42% of its height
   const fit = () => Math.log2(((Math.min(container.clientHeight, container.clientWidth * 0.9) * 0.42) * 2 * Math.PI) / 512);
   // the whole globe at rest, tipped to show both Hungary and Sydney; a fly-in
-  // leaves it for one event, and the globe comes back to it afterwards
+  // or a zoom leaves it, and the globe comes back to it afterwards
   const REST_LAT = 12;
   const resting = () => ({ zoom: fit(), lat: REST_LAT });
   const away = () => map.getZoom() - fit() > 0.05 || Math.abs(map.getCenter().lat - REST_LAT) > 0.5;
-  // Phones: the map takes no gestures of its own, so a vertical swipe always
-  // scrolls the page; a sideways swipe turns the globe (swipeToTurn below).
-  // Desktop: drag with the mouse; the wheel always scrolls the page.
+  // Phones: one finger never moves the map, so a vertical swipe always scrolls
+  // the page; a sideways swipe turns the globe (swipeToTurn below), and two
+  // fingers move and pinch it. Desktop: drag with the mouse; the wheel scrolls
+  // the page and a trackpad pinch (Ctrl + wheel) zooms. Both have + and −.
   const touch = matchMedia('(pointer: coarse)').matches;
   const map = new Map({
     container,
     style,
     center: [76, REST_LAT],
     zoom: fit(),
+    maxZoom: 6,
     attributionControl: false,
-    interactive: !touch,
     scrollZoom: false,
+    boxZoom: false,
+    cooperativeGestures: touch,
+    doubleClickZoom: !touch,
+    dragRotate: !touch,
+    touchPitch: false,
     renderWorldCopies: false,
     fadeDuration: 250,
     pixelRatio: Math.min(devicePixelRatio || 1, 2), // 3x screens draw at 2x: half the GPU memory
   });
+  map.touchZoomRotate.disableRotation();
+  const floor = () => map.setMinZoom(fit() - 0.5);
+  floor();
+  map.on('resize', floor);
   map.addControl(new AttributionControl({ compact: true }), 'bottom-right');
 
-  const arcs = placed.map((e) => greatCircle(home.lngLat, e.lngLat, 160));
+  container.addEventListener('wheel', (e) => {
+    if (!e.ctrlKey) return;
+    e.preventDefault();
+    map.zoomTo(map.getZoom() - e.deltaY * 0.01, { duration: 0 }, { originalEvent: e });
+  }, { passive: false, signal });
+  for (const b of frame.querySelectorAll('[data-zoom]')) {
+    b.addEventListener('click', (e) => map[b.dataset.zoom > 0 ? 'zoomIn' : 'zoomOut']({ duration: reduced ? 0 : 450 }, { originalEvent: e }), { signal });
+  }
+
+  // arcs from home: solid with travelling comets for the journeys made, a
+  // dashed gold line for the ones to come
+  const arcs = places.map((place) => ({
+    type: 'Feature',
+    geometry: { type: 'LineString', coordinates: greatCircle(home.lngLat, place.lngLat, 160) },
+    properties: { next: place.status === 'next' },
+  }));
+  const travelled = arcs.filter((a) => !a.properties.next).map((a) => a.geometry.coordinates);
   map.on('load', () => {
-    map.addSource('arcs', {
-      type: 'geojson',
-      data: { type: 'FeatureCollection', features: arcs.map((c) => ({ type: 'Feature', geometry: { type: 'LineString', coordinates: c }, properties: {} })) },
-    });
-    map.addLayer({ id: 'arcs-glow', type: 'line', source: 'arcs', layout: { 'line-cap': 'round' }, paint: { 'line-color': '#ff3b4e', 'line-width': 7, 'line-blur': 6, 'line-opacity': 0.45 } });
-    map.addLayer({ id: 'arcs-core', type: 'line', source: 'arcs', layout: { 'line-cap': 'round' }, paint: { 'line-color': '#f6f1ec', 'line-width': 1.3, 'line-opacity': 0.85 } });
+    map.addSource('arcs', { type: 'geojson', data: { type: 'FeatureCollection', features: arcs } });
+    const made = ['!', ['get', 'next']];
+    map.addLayer({ id: 'arcs-glow', type: 'line', source: 'arcs', filter: made, layout: { 'line-cap': 'round' }, paint: { 'line-color': '#ff3b4e', 'line-width': 7, 'line-blur': 6, 'line-opacity': 0.45 } });
+    map.addLayer({ id: 'arcs-core', type: 'line', source: 'arcs', filter: made, layout: { 'line-cap': 'round' }, paint: { 'line-color': '#f6f1ec', 'line-width': 1.3, 'line-opacity': 0.85 } });
+    map.addLayer({ id: 'arcs-next', type: 'line', source: 'arcs', filter: ['get', 'next'], paint: { 'line-color': GOLD, 'line-width': 1.4, 'line-opacity': 0.8, 'line-dasharray': [2, 3] } });
     map.addSource('comets', { type: 'geojson', data: comets(0) });
     map.addLayer({ id: 'comets-glow', type: 'circle', source: 'comets', paint: { 'circle-radius': 9, 'circle-color': '#ff3b4e', 'circle-blur': 1, 'circle-opacity': 0.8 } });
     map.addLayer({ id: 'comets-core', type: 'circle', source: 'comets', paint: { 'circle-radius': 2.6, 'circle-color': '#fff' } });
-    container.closest('.globe')?.classList.add('is-ready');
+    frame.classList.add('is-ready');
     shade();
     // keep the attribution folded into its (i) button, as on AusMC
     container.querySelector('.maplibregl-ctrl-attrib')?.classList.remove('maplibregl-compact-show');
@@ -115,7 +164,7 @@ export async function mountGlobe(container, { events, home, reduced = false }) {
   function comets(time) {
     return {
       type: 'FeatureCollection',
-      features: arcs.map((c, i) => {
+      features: travelled.map((c, i) => {
         const f = (time * 0.09 + i * 0.37) % 1;
         const k = Math.min(c.length - 1, Math.floor(f * (c.length - 1)));
         return { type: 'Feature', geometry: { type: 'Point', coordinates: c[k] }, properties: {} };
@@ -123,32 +172,129 @@ export async function mountGlobe(container, { events, home, reduced = false }) {
     };
   }
 
-  // markers
-  const markers = {};
-  const addMarker = (id, lngLat, cls = '') => {
+  // pins: home, then one per city
+  const pins = [];
+  const addPin = (lngLat, cls, prefer) => {
     const el = document.createElement('div');
     el.className = `gmark ${cls}`;
     el.innerHTML = '<span class="gmark__pulse"></span><span class="gmark__core"></span><span class="gmark__label glass"></span>';
     // a marker on the far side is hidden, not ghosted over whatever faces the camera
-    markers[id] = { el, marker: new Marker({ element: el, anchor: 'center', opacityWhenCovered: '0' }).setLngLat(lngLat).addTo(map) };
-    return el;
+    new Marker({ element: el, anchor: 'center', opacityWhenCovered: '0' }).setLngLat(lngLat).addTo(map);
+    const pin = { el, label: el.lastChild, lngLat, prefer, side: null, size: null, xy: null };
+    pins.push(pin);
+    return pin;
   };
-  addMarker('home', home.lngLat, 'gmark--home gmark--below');
-  placed.forEach((e) => addMarker(e.id, e.lngLat, e.label ? `gmark--${e.label}` : '').addEventListener('click', () => api.flyTo(e.id)));
+  const homePin = addPin(home.lngLat, 'gmark--home', 'bottom');
+  for (const place of places) {
+    place.pin = addPin(place.lngLat, `gmark--${place.status}`, 'top');
+    place.pin.rank = rank(place);
+    place.pin.el.addEventListener('click', () => api.flyTo(place.events[0].id), { signal });
+  }
+  // home's label gives way only to the overall titles
+  pins.sort((a, b) => (a.rank ?? 0.5) - (b.rank ?? 0.5));
   const label = () => {
-    markers.home.el.querySelector('.gmark__label').innerHTML = esc(t('globe.home'));
-    placed.forEach((e) => (markers[e.id].el.querySelector('.gmark__label').innerHTML = esc(t(`champs.events.${e.id}.short`))));
+    homePin.label.textContent = t('globe.home');
+    for (const place of places) {
+      place.pin.label.textContent = [t(`champs.events.${place.events[0].id}.city`), ...place.events.map((e) => e.end.slice(0, 4))].join(' · ');
+    }
+    for (const pin of pins) pin.size = null;
+    if (shown) open(shown);
+    map.triggerRepaint();
   };
+
+  // Labels never overlap. Each frame the pins are laid out in turn (the one
+  // tapped, then by rank): a label takes the first side of its pin, from the
+  // one it prefers, that stays inside the frame and clear of the other pins,
+  // the labels already placed, the frame's own buttons and the contact rail
+  // that floats over its right edge on phones. With no side free it waits
+  // for a zoom; its pin still shows.
+  let activePin = null;
+  const furniture = [...frame.querySelectorAll('.globe__legend, .globe__zoom, .globe__hint')];
+  function layout() {
+    const box = container.getBoundingClientRect();
+    const W = box.width;
+    const H = box.height;
+    const taken = [...furniture, panel, document.querySelector('.orbs.is-in')]
+      .filter((el) => el?.getClientRects().length)
+      .map((el) => {
+        const r = el.getBoundingClientRect();
+        return [r.left - box.left - 6, r.top - box.top - 6, r.width + 12, r.height + 12];
+      });
+    const order = activePin ? [activePin, ...pins.filter((p) => p !== activePin)] : pins;
+    const live = order.filter((p) => !p.el.classList.contains('maplibregl-marker-covered'));
+    for (const p of live) {
+      p.size ??= [p.label.offsetWidth, p.label.offsetHeight];
+      p.xy = map.project(p.lngLat);
+      taken.push([p.xy.x - 9, p.xy.y - 9, 18, 18]);
+    }
+    for (const p of order) {
+      let side = 'none';
+      if (live.includes(p)) {
+        for (const s of [p.prefer, ...SIDES]) {
+          const r = beside(s, p.xy, p.size);
+          if (r[0] >= 6 && r[1] >= 6 && r[0] + r[2] <= W - 6 && r[1] + r[3] <= H - 6 && !taken.some((q) => overlaps(q, r))) {
+            side = s;
+            taken.push(r);
+            break;
+          }
+        }
+      }
+      if (p.side !== side) p.el.dataset.side = p.side = side;
+    }
+  }
+  map.on('render', layout);
+
+  // tap a pin: its championships, with dates and any titles, in a card
+  const panel = document.createElement('section');
+  panel.className = 'gpanel glass';
+  panel.hidden = true;
+  panel.setAttribute('aria-live', 'polite');
+  frame.append(panel);
+  let shown = null;
+  const open = (place) => {
+    shown = place;
+    panel.innerHTML =
+      `<button type="button" class="gpanel__close" aria-label="${esc(t('globe.close'))}">${icon('close')}</button>` +
+      place.events
+        .map((e) => {
+          const ev = t(`champs.events.${e.id}`);
+          const next = isNext(e);
+          return `
+          <article class="gpanel__event${next ? ' is-next' : ''}">
+            <p class="gpanel__meta"><span class="gpanel__chip">${esc(t(next ? 'globe.next' : 'globe.past'))}</span><span>${esc(ev.date)}</span></p>
+            <h3 class="gpanel__name">${esc(ev.name)}</h3>
+            ${ev.note ? `<p class="gpanel__note">${esc(ev.note)}</p>` : ''}
+            <p class="gpanel__place">${icon('pin')}<span>${esc(ev.place)}</span></p>
+            ${ev.titles ? `<ul class="gpanel__titles">${ev.titles.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}
+          </article>`;
+        })
+        .join('');
+    panel.hidden = false;
+    frame.classList.add('has-panel');
+    idleUntil = Infinity;
+  };
+  const close = () => {
+    shown = null;
+    panel.hidden = true;
+    frame.classList.remove('has-panel');
+    activePin = null;
+    pins.forEach((p) => p.el.classList.remove('is-active'));
+    idle(4000);
+  };
+  panel.addEventListener('click', (e) => e.target.closest('.gpanel__close') && close(), { signal });
   label();
   addEventListener('langchange', label, { signal });
 
-  // slow turn while idle and on screen; comets travel
+  // slow turn while idle and on screen; comets travel. While a card is open
+  // the globe stays where the visitor left it.
   let onScreen = false;
   let idleUntil = 0;
   const io = new IntersectionObserver(([e]) => (onScreen = e.isIntersecting));
   io.observe(container);
-  const takeOver = () => (idleUntil = performance.now() + 9000);
-  ['mousedown', 'touchstart', 'wheel', 'dragstart'].forEach((ev) => map.on(ev, takeOver));
+  const idle = (ms) => (idleUntil = shown ? Infinity : performance.now() + ms);
+  const takeOver = () => idle(9000);
+  ['mousedown', 'touchstart', 'dragstart'].forEach((ev) => map.on(ev, takeOver));
+  map.on('zoomstart', (e) => e.originalEvent && idle(20000));
   const halt = touch ? swipeToTurn(container, map, { takeOver, resting, away, signal }) : () => {};
   let last = 0;
   let raf = 0;
@@ -159,7 +305,7 @@ export async function mountGlobe(container, { events, home, reduced = false }) {
     map.getSource('comets')?.setData(comets(now / 1000));
     if (now > idleUntil && !map.isMoving()) {
       const c = map.getCenter();
-      // after a fly-in, back out to the whole globe first, then the slow turn resumes
+      // after a fly-in or a zoom, back out to the whole globe first, then the slow turn resumes
       if (away()) map.easeTo({ center: [c.lng, REST_LAT], zoom: fit(), duration: 2600 });
       else map.jumpTo({ center: [c.lng + 0.045, c.lat] });
     }
@@ -168,12 +314,15 @@ export async function mountGlobe(container, { events, home, reduced = false }) {
 
   const api = {
     flyTo(id) {
-      const e = placed.find((x) => x.id === id);
-      if (!e) return;
-      idleUntil = performance.now() + 14000;
-      Object.entries(markers).forEach(([k, m]) => m.el.classList.toggle('is-active', k === id));
+      const place = places.find((x) => x.events.some((e) => e.id === id));
+      if (!place) return;
+      activePin = place.pin;
+      pins.forEach((p) => p.el.classList.toggle('is-active', p === activePin));
+      open(place);
       halt();
-      map.flyTo({ center: e.lngLat, zoom: small ? 2.6 : 3.4, duration: reduced ? 0 : 3200, curve: 1.5, essential: true });
+      // the pin settles in the middle of what the card leaves uncovered
+      const offset = [0, -(panel.offsetHeight / 2)];
+      map.flyTo({ center: place.lngLat, zoom: Math.max(map.getZoom(), small ? 2.6 : 3.4), offset, duration: reduced ? 0 : 3200, curve: 1.5, essential: true });
       sound.whoosh(2.2);
     },
     destroy() {
@@ -182,11 +331,22 @@ export async function mountGlobe(container, { events, home, reduced = false }) {
       halt();
       gone.abort();
       map.remove();
-      container.closest('.globe')?.classList.remove('is-ready');
+      panel.remove();
+      frame.classList.remove('is-ready', 'has-panel');
     },
   };
   return api;
 }
+
+// a label's box beside its pin (pins are 22 px; labels keep 8 px clear)
+const SIDES = ['top', 'right', 'left', 'bottom'];
+function beside(side, { x, y }, [w, h]) {
+  if (side === 'top') return [x - w / 2, y - 19 - h, w, h];
+  if (side === 'bottom') return [x - w / 2, y + 19, w, h];
+  if (side === 'right') return [x + 19, y - h / 2, w, h];
+  return [x - 19 - w, y - h / 2, w, h];
+}
+const overlaps = (a, b) => a[0] < b[0] + b[2] && b[0] < a[0] + a[2] && a[1] < b[1] + b[3] && b[1] < a[1] + a[3];
 
 /**
  * Sideways swipes turn the globe, with momentum; vertical swipes scroll the page.
@@ -225,7 +385,12 @@ function swipeToTurn(container, map, { takeOver, resting, away, signal }) {
     map.jumpTo({ center: [c.lng - deg, c.lat] });
   };
   container.addEventListener('pointerdown', (e) => {
-    if (e.pointerType !== 'touch' || !e.isPrimary) return;
+    if (e.pointerType !== 'touch') return;
+    if (!e.isPrimary) {
+      start = null; // a second finger: it's a pinch, MapLibre zooms
+      turning = false;
+      return;
+    }
     cancelAnimationFrame(glide);
     start = { x: e.clientX, y: e.clientY };
     lastX = e.clientX;

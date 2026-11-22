@@ -104,8 +104,190 @@
   opacity: 1;
 }
 
+/* what the pins mean, and zoom buttons (top left: clear of the phone's contact rail) */
+.globe__legend {
+  position: absolute;
+  top: 16px;
+  left: 18px;
+  display: flex;
+  gap: 0.9rem;
+  margin: 0;
+  padding: 0.5rem 0.85rem;
+  list-style: none;
+  border-radius: 999px;
+  background: rgba(11, 6, 7, 0.55);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  color: var(--pearl-dim);
+  font-size: 0.72rem;
+  font-weight: 650;
+  pointer-events: none;
+}
+.globe__key {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+.globe__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--pearl);
+  box-shadow: 0 0 0 2px rgba(255, 59, 78, 0.7), 0 0 10px var(--ember);
+}
+.globe__key--next .globe__dot {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px #e0b56d, 0 0 8px rgba(224, 181, 109, 0.6);
+}
+.globe__zoom {
+  position: absolute;
+  top: 60px;
+  left: 18px;
+  display: grid;
+  gap: 6px;
+}
+.globe:not(.is-ready) .globe__zoom {
+  display: none;
+}
+.globe__zoom button {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(11, 6, 7, 0.55);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  color: var(--pearl);
+  font: 500 1.3rem/1 var(--sans);
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.globe__zoom button:hover {
+  background: rgba(195, 18, 47, 0.6);
+}
+.globe.has-panel .globe__hint {
+  opacity: 0;
+}
+
+/* a pin's championships, opened by tapping it: on the left, as the contact
+   rail floats over the frame's right edge on phones and tablets */
+.gpanel {
+  position: absolute;
+  left: 14px;
+  right: 64px;
+  bottom: 14px;
+  z-index: 3;
+  max-height: 58%;
+  overflow: auto;
+  padding: 1rem 1.1rem 1.1rem;
+  border-radius: var(--r-md);
+  background: rgba(16, 5, 8, 0.82);
+}
+.gpanel[hidden] {
+  display: none;
+}
+@media (min-width: 720px) {
+  .gpanel {
+    left: 18px;
+    right: auto;
+    bottom: 18px;
+    width: min(360px, 46%);
+  }
+}
+.gpanel__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--pearl);
+  cursor: pointer;
+}
+.gpanel__close .i {
+  width: 16px;
+  height: 16px;
+}
+.gpanel__event + .gpanel__event {
+  margin-top: 0.9rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--line);
+}
+.gpanel__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0 2.4rem 0.4rem 0;
+  color: var(--pearl-dim);
+  font-size: 0.76rem;
+  font-weight: 650;
+}
+.gpanel__chip {
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(255, 59, 78, 0.18);
+  color: #ffb3ba;
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.is-next .gpanel__chip {
+  background: rgba(224, 181, 109, 0.16);
+  color: #f3dcae;
+}
+.gpanel__name {
+  margin: 0 0 0.25rem;
+  font: 400 1.2rem/1.15 var(--serif);
+}
+.gpanel__note {
+  margin: 0 0 0.25rem;
+  color: #f3dcae;
+  font-size: 0.8rem;
+  font-weight: 650;
+}
+.gpanel__place {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+  color: var(--pearl-dim);
+  font-size: 0.8rem;
+}
+.gpanel__place .i {
+  width: 14px;
+  height: 14px;
+  color: var(--ember);
+}
+.gpanel__titles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0.65rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.gpanel__titles li {
+  padding: 0.3rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(224, 181, 109, 0.14);
+  color: #f3dcae;
+  font-size: 0.72rem;
+  font-weight: 650;
+}
+
 /* markers */
 .gmark {
+  --gold: #e0b56d;
+  --gold-hi: #f3dcae;
   position: relative;
   display: grid;
   place-items: center;
@@ -133,25 +315,57 @@
 }
 .gmark__label {
   position: absolute;
-  left: 50%;
-  bottom: calc(100% + 8px);
-  translate: -50% 0;
   padding: 0.45rem 0.75rem;
   border-radius: 999px;
   color: var(--pearl);
   font: 650 0.74rem/1.2 var(--sans);
   white-space: nowrap;
   pointer-events: none;
+  transition: opacity 0.25s, visibility 0.25s;
 }
-.gmark--below .gmark__label {
-  bottom: auto;
+/* globe.js picks the side with room; with none free the label waits for a zoom */
+.gmark:not([data-side]) .gmark__label,
+.gmark[data-side='none'] .gmark__label {
+  opacity: 0;
+  visibility: hidden;
+}
+.gmark[data-side='top'] .gmark__label {
+  left: 50%;
+  bottom: calc(100% + 8px);
+  translate: -50% 0;
+}
+.gmark[data-side='bottom'] .gmark__label {
+  left: 50%;
   top: calc(100% + 8px);
+  translate: -50% 0;
 }
-.gmark--right .gmark__label {
+.gmark[data-side='right'] .gmark__label {
   left: calc(100% + 8px);
-  bottom: auto;
   top: 50%;
   translate: 0 -50%;
+}
+.gmark[data-side='left'] .gmark__label {
+  right: calc(100% + 8px);
+  top: 50%;
+  translate: 0 -50%;
+}
+/* upcoming: an open gold ring, still to be filled */
+.gmark--next .gmark__core {
+  background: transparent;
+  box-shadow: inset 0 0 0 2px var(--gold), 0 0 14px rgba(224, 181, 109, 0.65);
+}
+.gmark--next .gmark__pulse {
+  border: 1px dashed var(--gold);
+}
+.gmark--next .gmark__label {
+  color: var(--gold-hi);
+}
+/* both: competed there, and going back */
+.gmark--both .gmark__core {
+  box-shadow: 0 0 0 3px rgba(255, 59, 78, 0.7), 0 0 0 5px var(--gold), 0 0 18px var(--ember);
+}
+.gmark--both .gmark__pulse {
+  border-color: var(--gold);
 }
 .gmark.is-active .gmark__core {
   transform: scale(1.35);
@@ -234,6 +448,10 @@
 .maplibregl-cooperative-gesture-screen {
   font-family: var(--sans);
   background: rgba(11, 6, 7, 0.6) !important;
+}
+/* the globe says how to use it in its own hint, and a sideways swipe turns it */
+.globe .maplibregl-cooperative-gesture-screen {
+  display: none;
 }
 
 /* one studio: nothing to switch between */

@@ -24,7 +24,8 @@ Wording lives in `src/i18n/hu.js` and `src/i18n/en.js` (change both). Facts live
 - AusMC 2026 (Cockatoo Island, Sydney, 9–11 October 2026): Overall Winner, Freestyle Massage Award, Best Flow & Transition Award, Best International Therapist
 - World Massage Super Cup 2026 (Sibiu, Romania, 30 October – 1 November 2026): Silver Medal, Swedish Massage
 - Story (from the short film): started competing in May 2026, out of curiosity; two overall titles on two continents less than two months apart
-- Not shown, by request: EMC 2026 and the World Championship in Massage (IMA)
+- On the globe only (no card, no results shown, at Zoltan's request): NewMa Euro Massage Championship 2026 (Paris, 22–24 May 2026) and the World Championship in Massage 2026 (IMA, Copenhagen, July 2026; exact days unpublished)
+- Upcoming on the globe (gold rings until each event's last day): SEAMC 2027 (Penang, 15–17 Jan), NewMa Asia Massage Championship 2027 (Phuket, 22–24 Jan), Philippines World Massage Summit 2027 (Manila, 17–18 Apr), Bulgarian Massage Championship 2027 (Veliko Tarnovo, 14–16 May), Massage Championship World Tour 2027 (Tokyo, 26–27 May), World Championship in Massage 2027, the 10th (Copenhagen, 2–4 Jul). Dates from the organisers' sites, 22 Nov 2026
 - Judge's verdict (video, Matthew Hua, international massage judge, Zurich): "The styling, simplicity, the zen, the posture, the ergonomics. Well done."
 - Honorary invitation from the Bulgarian Massage Championship organiser, for winning the Slovakia Massage Championship: a free place at OBMC 2027, Veliko Tarnovo, Bulgaria, 14–16 May 2027 (read from the certificate)
 - AusMC moments: lifted with the Overall Winner board; with organiser Anh Ha and judge Matthew Hua, holding the Best Flow & Transition Award

@@ -161,6 +161,7 @@ export default {
     noLocation: 'Location coming soon',
     events: {
       slovakia: {
+        city: 'Slovakia',
         short: 'Slovakia 2026',
         name: 'Slovakia Massage Championship 2026',
         place: 'Slovakia',
@@ -168,6 +169,7 @@ export default {
         titles: ['Grand Champion · Absolute Winner', 'Gold'],
       },
       ausmc26: {
+        city: 'Sydney',
         short: 'AusMC 2026 · Sydney',
         name: 'Australian Massage Championship 2026',
         place: 'Cockatoo Island, Sydney',
@@ -175,12 +177,21 @@ export default {
         titles: ['Overall Winner', 'Freestyle Massage Award', 'Best Flow & Transition Award', 'Best International Therapist'],
       },
       wmsc26: {
+        city: 'Sibiu',
         short: 'WMSC 2026 · Sibiu',
         name: 'World Massage Super Cup 2026',
         place: 'Sibiu, Romania',
         date: '30 October – 1 November 2026',
         titles: ['Silver Medal · Swedish Massage'],
       },
+      emc26: { city: 'Paris', name: 'NewMa Euro Massage Championship 2026', place: 'Paris, France', date: '22–24 May 2026' },
+      wcm26: { city: 'Copenhagen', name: 'World Championship in Massage 2026', place: 'Copenhagen, Denmark', date: 'July 2026' },
+      seamc27: { city: 'Penang', name: 'Southeast Asia Massage Championship 2027', place: 'Penang, Malaysia', date: '15–17 January 2027' },
+      newma27: { city: 'Phuket', name: 'NewMa Asia Massage Championship 2027', place: 'Phuket, Thailand', date: '22–24 January 2027' },
+      phlwms27: { city: 'Manila', name: 'Philippines World Massage Summit 2027', place: 'Manila, Philippines', date: '17–18 April 2027' },
+      obmc27: { city: 'Veliko Tarnovo', name: 'Bulgarian Massage Championship 2027', place: 'Veliko Tarnovo, Bulgaria', date: '14–16 May 2027' },
+      mcwt27: { city: 'Tokyo', name: 'Massage Championship World Tour 2027', place: 'Tokyo, Japan', date: '26–27 May 2027' },
+      wcm27: { city: 'Copenhagen', name: 'World Championship in Massage 2027', note: 'The 10th anniversary edition', place: 'Copenhagen, Denmark', date: '2–4 July 2027' },
     },
   },
   honours: {
@@ -205,8 +216,13 @@ export default {
   globe: {
     label: 'Interactive globe of Zoltan’s championship journeys',
     home: 'Home · Hungary',
-    hint: 'Drag to turn the globe',
-    hintTouch: 'Swipe sideways to turn the globe',
+    hint: 'Drag to turn, click a pin for details',
+    hintTouch: 'Swipe sideways to turn, pinch to zoom',
+    past: 'Competed',
+    next: 'Upcoming',
+    zoomIn: 'Zoom in',
+    zoomOut: 'Zoom out',
+    close: 'Close',
   },
   gallery: {
     kicker: 'Gallery',

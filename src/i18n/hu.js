@@ -3,13 +3,12 @@ export default {
   meta: {
     title: 'Kódor Zoltán · Kétszeres abszolút masszázsbajnok · Budapest',
     description:
-      'Kódor Zoltán, Szlovákia és az Ausztrál Masszázsbajnokság 2026 abszolút győztese. Személyre szabott masszázskezelés Budapesten és Mezőkeresztesen. Foglalj időpontot telefonon vagy WhatsAppon.',
+      'Kódor Zoltán, Szlovákia és az Ausztrál Masszázsbajnokság 2026 abszolút győztese. Személyre szabott masszázskezelés Budapesten. Foglalj időpontot telefonon vagy WhatsAppon.',
   },
   brand: 'Clinical Precision • Aesthetic Flow',
   name: { full: 'Kódor Zoltán', first: 'Zoltán', last: 'Kódor' },
   locations: {
     budapest: { name: 'Budapest', in: 'Budapesten', address: 'Budapest, XVI. kerület – Sashalom' },
-    mezokeresztes: { name: 'Mezőkeresztes', in: 'Mezőkeresztesen', address: '3441 Mezőkeresztes, Bornemissza utca 3.' },
   },
   a11y: {
     results: 'Címek és eredmények',
@@ -45,8 +44,8 @@ export default {
     book: 'Foglalás',
   },
   hero: {
-    kicker: 'Masszőr · Budapest & Mezőkeresztes',
-    lead: 'Két abszolút győzelem két kontinensen, kevesebb mint két hónap alatt. Egyetlen, személyre szabott kezelés Budapesten és Mezőkeresztesen.',
+    kicker: 'Masszőr · Budapest',
+    lead: 'Két abszolút győzelem két kontinensen, kevesebb mint két hónap alatt. Egyetlen, személyre szabott kezelés Budapesten.',
     call: 'Hívás',
     whatsapp: 'WhatsApp',
     chipOverall: 'AusMC 2026 · Abszolút győztes',
@@ -72,7 +71,7 @@ export default {
     'Best International Therapist',
     'Szlovákiai Masszázsbajnokság · Abszolút győztes',
     'Nagyszeben · World Massage Super Cup · Ezüstérem, svédmasszázs',
-    'Budapest · Mezőkeresztes',
+    'Budapest',
   ],
   about: {
     kicker: 'Bemutatkozás',
@@ -260,7 +259,7 @@ export default {
     },
   },
   footer: {
-    tagline: 'Masszázsterápia Budapesten és Mezőkeresztesen.',
+    tagline: 'Masszázsterápia Budapesten.',
     rights: '© 2026 Kódor Zoltán e.v. · Z-Wellness. Minden jog fenntartva.',
     disclaimer: 'A kezelések nem minősülnek orvosi tevékenységnek, és nem helyettesítik az orvosi vizsgálatot, diagnózist vagy kezelést. Egészségügyi panasz esetén javasolt orvosi konzultáció.',
     top: 'Vissza a tetejére',
@@ -287,12 +286,12 @@ export default {
   },
   bio: {
     title: 'Kódor Zoltán · Elérhetőségek és linkek',
-    description: 'Foglalj időpontot Kódor Zoltánnál, a kétszeres abszolút masszázsbajnoknál Budapesten vagy Mezőkeresztesen. WhatsApp, telefon, e-mail és közösségi oldalak egy helyen.',
+    description: 'Foglalj időpontot Kódor Zoltánnál, a kétszeres abszolút masszázsbajnoknál Budapesten. WhatsApp, telefon, e-mail és közösségi oldalak egy helyen.',
     website: 'Weboldal',
     home: 'Kódor Zoltán · Weboldal',
     arrival: 'Kétszeres abszolút bajnok',
     welcome: 'Örülök, hogy itt vagy.',
-    role: 'Masszőr · Budapest & Mezőkeresztes',
+    role: 'Masszőr · Budapest',
     book: 'Foglalj időpontot',
     bookDetail: 'Kb. 70 perc · {price}-tól',
     bookInvite: 'Találjunk egy neked megfelelő időpontot.',
@@ -330,6 +329,6 @@ export default {
     linkCopied: 'Link kimásolva',
     shareText: 'Kódor Zoltán · kétszeres abszolút masszázsbajnok',
     farewell: 'Szeretettel várlak.',
-    footerNote: 'Előzetes egyeztetés alapján · Budapest · Mezőkeresztes',
+    footerNote: 'Előzetes egyeztetés alapján · Budapest',
   },
 };

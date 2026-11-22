@@ -236,6 +236,10 @@
   background: rgba(11, 6, 7, 0.6) !important;
 }
 
+/* one studio: nothing to switch between */
+.studio__switch:not(:has(> :nth-child(2))) {
+  display: none;
+}
 .studio__switch {
   position: absolute;
   top: 14px;

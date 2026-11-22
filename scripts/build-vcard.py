@@ -24,7 +24,6 @@ lines = [
     'TITLE:Massage therapist',
     'TEL;TYPE=CELL,VOICE:+36304162043',
     'EMAIL;TYPE=INTERNET:zwellness18@gmail.com',
-    'ADR;TYPE=WORK;CHARSET=UTF-8:;;Bornemissza utca 3;Mezőkeresztes;;3441;Hungary',
     'ADR;TYPE=WORK;CHARSET=UTF-8:;;Sashalom, District XVI;Budapest;;;Hungary',
     f'URL:{SITE}',
     'X-SOCIALPROFILE;TYPE=instagram:https://www.instagram.com/zwellness18/',

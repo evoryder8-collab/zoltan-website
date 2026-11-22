@@ -3,13 +3,12 @@ export default {
   meta: {
     title: 'Zoltan Kodor · Two-time overall massage champion · Budapest',
     description:
-      'Zoltan Kodor, Overall Winner in Slovakia and at the Australian Massage Championship 2026. One personalised massage treatment in Budapest and Mezőkeresztes. Book by phone or WhatsApp.',
+      'Zoltan Kodor, Overall Winner in Slovakia and at the Australian Massage Championship 2026. One personalised massage treatment in Budapest. Book by phone or WhatsApp.',
   },
   brand: 'Clinical Precision • Aesthetic Flow',
   name: { full: 'Zoltan Kodor', first: 'Zoltan', last: 'Kodor' },
   locations: {
     budapest: { name: 'Budapest', in: 'in Budapest', address: 'Budapest, District XVI, Sashalom' },
-    mezokeresztes: { name: 'Mezőkeresztes', in: 'in Mezőkeresztes', address: 'Bornemissza utca 3, 3441 Mezőkeresztes' },
   },
   a11y: {
     results: 'Titles and results',
@@ -45,8 +44,8 @@ export default {
     book: 'Book',
   },
   hero: {
-    kicker: 'Massage therapist · Budapest & Mezőkeresztes',
-    lead: 'Two overall titles on two continents, less than two months apart. One personalised treatment, in Budapest and Mezőkeresztes.',
+    kicker: 'Massage therapist · Budapest',
+    lead: 'Two overall titles on two continents, less than two months apart. One personalised treatment, in Budapest.',
     call: 'Call',
     whatsapp: 'WhatsApp',
     chipOverall: 'AusMC 2026 · Overall Winner',
@@ -72,7 +71,7 @@ export default {
     'Best International Therapist',
     'Slovakia Massage Championship · Grand Champion',
     'Sibiu · World Massage Super Cup · Silver, Swedish Massage',
-    'Budapest · Mezőkeresztes',
+    'Budapest',
   ],
   about: {
     kicker: 'About',
@@ -260,7 +259,7 @@ export default {
     },
   },
   footer: {
-    tagline: 'Massage therapy in Budapest and Mezőkeresztes.',
+    tagline: 'Massage therapy in Budapest.',
     rights: '© 2026 Kódor Zoltán e.v. · Z-Wellness. All rights reserved.',
     disclaimer: 'Treatments are not a medical service and do not replace medical examination, diagnosis or treatment. For health complaints, please consult a doctor.',
     top: 'Back to top',
@@ -288,12 +287,12 @@ export default {
   },
   bio: {
     title: 'Zoltan Kodor · Contact & links',
-    description: 'Book Zoltan Kodor, two-time overall massage champion, in Budapest or Mezőkeresztes. WhatsApp, phone, email and socials in one place.',
+    description: 'Book Zoltan Kodor, two-time overall massage champion, in Budapest. WhatsApp, phone, email and socials in one place.',
     website: 'Website',
     home: 'Zoltan Kodor · Website',
     arrival: 'Two-time overall champion',
     welcome: 'Lovely to see you here.',
-    role: 'Massage therapist · Budapest & Mezőkeresztes',
+    role: 'Massage therapist · Budapest',
     book: 'Book your treatment',
     bookDetail: 'About 70 minutes · from {price}',
     bookInvite: 'Let’s find a time that suits you.',
@@ -331,6 +330,6 @@ export default {
     linkCopied: 'Link copied',
     shareText: 'Zoltan Kodor · two-time overall massage champion',
     farewell: 'I look forward to welcoming you.',
-    footerNote: 'By appointment · Budapest · Mezőkeresztes',
+    footerNote: 'By appointment · Budapest',
   },
 };

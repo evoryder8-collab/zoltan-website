@@ -1010,7 +1010,7 @@ html.is-film body {
 }
 .places {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
   gap: 10px;
 }
 .place {
@@ -1249,7 +1249,7 @@ html.is-film body {
 }
 .sheet__places {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
   gap: 8px;
   width: 100%;
 }

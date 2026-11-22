@@ -39,7 +39,7 @@ def og():
     d.text((70, 170), 'Zoltan Kodor', font=font(DIDOT, 112), fill=(246, 241, 236))
     d.text((76, 330), 'Clinical Precision • Aesthetic Flow', font=font(DIDOT, 40, 1), fill=(246, 241, 236))
     d.text((78, 410), 'AUSMC 2026 OVERALL WINNER', font=font(SANS, 24, 1), fill=(255, 92, 110))
-    d.text((78, 450), 'Massage therapy · Budapest & Mezőkeresztes', font=font(SANS, 26), fill=(189, 179, 171))
+    d.text((78, 450), 'Massage therapy · Budapest', font=font(SANS, 26), fill=(189, 179, 171))
     img.save(os.path.join(PUB, 'og.jpg'), quality=88)
 
 

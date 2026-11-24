@@ -104,13 +104,14 @@
           <span data-i18n="name.full">Zoltan Kodor</span>
         </a>
         <nav class="nav__links" aria-label="Sections">
+          <a href="#championships" data-i18n="nav.champs"></a>
           <a href="#about" data-i18n="nav.about"></a>
           <a href="#treatments" data-i18n="nav.treatments"></a>
-          <a href="#championships" data-i18n="nav.champs"></a>
           <a href="#gallery" data-i18n="nav.gallery"></a>
           <a href="#contact" data-i18n="nav.contact"></a>
         </nav>
         <div class="nav__tools">
+          <div class="follow" role="group" data-i18n-attr="aria-label:orbs.label"></div>
           <div class="langswitch" role="group" data-i18n-attr="aria-label:a11y.lang">
             <span class="langswitch__thumb" aria-hidden="true"></span>
             <button type="button" data-lang="hu" lang="hu">HU</button>
@@ -127,9 +128,9 @@
     <div class="menu" id="menu" hidden>
       <svg class="menu__laurel laurel-svg" viewBox="-120 -120 240 240" aria-hidden="true"></svg>
       <nav class="menu__links" aria-label="Menu">
-        <a href="#about"><i>01</i><span data-i18n="nav.about"></span></a>
-        <a href="#treatments"><i>02</i><span data-i18n="nav.treatments"></span></a>
-        <a href="#championships"><i>03</i><span data-i18n="nav.champs"></span></a>
+        <a href="#championships"><i>01</i><span data-i18n="nav.champs"></span></a>
+        <a href="#about"><i>02</i><span data-i18n="nav.about"></span></a>
+        <a href="#treatments"><i>03</i><span data-i18n="nav.treatments"></span></a>
         <a href="#gallery"><i>04</i><span data-i18n="nav.gallery"></span></a>
         <a href="#training"><i>05</i><span data-i18n="nav.training"></span></a>
         <a href="#contact"><i>06</i><span data-i18n="nav.contact"></span></a>
@@ -139,6 +140,7 @@
         <a class="btn btn--crimson" data-wa target="_blank" rel="noopener"><span data-icon="whatsapp"></span><span data-i18n="hero.whatsapp"></span></a>
         <a class="btn btn--glass glass" data-tel><span data-icon="phone"></span><span data-i18n="hero.call"></span></a>
       </div>
+      <div class="follow follow--menu" role="group" data-i18n-attr="aria-label:orbs.label"></div>
     </div>
 
     <main id="main">
@@ -177,7 +179,40 @@
           <div class="hero__flash" aria-hidden="true"></div>
           <div class="hero__floor" aria-hidden="true"></div>
         </div>
-        <a class="hero__scroll" href="#about"><span data-i18n="hero.scroll"></span><i aria-hidden="true"></i></a>
+        <a class="hero__scroll" href="#championships"><span data-i18n="hero.scroll"></span><i aria-hidden="true"></i></a>
+      </section>
+
+      <!-- Championships -->
+      <section class="section champs" id="championships" aria-labelledby="champs-title">
+        <div class="wrap">
+          <header class="section-head">
+            <p class="kicker" data-reveal><span class="leaf" aria-hidden="true"></span><span data-i18n="champs.kicker"></span></p>
+            <h2 class="section-title" id="champs-title" data-i18n="champs.title" data-reveal></h2>
+            <p class="section-intro" data-i18n="champs.intro" data-reveal></p>
+          </header>
+          <div class="champs__stage">
+            <div class="medal" role="img" data-i18n-attr="aria-label:a11y.medal">
+              <div class="medal__glow" aria-hidden="true"></div>
+              <div class="medal__canvas"></div>
+              <p class="medal__hint"><span data-icon="drag"></span><span data-i18n="champs.medalHint"></span></p>
+            </div>
+            <ol class="champs__cards" id="event-cards"></ol>
+          </div>
+          <div class="globe glass" data-reveal>
+            <canvas class="globe__space" aria-hidden="true"></canvas>
+            <div class="globe__map" id="globe" role="region" data-i18n-attr="aria-label:globe.label"></div>
+            <div class="globe__loading" aria-hidden="true"><span></span></div>
+            <ul class="globe__legend" aria-hidden="true">
+              <li class="globe__key"><span class="globe__dot"></span><span data-i18n="globe.past"></span></li>
+              <li class="globe__key globe__key--next"><span class="globe__dot"></span><span data-i18n="globe.next"></span></li>
+            </ul>
+            <div class="globe__zoom">
+              <button type="button" data-zoom="1" data-i18n-attr="aria-label:globe.zoomIn">+</button>
+              <button type="button" data-zoom="-1" data-i18n-attr="aria-label:globe.zoomOut">−</button>
+            </div>
+            <p class="globe__hint"><span data-icon="drag"></span><span data-i18n="globe.hint"></span></p>
+          </div>
+        </div>
       </section>
 
       <!-- The film: a floating vertical frame that grows to full screen as you scroll -->
@@ -258,39 +293,6 @@
           </div>
           <div class="policy glass" id="treatment-policy" data-reveal></div>
           <p class="treatments__note" data-reveal><span data-i18n="treatments.note"></span> <a data-wa target="_blank" rel="noopener"><span data-icon="whatsapp"></span>WhatsApp</a></p>
-        </div>
-      </section>
-
-      <!-- Championships -->
-      <section class="section champs" id="championships" aria-labelledby="champs-title">
-        <div class="wrap">
-          <header class="section-head">
-            <p class="kicker" data-reveal><span class="leaf" aria-hidden="true"></span><span data-i18n="champs.kicker"></span></p>
-            <h2 class="section-title" id="champs-title" data-i18n="champs.title" data-reveal></h2>
-            <p class="section-intro" data-i18n="champs.intro" data-reveal></p>
-          </header>
-          <div class="champs__stage">
-            <div class="medal" role="img" data-i18n-attr="aria-label:a11y.medal">
-              <div class="medal__glow" aria-hidden="true"></div>
-              <div class="medal__canvas"></div>
-              <p class="medal__hint"><span data-icon="drag"></span><span data-i18n="champs.medalHint"></span></p>
-            </div>
-            <ol class="champs__cards" id="event-cards"></ol>
-          </div>
-          <div class="globe glass" data-reveal>
-            <canvas class="globe__space" aria-hidden="true"></canvas>
-            <div class="globe__map" id="globe" role="region" data-i18n-attr="aria-label:globe.label"></div>
-            <div class="globe__loading" aria-hidden="true"><span></span></div>
-            <ul class="globe__legend" aria-hidden="true">
-              <li class="globe__key"><span class="globe__dot"></span><span data-i18n="globe.past"></span></li>
-              <li class="globe__key globe__key--next"><span class="globe__dot"></span><span data-i18n="globe.next"></span></li>
-            </ul>
-            <div class="globe__zoom">
-              <button type="button" data-zoom="1" data-i18n-attr="aria-label:globe.zoomIn">+</button>
-              <button type="button" data-zoom="-1" data-i18n-attr="aria-label:globe.zoomOut">−</button>
-            </div>
-            <p class="globe__hint"><span data-icon="drag"></span><span data-i18n="globe.hint"></span></p>
-          </div>
         </div>
       </section>
 
@@ -430,9 +432,6 @@
       <a href="#top" class="footer__top glass"><span data-i18n="footer.top"></span><span data-icon="up"></span></a>
       <p class="footer__credit" data-i18n="footer.credit"></p>
     </footer>
-
-    <!-- Floating contact jewels, summoned by the first scroll (components/orbs.js) -->
-    <nav class="orbs orb-set" id="orbs"></nav>
 
     <dialog class="viewer" id="viewer" data-i18n-attr="aria-label:gallery.viewer.label">
       <div class="viewer__stage">

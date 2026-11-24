@@ -18,13 +18,14 @@ Wording lives in `src/i18n/hu.js` and `src/i18n/en.js` (change both). Facts live
 - Brand line: "Clinical Precision • Aesthetic Flow" (English in both languages)
 - Contact from zwellness.hu: +36 30 416 2043, zwellness18@gmail.com, Facebook / Instagram / YouTube / TikTok `zwellness18`
 - Studio: Budapest XVI. kerület – Sashalom (Mezőkeresztes removed at Zoltan's request, 22 Nov 2026)
-- One personalised treatment, about 70 minutes, fixed price, never extra if it runs longer: €65 / 22,000 HUF in Budapest (prices in euros; the forint price shows beneath only in Hungarian, and is lower: no conversion fees)
+- One personalised treatment, about 60 minutes, fixed price, never extra if it runs longer: €60 / 22,000 HUF in Budapest (Zoltan, 24 Nov 2026: €60 is about 22,000 HUF at the current rate; prices in euros, the forint price shows beneath only in Hungarian)
 - Methods: therapeutic and Swedish massage, FDM, trigger point techniques, cupping, IASTM, kinesiology taping, scar tissue treatment, vagus therapy, mobilization techniques
 - Slovakia Massage Championship, 12 September 2026: gold, Grand Champion (absolute winner)
 - AusMC 2026 (Cockatoo Island, Sydney, 9–11 October 2026): Overall Winner, Freestyle Massage Award, Best Flow & Transition Award, Best International Therapist
 - World Massage Super Cup 2026 (Sibiu, Romania, 30 October – 1 November 2026): Silver Medal, Swedish Massage
 - Story (from the short film): started competing in May 2026, out of curiosity; two overall titles on two continents less than two months apart
 - On the globe only (no card, no results shown, at Zoltan's request): NewMa Euro Massage Championship 2026 (Paris, 22–24 May 2026) and the World Championship in Massage 2026 (IMA, Copenhagen, July 2026; exact days unpublished)
+- Two Worlds Union Massage Championship 2026 (Championship Massage Association, Rome, 27–29 November 2026; dates from the user, 24 Nov 2026; oltrelecolonne.it lists the competition on 28–29 Nov at via Vigna Murata 70): on the globe, upcoming until the 29th; no card or results yet
 - Upcoming on the globe (gold rings until each event's last day): SEAMC 2027 (Penang, 15–17 Jan), NewMa Asia Massage Championship 2027 (Phuket, 22–24 Jan), Philippines World Massage Summit 2027 (Manila, 17–18 Apr), Bulgarian Massage Championship 2027 (Veliko Tarnovo, 14–16 May), Massage Championship World Tour 2027 (Tokyo, 26–27 May), World Championship in Massage 2027, the 10th (Copenhagen, 2–4 Jul). Dates from the organisers' sites, 22 Nov 2026
 - Judge's verdict (video, Matthew Hua, international massage judge, Zurich): "The styling, simplicity, the zen, the posture, the ergonomics. Well done."
 - Honorary invitation from the Bulgarian Massage Championship organiser, for winning the Slovakia Massage Championship: a free place at OBMC 2027, Veliko Tarnovo, Bulgaria, 14–16 May 2027 (read from the certificate)

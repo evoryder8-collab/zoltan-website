@@ -205,16 +205,15 @@ export async function mountGlobe(container, { events, home, reduced = false }) {
   // Labels never overlap. Each frame the pins are laid out in turn (the one
   // tapped, then by rank): a label takes the first side of its pin, from the
   // one it prefers, that stays inside the frame and clear of the other pins,
-  // the labels already placed, the frame's own buttons and the contact rail
-  // that floats over its right edge on phones. With no side free it waits
-  // for a zoom; its pin still shows.
+  // the labels already placed and the frame's own buttons and card. With no
+  // side free it waits for a zoom; its pin still shows.
   let activePin = null;
   const furniture = [...frame.querySelectorAll('.globe__legend, .globe__zoom, .globe__hint')];
   function layout() {
     const box = container.getBoundingClientRect();
     const W = box.width;
     const H = box.height;
-    const taken = [...furniture, panel, document.querySelector('.orbs.is-in')]
+    const taken = [...furniture, panel]
       .filter((el) => el?.getClientRects().length)
       .map((el) => {
         const r = el.getBoundingClientRect();

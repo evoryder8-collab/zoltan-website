@@ -80,7 +80,7 @@ if (!reduced) {
 }
 
 const nav = initNav({ lenis });
-initOrbs({ reduced });
+initOrbs();
 initTopics({ sound });
 initStudioSwitch();
 initGallery({ reduced });

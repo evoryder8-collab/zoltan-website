@@ -436,6 +436,7 @@
   color: var(--pearl);
   font: 450 1.4rem/1 var(--serif);
   letter-spacing: -0.01em;
+  white-space: nowrap;
   text-decoration: none;
 }
 .nav__mark {
@@ -659,7 +660,7 @@ html[lang='en'] .langswitch__thumb {
   flex: 1;
 }
 
-@media (max-width: 960px) {
+@media (max-width: 1199px) {
   .nav__links {
     display: none;
   }
@@ -667,7 +668,7 @@ html[lang='en'] .langswitch__thumb {
     display: block;
   }
 }
-@media (min-width: 961px) {
+@media (min-width: 1200px) {
   .menu {
     display: none !important;
   }

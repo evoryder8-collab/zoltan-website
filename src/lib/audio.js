@@ -218,13 +218,6 @@ class Sound {
     this.play('swoosh', { gain: 0.13, rate: 0.72, when: 0.2, lp: 3200, wet: 0.22 });
   }
 
-  /** The contact beads fly in at the side: two soft swooshes, one after the other. */
-  summon() {
-    if (!this.ready()) return;
-    this.play('swoosh', { gain: 0.14, rate: 0.8, pan: 0.5, lp: 3500, wet: 0.15 });
-    this.play('swoosh', { gain: 0.09, rate: 0.95, pan: 0.6, when: 0.2, lp: 3500, wet: 0.2 });
-  }
-
   /** The ticket's confetti: two soft pops, then a sparkle. */
   sparkle() {
     if (!this.ready()) return;

@@ -1,44 +1,25 @@
-// Contact jewels: Instagram, Facebook, WhatsApp, call and TikTok as gold-set
-// beads in each platform's colour (styles/orbs.css). On the homepage they
-// float on the right edge (a row along the bottom on phones) and wait for the
-// first real scroll, so the opening stays uncluttered; /linkinbio shows a row
-// of them under the name. Once in, they bob, lean toward the pointer (or the
-// phone's tilt) and trail a little behind fast scrolling, like beads in water.
+// Social icons: Instagram, Facebook, WhatsApp, YouTube and TikTok, small and
+// quiet in the nav pill (in the menu below 1200px), each lighting up in its
+// platform's colour when pointed at (styles/orbs.css). A tap first asks
+// "You're about to visit me on…", so a stray tap never opens an app.
 import { CONTACT } from '../config.js';
 import { t } from '../i18n/index.js';
 import { icon } from '../lib/icons.js';
-import { waLink, telLink } from '../lib/links.js';
-import { tilt, buzz } from '../lib/tilt.js';
-import { sound } from '../lib/audio.js';
-import { setVar } from '../lib/dom.js';
+import { waLink } from '../lib/links.js';
 
 const HREFS = {
   instagram: () => CONTACT.socials.instagram,
   facebook: () => CONTACT.socials.facebook,
-  tiktok: () => CONTACT.socials.tiktok,
-  youtube: () => CONTACT.socials.youtube,
   whatsapp: () => waLink(CONTACT.whatsapp, t('contact.topics.booking.wa')),
-  phone: () => telLink(CONTACT.phone),
+  youtube: () => CONTACT.socials.youtube,
+  tiktok: () => CONTACT.socials.tiktok,
 };
-const SUMMON_AT = 60; // px: a deliberate swipe, not a nudge
-const clamp = (v, a) => Math.max(-a, Math.min(a, v));
 
-/**
- * Fills a container with jewels. `ids` in display order; the arrival order
- * runs from the middle out. Labels and links follow the language.
- */
-export function renderOrbs(container, ids) {
-  const mid = (ids.length - 1) / 2;
-  container.innerHTML = ids
+/** Fills a container with icons, in `HREFS` order. Labels and links follow the language. */
+function renderOrbs(container) {
+  container.innerHTML = Object.keys(HREFS)
     .filter((id) => HREFS[id]())
-    .map(
-      (id, i) => `
-      <a class="orb orb--${id}" style="--d:${Math.round(Math.abs(i - mid))}" data-orb="${id}"${id === 'phone' ? '' : ' target="_blank" rel="noopener"'}>
-        <span class="orb__shadow"></span>
-        <span class="orb__float"><span class="orb__gem">${icon(id)}</span></span>
-        <span class="orb__tip" aria-hidden="true"></span>
-      </a>`,
-    )
+    .map((id) => `<a class="orb orb--${id}" data-orb="${id}" target="_blank" rel="noopener">${icon(id)}<span class="orb__tip" aria-hidden="true"></span></a>`)
     .join('');
   const label = () => {
     container.querySelectorAll('[data-orb]').forEach((a) => {
@@ -105,27 +86,22 @@ function ask(orb) {
   dialog.querySelector('.orb-ask__cancel').textContent = t('orbs.ask.cancel');
   const go = dialog.querySelector('.orb-ask__go');
   go.href = orb.href;
+  go.target = '_blank';
+  go.rel = 'noopener';
   go.querySelector('span').textContent = t('orbs.ask.continue');
-  if (orb.target) {
-    go.target = orb.target;
-    go.rel = 'noopener';
-  } else go.removeAttribute('target');
 
   dialog.showModal();
   card.focus(); // not Continue: a stray Enter or tap shouldn't send anyone away
-  // phones: a card above the row; desktop: beside the jewel (or under it when there's no room)
+  // phones: a card along the bottom; wider: under the icon (over it when there's no room)
   if (matchMedia('(max-width: 720px)').matches) {
     dialog.style.left = dialog.style.top = '';
   } else {
     const r = orb.getBoundingClientRect();
     const w = dialog.offsetWidth;
     const h = dialog.offsetHeight;
-    let x = r.left - w - 20;
-    let y = r.top + r.height / 2 - h / 2;
-    if (x < 16) {
-      x = r.left + r.width / 2 - w / 2;
-      y = r.bottom + 18;
-    }
+    const x = r.left + r.width / 2 - w / 2;
+    let y = r.bottom + 36; // room for the badge that sits on the card's top edge
+    if (y + h > innerHeight - 16) y = r.top - h - 18;
     dialog.style.left = `${Math.max(16, Math.min(innerWidth - w - 16, x))}px`;
     dialog.style.top = `${Math.max(16, Math.min(innerHeight - h - 16, y))}px`;
   }
@@ -134,63 +110,7 @@ function ask(orb) {
   card.style.transformOrigin = `${o.left + o.width / 2 - d.left}px ${o.top + o.height / 2 - d.top}px`;
 }
 
-/** Brings a set in (once), on a soft swoosh. */
-export function summonOrbs(container, { reduced }) {
-  if (container.classList.contains('is-in')) return;
-  container.classList.add('is-in');
-  sound.summon();
-  buzz(5);
-  if (!reduced) floatOrbs(container);
-}
-
-// lean toward the pointer or tilt, trail behind the scroll
-const aim = { x: 0, y: 0 };
-addEventListener(
-  'pointermove',
-  (e) => {
-    if (e.pointerType !== 'mouse') return;
-    aim.x = (e.clientX / innerWidth) * 2 - 1;
-    aim.y = (e.clientY / innerHeight) * 2 - 1;
-  },
-  { passive: true },
-);
-
-function floatOrbs(container) {
-  let lx = 0, ly = 0, sv = 0, sVel = 0, lastY = scrollY, last = performance.now();
-  const frame = (now) => {
-    requestAnimationFrame(frame);
-    const dt = Math.min(0.05, (now - last) / 1000);
-    last = now;
-    if (document.hidden || !dt) return;
-    const k = 1 - Math.exp(-dt / 0.2);
-    lx += ((tilt.active ? tilt.x : aim.x) - lx) * k;
-    ly += ((tilt.active ? tilt.y : aim.y) - ly) * k;
-    // a springy offset pulled along with the page, then wobbling home
-    const v = (scrollY - lastY) / dt;
-    lastY = scrollY;
-    const target = clamp(-v * 0.01, 14);
-    sVel += ((target - sv) * 160 - sVel * 13) * dt;
-    sv += sVel * dt;
-    setVar(container, '--px', lx.toFixed(3));
-    setVar(container, '--py', ly.toFixed(3));
-    setVar(container, '--sv', `${sv.toFixed(2)}px`);
-  };
-  requestAnimationFrame(frame);
-}
-
-/** The homepage rail: summoned once, at the first real scroll. */
-export function initOrbs({ reduced }) {
-  const rail = document.getElementById('orbs');
-  const root = document.documentElement;
-  renderOrbs(rail, ['instagram', 'facebook', 'whatsapp', 'phone', 'tiktok']);
-  const setLabel = () => rail.setAttribute('aria-label', t('orbs.label'));
-  setLabel();
-  addEventListener('langchange', setLabel);
-
-  const onScroll = () => {
-    if (scrollY < SUMMON_AT || root.classList.contains('is-locked')) return;
-    removeEventListener('scroll', onScroll);
-    summonOrbs(rail, { reduced });
-  };
-  addEventListener('scroll', onScroll, { passive: true });
+/** The icons in the nav pill and the phone menu. */
+export function initOrbs() {
+  document.querySelectorAll('.follow').forEach(renderOrbs);
 }
